@@ -1,0 +1,41 @@
+{
+    "title_app": "Presence",
+    "title_kantor": "Office",
+    "title_wfh": "WFH",
+    "title_dl": "Outstation",
+    "title_f_absent": "You Haven't Been Absent",
+    "title_t_absent": "You Have Been Absent",
+
+    "btn_absen": "Absent",
+    "btn_absen_masuk": "Attendance",
+    "btn_absen_keluar": "Go Home",
+    "btn_hapus_foto": "Clear",
+    "popup_marker": "Location according to your city.",
+
+    "kantor": {
+        "my_waktu": "Current Time",
+        "my_lokasi": "Current Location",
+        "my_news": "News Today"
+    },
+    "menu": {
+        "my_home": "Home",
+        "my_jurnal": "Journal",
+        "my_jadwal_wfh": "WFH Schedule",
+        "my_izin": "Permit Application",
+        "my_history_izin": "Absent History",
+        "my_logout": "Logout"
+    },
+    "jadwal_wfh": {
+        "my_app_title": "WFH Schedule"
+    },
+    "pengajuan_izin": {
+        "my_app_title": "Permit Application",
+        "my_nav1": "Presence",
+        "my_nav2": "Permit"
+    },
+    "histori_absen": {
+        "my_app_title": "Presence History",
+        "my_nav1": "Presence",
+        "my_nav2": "Permit"
+    }
+}

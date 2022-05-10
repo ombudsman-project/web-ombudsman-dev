@@ -1,0 +1,41 @@
+{
+    "title_app": "Presensi",
+    "title_kantor": "Kantor",
+    "title_wfh": "WFH",
+    "title_dl": "Dinas Luar",
+    "title_f_absent": "Anda Belum Melakukan Absen",
+    "title_t_absent": "Anda Telah Absen",
+
+    "btn_absen": "Absen",
+    "btn_absen_masuk": "Absen Masuk",
+    "btn_absen_keluar": "Absen Keluar",
+    "btn_hapus_foto": "Hapus Foto",
+    "popup_marker": "Lokasi sesuai dengan kota anda.",
+
+    "kantor": {
+        "my_waktu": "Waktu Saat Ini",
+        "my_lokasi": "Lokasi Saat Ini",
+        "my_news": "Berita Hari Ini"
+    },
+    "menu": {
+        "my_home": "Beranda",
+        "my_jurnal": "Jurnal",
+        "my_jadwal_wfh": "Jadwal WFH",
+        "my_izin": "Pengajuan Izin",
+        "my_history_izin": "Riwayat Absen",
+        "my_logout": "Keluar"
+    },
+    "jadwal_wfh": {
+        "my_app_title": "Jadwal WFH"
+    },
+    "pengajuan_izin": {
+        "my_app_title": "Pengajuan Izin",
+        "my_nav1": "Presensi",
+        "my_nav2": "Izin"
+    },
+    "histori_absen": {
+        "my_app_title": "Riwayat Absen",
+        "my_nav1": "Presensi",
+        "my_nav2": "Izin"
+    }
+}
