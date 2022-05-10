@@ -7,6 +7,7 @@ $timeNow        :#ffffff;
 $sideMenu       :#FFF;
 $textColor      :#FFF;
 $textColorSide  :rgb(68, 68, 68);
+$mainNavColor    :#0058a8;
 
 html {
   height:100%;
@@ -322,7 +323,8 @@ h2 {
 }
 
 .main-content {
-  margin: auto auto auto auto;
+  // margin: auto auto auto auto;
+  
 }
 
 .main {
@@ -468,6 +470,12 @@ button {
 
 @media (min-width:320px)  { /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
   header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
+  .side-menu-stick{
     position: sticky;
     top: 0;
     z-index: 1;
@@ -733,4 +741,89 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .date.prev-month,
 .date.next-month {
   color: grey;
+}
+
+// == TEs
+// body{
+//   margin:0;
+//   padding:0;
+//   font-family:'montserrat';
+//   background:#e3e9f7;
+// }
+
+.logo{
+  padding:20px;
+}
+
+nav ul{
+  margin: 0px 0px 0px 0px;
+  border-radius: 10px;
+  padding:0;
+  height:98.5%;
+  width:260px;
+  position:fixed;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  background-color: $mainNavColor;
+  z-index: 1;
+}
+
+nav ul li{
+  list-style:none;
+}
+
+
+nav ul li a{
+  display:flex;
+  flex-direction: row;
+  font-family:'montserrat';
+  text-decoration:none;
+  text-transform:uppercase;
+  font-size:17px;
+  color:rgba(255, 255, 255, 0.548);
+  position:relative;
+  padding:15px 0px 15px 25px;
+  transition:all 0.5s;
+}
+
+nav ul li a .space-item {
+  width: 15px;  
+}
+
+nav ul li a:before{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:100%;
+  background:rgba(0, 81, 154, 1);
+  z-index:-1;
+  transition:all 1s;
+}
+
+
+nav ul li a:hover{
+  color:rgba(255, 255, 255, 1);
+}
+
+nav ul li a:hover:before{
+  width:100%;
+}
+
+
+.wrapper{
+  margin-left:270px;
+}
+
+.section{
+  display:grid;
+  place-items:center;
+  min-height:100vh;
+  text-align:center;
+}
+
+.box-area h2{
+  text-transform:uppercase;
+  font-size:30px;
 }
