@@ -133,12 +133,12 @@ header {
   width: 100%;
 }
 
-h1 {
-  color:$textColor;
-  text-shadow: 0 0 20px #8b8b8b;
-  display: inline-block;
-  padding-top: 20px;
-}
+// h1 {
+//   color:$textColor;
+//   text-shadow: 0 0 20px #8b8b8b;
+//   display: inline-block;
+//   padding-top: 20px;
+// }
 
 h2 {
   color: #666;
@@ -439,6 +439,22 @@ button {
   border-top-left-radius: 19px;
   border-bottom-left-radius: 19px;
   background-image: linear-gradient(to bottom, #374373, #344880, #2d4d8d, #21529a, #0058a8);
+}
+
+.logo-img {
+  margin-bottom: 3rem;
+}
+
+.logo-title {
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.logo-subtitle {
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff
 }
 
 .form-check-label {
