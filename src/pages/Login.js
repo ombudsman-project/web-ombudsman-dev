@@ -4,6 +4,7 @@ import { Card, Col, Form, Row } from 'react-bootstrap';
 import PresenceContext from '../context/PresenceContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import Logo from '../img/logo.png'
 
 const Login = () => {
     const { setRemember } = useContext(PresenceContext);
@@ -42,8 +43,16 @@ const Login = () => {
             <Card className="login-card">
                 <Card.Body className="p-0">
                     <Row>
-                        <Col lg="6" className="login-logo">
-
+                        <Col lg="6" className="login-logo d-flex flex-column justify-content-center">
+                            <div>
+                                <img className="logo-img img-fluid" src={Logo} />
+                            </div>
+                            <div>
+                                <h1 className="logo-title">OMBUDSMAN</h1>
+                            </div>
+                            <div>
+                                <h5 className="logo-subtitle">Aplikasi Pengembangan<br />Kompetensi</h5>
+                            </div>
                         </Col>
                         <Col lg="6">
                             <h1>Login</h1>
