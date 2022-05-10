@@ -212,9 +212,9 @@ h2 {
 
 .my-home-card {
   background: $mainCardBg;
-  margin-top: 3vh;
-  min-height: 75vh;
-  border-radius: 24px 24px 0px 0px !important;
+  margin: 10px;
+  min-height: 90vh;
+  border-radius: 24px !important;
 
   .title {
     h5 {

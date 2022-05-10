@@ -3,9 +3,9 @@ import { BrowserRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 import _ from "lodash";
 
 import Header from "../components/Header";
-import LoginView from '../pages/Login';
+import LoginView from '../components/Login';
 
-import KantorView from "../components/Kantor";
+import DashboardView from "../pages/Dashboard";
 import WFHView from "../components/WFH";
 import DinasLuarView from "../components/DinasLuar";
 
@@ -136,7 +136,7 @@ const AppRouter = () => {
                     path="/beranda"
                     exact
                   />
-                  <Route component={KantorView} path="/beranda/kantor" />
+                  <Route component={DashboardView} path="/beranda/kantor" />
                   <Route component={WFHView} path="/beranda/wfh" />
                   <Route component={DinasLuarView} path="/beranda/dinas_luar" />
 
