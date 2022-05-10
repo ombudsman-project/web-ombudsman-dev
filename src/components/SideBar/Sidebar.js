@@ -7,6 +7,8 @@ import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 
+import Logo from '../../img/logo.png'
+
 const Nav = styled.div`
   background: #15171c;
   height: 80px;
@@ -25,21 +27,20 @@ const NavIcon = styled(Link)`
 `;
 
 const SidebarNav = styled.nav`
-    margin: 0px 0px 0px 0px;
-    background: #0058a8;
-    border-radius: 10px;
-    width: 250px;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding-top: 10px;
-    height:98.5%;
-    position: fixed;
-    top: 10px;
-    bottom: 10px;
-    left: 10px;
-    transition: 350ms;
-    z-index: 10;
+  margin: 0px 0px 0px 0px;
+  background: #0058a8;
+  border-radius: 10px;
+  width: 280px;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  height: 98.5%;
+  position: fixed;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  transition: 350ms;
+  z-index: 10;
 `;
 
 const SidebarWrap = styled.div`
@@ -47,31 +48,39 @@ const SidebarWrap = styled.div`
 `;
 
 const Sidebar = () => {
-    const [sidebar, setSidebar] = useState(true);
+  const [sidebar, setSidebar] = useState(true);
 
-    const showSidebar = () => setSidebar(!sidebar);
+  const showSidebar = () => setSidebar(!sidebar);
 
-    return (
-        <>
-            <IconContext.Provider value={{ color: "#fff" }}>
-                {/* <Nav>
+  return (
+    <>
+      <IconContext.Provider value={{ color: "#fff" }}>
+        {/* <Nav>
                     <NavIcon to="#">
                         <FaIcons.FaBars onClick={showSidebar} />
                     </NavIcon>
                 </Nav> */}
-                <SidebarNav sidebar={sidebar}>
-                    <SidebarWrap>
-                        {/* <NavIcon to="#">
+        <SidebarNav sidebar={sidebar}>
+          <SidebarWrap>
+            <div className="side-header">
+                <div className="side-logo">
+                  <img src={Logo} />
+                </div>
+                <div>
+                  <p>APLIKASI<br/>PENGEMBANGAN<br/><div className="second-text">KOMPETENSI</div></p>
+                </div>
+            </div>
+            {/* <NavIcon to="#">
                             <AiIcons.AiOutlineClose onClick={showSidebar} />
                         </NavIcon> */}
-                        {SidebarData.map((item, index) => {
-                            return <SubMenu item={item} key={index} />;
-                        })}
-                    </SidebarWrap>
-                </SidebarNav>
-            </IconContext.Provider>
-        </>
-    );
+            {SidebarData.map((item, index) => {
+              return <SubMenu item={item} key={index} />;
+            })}
+          </SidebarWrap>
+        </SidebarNav>
+      </IconContext.Provider>
+    </>
+  );
 };
 
 export default Sidebar;
