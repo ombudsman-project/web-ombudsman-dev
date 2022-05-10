@@ -1,4 +1,4 @@
-$mainBgColor    :#FFF;
+$mainBgColor    :#eaeaea;
 $mainHeaderColor:#0daaaa;
 $shadowMainBg   :#c5c5c5;
 $shadowHeader   :#b0bccc;
@@ -397,10 +397,11 @@ button {
 }
 
 .login {
+  height: 100vh;
   text-align: center;
-  padding: 10px;
-  height: 200px;
-  line-height: 200px;
+  padding: 5rem 20rem 5rem 20rem;
+  // height: 100%;
+  // line-height: 200px;
 
   button {
     font-size: 20px;
@@ -408,6 +409,10 @@ button {
 }
 
 .login-card {
+  border: none ;//1px solid black; //none
+  border-radius: 19px;
+  height: 100%;
+  width: 100% !important;
   h3 {
     text-align: center;
     font-weight: bold;
@@ -421,6 +426,17 @@ button {
     text-align: center;
     font-weight: bold;
   }
+}
+
+.login .row {
+  height: 100%;
+}
+
+.login-logo {
+  // background-color: $primaryColor !important;
+  border-top-left-radius: 19px;
+  border-bottom-left-radius: 19px;
+  background-image: linear-gradient(to bottom, #374373, #344880, #2d4d8d, #21529a, #0058a8);
 }
 
 .form-check-label {
