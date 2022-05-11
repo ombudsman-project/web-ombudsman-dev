@@ -1,14 +1,11 @@
 import React from "react";
-import * as FaIcons from "react-icons/fa";
-import * as BsIcons from "react-icons/bs";
-import * as IoIcons from "react-icons/io";
 import * as RiIcons from "react-icons/ri";
 import {GoPrimitiveDot as Dot} from "react-icons/go";
 
 export const SidebarData = [
     {
         title: "Dashboard",
-        path: "/",
+        path: "/dashboard",
         icon: <img src={require('../../icons/icon-dashboard.svg').default} alt='mySvgImage' />,
     },
     {

@@ -49,12 +49,12 @@ const SubMenu = ({ item }) => {
     const showSubnav = () => setSubnav(!subnav);
   
     useEffect(() => {
-      setMyPath(location.pathname.split('/'));
+      setMyPath(location.pathname);
     }, [location.pathname]);
 
     return (
         <>
-            <SidebarLink to={item.path} style={{  }} onClick={item.subNav && showSubnav}>
+            <SidebarLink to={item.path} style={ myPath.includes(item.path) ? { backgroundColor: 'rgba(0, 81, 154, 1)' } : {backgroundColor: '#0058a8'} } onClick={item.subNav && showSubnav}>
                 <div>
                     {item.icon}
                     <SidebarLabel>{item.title}</SidebarLabel>

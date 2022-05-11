@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 //import { useHistory } from 'react-router-dom';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import PresenceContext from '../context/PresenceContext';
+import PresenceContext from '../context/OmbudsmanContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Logo from '../img/logo.png'
