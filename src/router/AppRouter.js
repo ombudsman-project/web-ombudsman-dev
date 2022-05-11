@@ -126,17 +126,17 @@ const AppRouter = () => {
               <main id="page-wrap" className="main-content wrapper">
                 <PresenceContext.Provider value={{ remember, setRemember }}>
                   <Route
-                    component={() => <Redirect to="/beranda/kantor" />}
+                    component={() => <Redirect to="/dashboard" />}
                     path="/"
                     exact
                   />
 
                   <Route
-                    component={() => <Redirect to="/beranda/kantor" />}
-                    path="/beranda"
+                    component={() => <Redirect to="/dashboard" />}
+                    path="/dashboard"
                     exact
                   />
-                  <Route component={DashboardView} path="/beranda/kantor" />
+                  <Route component={DashboardView} path="/dashboard" />
                   <Route component={WFHView} path="/beranda/wfh" />
                   <Route component={DinasLuarView} path="/beranda/dinas_luar" />
 

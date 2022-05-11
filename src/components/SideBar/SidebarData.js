@@ -1,91 +1,164 @@
 import React from "react";
 import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
+import * as BsIcons from "react-icons/bs";
 import * as IoIcons from "react-icons/io";
 import * as RiIcons from "react-icons/ri";
+import {GoPrimitiveDot as Dot} from "react-icons/go";
 
 export const SidebarData = [
     {
-        title: "Overview",
-        path: "#",
+        title: "Dashboard",
+        path: "/",
         icon: <img src={require('../../icons/icon-dashboard.svg').default} alt='mySvgImage' />,
-        iconClosed: <RiIcons.RiArrowDownSLine />,
-        iconOpened: <RiIcons.RiArrowUpSLine />,
-
-        subNav: [
-            {
-                title: "Users",
-                path: "/beranda",
-                icon: <IoIcons.IoIosPaper />,
-            },
-            {
-                title: "Revenue",
-                path: "/overview/revenue",
-                icon: <IoIcons.IoIosPaper />,
-            },
-        ],
     },
     {
-        title: "Reports",
+        title: "Rekapitulasi",
+        path: "/jadwal_wfh",
+        icon: <img src={require('../../icons/icon-rekapitulasi.svg').default} alt='mySvgImage' />,
+    },
+    {
+        title: "Kegiatan",
         path: "#",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <img src={require('../../icons/icon-kegiatan.svg').default} alt='mySvgImage' />,
         iconClosed: <RiIcons.RiArrowDownSLine />,
         iconOpened: <RiIcons.RiArrowUpSLine />,
 
         subNav: [
             {
-                title: "Reports",
+                title: "Daftar Kegiatan",
                 path: "/pengajuan_izin",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <Dot />,
                 cName: "sub-nav",
             },
             {
-                title: "Reports 2",
+                title: "Tambah Pelatihan",
                 path: "/reports/reports2",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <Dot />,
                 cName: "sub-nav",
             },
             {
-                title: "Reports 3",
+                title: "Tambah Pendidikan",
                 path: "/reports/reports3",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <Dot />,
             },
         ],
     },
     {
-        title: "Products",
+        title: "Pencatatan",
         path: "#",
-        icon: <FaIcons.FaCartPlus />,
+        icon: <img src={require('../../icons/icon-pencatatan.svg').default} alt='mySvgImage' />,
     },
     {
-        title: "Team",
-        path: "/team",
-        icon: <IoIcons.IoMdPeople />,
+        title: "Analisa Kompetensi",
+        path: "#",
+        icon: <img src={require('../../icons/icon-pegawai.svg').default} alt='mySvgImage' />,
+        iconClosed: <RiIcons.RiArrowDownSLine />,
+        iconOpened: <RiIcons.RiArrowUpSLine />,
+
+        subNav: [
+            {
+                title: "Lihat Dashboard",
+                path: "/pengajuan_izin",
+                icon: <Dot />,
+                cName: "sub-nav",
+            },
+            {
+                title: "Kompetensi Pegawai",
+                path: "/reports/reports2",
+                icon: <Dot />,
+                cName: "sub-nav",
+            },
+            {
+                title: "Update Nilai Ujikom",
+                path: "/reports/reports3",
+                icon: <Dot />,
+            },
+        ],
     },
     {
-        title: "Messages",
+        title: "Riwayat Aktivitas",
         path: "#",
-        icon: <FaIcons.FaEnvelopeOpenText />,
+        icon: <img src={require('../../icons/icon-analisis.svg').default} alt='mySvgImage' />,
+    },
+    {
+        title: "Master Data",
+        path: "#",
+        icon: <img src={require('../../icons/icon-master-data.svg').default} alt='mySvgImage' />,
 
         iconClosed: <RiIcons.RiArrowDownSLine />,
         iconOpened: <RiIcons.RiArrowUpSLine />,
 
         subNav: [
             {
-                title: "Message 1",
+                title: "Pegawai",
                 path: "/messages/message1",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <Dot />,
             },
             {
-                title: "Message 2",
+                title: "Penyelenggara",
                 path: "/messages/message2",
-                icon: <IoIcons.IoIosPaper />,
+                icon: <Dot />,
+            },
+            {
+                title: "Kompetensi",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Sub Kompetensi",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Bentuk & Jalur Komp",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Jenis Kepegawaian",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Pangkat & Golongan",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Jabatan",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Klasifikasi Jabatan",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Kategori Jabatan",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Unit Kerja",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Penempatan",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Role Akses",
+                path: "/messages/message2",
+                icon: <Dot />,
+            },
+            {
+                title: "Manajemen User",
+                path: "/messages/message2",
+                icon: <Dot />,
             },
         ],
-    },
-    {
-        title: "Support",
-        path: "#",
-        icon: <IoIcons.IoMdHelpCircle />,
     },
 ];

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { useLocation } from 'react-router-dom';
 
 const SidebarLink = styled(Link)`
   display: flex;
@@ -42,12 +43,18 @@ background: #0058a8;
 
 const SubMenu = ({ item }) => {
     const [subnav, setSubnav] = useState(false);
+    const [myPath, setMyPath] = useState('my_path', []);
+    const location = useLocation();
 
     const showSubnav = () => setSubnav(!subnav);
+  
+    useEffect(() => {
+      setMyPath(location.pathname.split('/'));
+    }, [location.pathname]);
 
     return (
         <>
-            <SidebarLink to={item.path} onClick={item.subNav && showSubnav}>
+            <SidebarLink to={item.path} style={{  }} onClick={item.subNav && showSubnav}>
                 <div>
                     {item.icon}
                     <SidebarLabel>{item.title}</SidebarLabel>

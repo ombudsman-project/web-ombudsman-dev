@@ -47,6 +47,17 @@ const SidebarWrap = styled.div`
   width: 100%;
 `;
 
+const SidebarListMenu = styled.div`
+  height: 83vh;
+  z-index: -1;
+  overflow-y: scroll;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(true);
 
@@ -63,19 +74,21 @@ const Sidebar = () => {
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
             <div className="side-header">
-                <div className="side-logo">
-                  <img src={Logo} />
-                </div>
-                <div>
-                  <p>APLIKASI<br/>PENGEMBANGAN<br/><div className="second-text">KOMPETENSI</div></p>
-                </div>
+              <div className="side-logo">
+                <img src={Logo} />
+              </div>
+              <div>
+                <p>APLIKASI<br />PENGEMBANGAN<br /><div className="second-text">KOMPETENSI</div></p>
+              </div>
             </div>
+            <SidebarListMenu>
+              {SidebarData.map((item, index) => {
+                return <SubMenu item={item} key={index} />;
+              })}
+            </SidebarListMenu>
             {/* <NavIcon to="#">
                             <AiIcons.AiOutlineClose onClick={showSidebar} />
                         </NavIcon> */}
-            {SidebarData.map((item, index) => {
-              return <SubMenu item={item} key={index} />;
-            })}
           </SidebarWrap>
         </SidebarNav>
       </IconContext.Provider>
