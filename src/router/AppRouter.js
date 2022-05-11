@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect, Link } from "react-router-dom";
 import _ from "lodash";
 
 import Header from "../components/Header";
-import LoginView from '../components/Login';
+import LoginView from '../pages/Login';
 
 import DashboardView from "../pages/Dashboard";
 import WFHView from "../components/WFH";

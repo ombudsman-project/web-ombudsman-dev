@@ -400,8 +400,7 @@ button {
 
 .login {
   height: 100vh;
-  text-align: center;
-  padding: 5rem 20rem 5rem 20rem;
+  padding: 5rem 30rem 5rem 30rem;
   // height: 100%;
   // line-height: 200px;
 
@@ -435,6 +434,7 @@ button {
 }
 
 .login-logo {
+  text-align: center;
   // background-color: $primaryColor !important;
   border-top-left-radius: 19px;
   border-bottom-left-radius: 19px;
@@ -455,6 +455,56 @@ button {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #fff
+}
+
+.login-form {
+  padding-inline: 4rem;
+}
+
+.login-form .form-title {
+  color: #2b2d31;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.login-form .form-subtitle {
+  color: #85868f;
+  // font-weight: 500;
+  margin-bottom: 3rem;
+}
+
+.login-form .form-label {
+  margin-bottom: 0;
+}
+
+.login-form .form-control {
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 20px;
+  color: #4f5359;
+}
+
+.login-form .form-check {
+  color: #67686f;
+  margin-bottom: 20px;
+}
+
+.login-form a {
+  color: $mainNavColor;
+  text-decoration: none;
+}
+
+.form-check-input:checked {
+  border-color: $mainNavColor;
+  background-color: $mainNavColor;
+}
+
+.login-form button {
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 15px;
+  border-color: $mainNavColor;
+  background-color: $mainNavColor;
 }
 
 .form-check-label {
