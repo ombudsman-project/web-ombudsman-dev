@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
 //import { useHistory } from 'react-router-dom';
-import { Card, Col, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import PresenceContext from '../context/PresenceContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Logo from '../img/logo.png'
+import { Link } from 'react-router-dom';
 
 const Login = () => {
     const { setRemember } = useContext(PresenceContext);
@@ -51,11 +52,38 @@ const Login = () => {
                                 <h1 className="logo-title">OMBUDSMAN</h1>
                             </div>
                             <div>
-                                <h5 className="logo-subtitle">Aplikasi Pengembangan<br />Kompetensi</h5>
+                                <h5 className="logo-subtitle">Aplikasi Pengembangan <div className="mt-2">Kompetensi</div></h5>
                             </div>
                         </Col>
-                        <Col lg="6">
-                            <h1>Login</h1>
+                        <Col lg="6" className="login-form d-flex flex-column justify-content-center">
+                            <div>
+                                <h2 className="form-title">Login</h2>
+                                <p className="form-subtitle">Silahkan gunakan akun yang Anda miliki untuk dapat melanjutkan</p>
+                                <Form onSubmit={sampleLogin}>
+                                    <Form.Group controlId="formBasicEmail">
+                                        <Form.Label>Email address</Form.Label>
+                                        <Form.Control type="email" name="email" autoComplete="off" />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formBasicPassword">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control type="password" name="password" autoComplete="off" />
+                                    </Form.Group>
+                                    <Form.Group controlId="formBasicCheckbox">
+                                        <Row className="form-checkbox">
+                                            <Col lg="6">
+                                                <Form.Check type="checkbox" label="Remember me" />
+                                            </Col>
+                                            <Col lg="6" className="text-end">
+                                                <Link>Forgot your password?</Link>
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>
+                                    <Button variant="primary" type="submit" style={{ width: '100%' }}>
+                                        Sign In
+                                    </Button>
+                                </Form>
+                            </div>
                         </Col>
                     </Row>
                 </Card.Body>
