@@ -8,13 +8,17 @@ import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 
 import Logo from '../../img/logo.png'
+import { Form } from "react-bootstrap";
 
 const Nav = styled.div`
-  background: #15171c;
+  background: #fff;
+  margin: 10px 10px 0px 310px;
+  border-radius: 8px;
   height: 80px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  box-shadow: 0 0.05px 5px rgb(0 0 0 / 0.2);
 `;
 
 const NavIcon = styled(Link)`
@@ -42,6 +46,7 @@ const SidebarNav = styled.nav`
   transition: 350ms;
   z-index: 10;
 `;
+//left: ${({ sidebar }) => (sidebar ? '10' : '-100%')};
 
 const SidebarWrap = styled.div`
   width: 100%;
@@ -66,11 +71,16 @@ const Sidebar = () => {
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
-        {/* <Nav>
-                    <NavIcon to="#">
-                        <FaIcons.FaBars onClick={showSidebar} />
-                    </NavIcon>
-                </Nav> */}
+        <Nav>
+          {/* <NavIcon to="#">
+            <FaIcons.FaBars onClick={showSidebar} />
+          </NavIcon> */}
+          {/* <Form>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Control type="email" placeholder="Search" />
+            </Form.Group>
+          </Form> */}
+        </Nav>
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
             <div className="side-header">

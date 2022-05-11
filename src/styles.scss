@@ -1,4 +1,4 @@
-$mainBgColor    :#eaeaea;
+$mainBgColor    :#F1F5FB;
 $mainHeaderColor:#0daaaa;
 $shadowMainBg   :#c5c5c5;
 $shadowHeader   :#b0bccc;
@@ -211,10 +211,14 @@ h2 {
 
 
 .my-home-card {
-  background: $mainCardBg;
+  background: #fff;
   margin: 10px;
-  min-height: 90vh;
-  border-radius: 24px !important;
+  border-radius: 8px;
+  display: flex;
+  min-height: 10vh;
+  justify-content: flex-start;
+  align-items: center;
+  box-shadow: 0 0.05px 5px rgba(0, 0, 0, 0.1);
 
   .title {
     h5 {
@@ -911,6 +915,7 @@ nav ul li a:hover:before{
 
 .wrapper{
   margin-left:300px;
+  overflow:hidden;
 }
 
 .section{
