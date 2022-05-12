@@ -8,6 +8,7 @@ $sideMenu       :#FFF;
 $textColor      :#FFF;
 $textColorSide  :rgb(68, 68, 68);
 $mainNavColor    :#0058a8;
+$textColorSubtitle : #85868f;
 
 html {
   height: 100%;
@@ -224,6 +225,19 @@ h2 {
   border-color: $mainNavColor;
 }
 
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+a:hover {
+  color: #000
+}
+
+a:visited {
+  color: #000
+}
+
 .content-button:hover {
   background-color: $mainNavColor;
   border-color: $mainNavColor;
@@ -235,6 +249,7 @@ h2 {
 }
 
 .card-main-content {
+  padding: 47px 60px 55px 42px;
   background: #fff;
   margin-inline: 10px;
   border-radius: 20px;
@@ -305,6 +320,18 @@ h2 {
       text-align: center;
     }
   }
+}
+
+.card-main-content-title {
+  font-weight: 600;
+}
+
+.card-main-content-subtitle {
+  color: $textColorSubtitle
+}
+
+.button-submit {
+  margin-bottom: 32px !important;
 }
 
 .main-content {
@@ -453,7 +480,7 @@ button {
 }
 
 .login-form .form-subtitle {
-  color: #85868f;
+  color: $textColorSubtitle;
   // font-weight: 500;
   margin-bottom: 3rem;
 }

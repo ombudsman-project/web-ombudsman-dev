@@ -12,6 +12,7 @@ import moment from 'moment';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai'
+import { Link } from 'react-router-dom';
 
 const iconPerson = new L.Icon({
 
@@ -25,7 +26,7 @@ const Jabatan = () => {
                     <h3 className="content-title">Jabatan</h3>
                 </div>
                 <div>
-                    <Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus/>&nbsp; Tambah Data</Button>
+                    <Link to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus/>&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
