@@ -29,7 +29,7 @@ const Jabatan = () => {
                 </div>
             </div>
 
-            <Card className="content">
+            <Card className="card-main-content">
                 <Card.Body>
                     fitur masih dalam pengembangan...
                 </Card.Body>
