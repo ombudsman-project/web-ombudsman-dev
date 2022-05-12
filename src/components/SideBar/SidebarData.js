@@ -98,7 +98,7 @@ export const SidebarData = [
             },
             {
                 title: "Kompetensi",
-                path: "/messages/message2",
+                path: "/master/kompetensi",
                 icon: <Dot />,
             },
             {
