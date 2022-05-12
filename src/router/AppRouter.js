@@ -9,6 +9,7 @@ import JadwalWFHView from "../components/JadwalWFH";
 
 //MASTER DATA
 import JabatanView from "../pages/master/Jabatan"
+import KompetensiView from "../pages/master/Kompetensi"
 
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -75,6 +76,7 @@ const AppRouter = () => {
 
                   {/* MASTER DATA */}
                   <Route component={JabatanView} path="/master/jabatan" exact />
+                  <Route component={KompetensiView} path="/master/kompetensi" exact />
 
                   {/* <Route component={() => <Redirect to="/" />} /> */}
                 </PresenceContext.Provider>
