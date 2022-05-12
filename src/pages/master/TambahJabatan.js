@@ -24,7 +24,7 @@ const TambahJabatan = () => {
         <div>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link to={{ pathname: `/master/jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" style={{ fontWeight: '500' }} />&nbsp; Tambah Jabatan</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" style={{ fontWeight: '500' }} />&nbsp; Tambah Jabatan</h3></Link>
                 </div>
             </div>
 
@@ -33,18 +33,22 @@ const TambahJabatan = () => {
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
                         <p className="card-main-content-subtitle">Masukkan detail jenis kepegawaian</p>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Jenis Kepegawaian</Form.Label>
-                            <Form.Control type="text" name="jenis_kepegawaian" placeholder="Masukkan Jenis Kepegawaian" autoComplete="off" />
+                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+                            <Form.Label column sm="2">
+                                Jenis Kepegawaian
+                            </Form.Label>
+                            <Col sm="10">
+                                <Form.Control type="password" placeholder="Masukkan jenis kepegawaian" />
+                            </Col>
                         </Form.Group>
                     </Card.Body>
                 </Card>
             </Form>
 
-            <div className="d-flex flex-row justify-content-between align-items-center">
+            <div className="button-submit d-flex flex-row justify-content-between align-items-center">
                 <div></div>
-                <div classname="button-submit">
-                    <Button variant="primary" type="submit">Sign In</Button>
+                <div>
+                    <Button className="content-button-submit" variant="primary" type="submit">Simpan</Button>
                 </div>
             </div>
         </div>

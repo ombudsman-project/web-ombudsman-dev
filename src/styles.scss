@@ -9,6 +9,7 @@ $textColor      :#FFF;
 $textColorSide  :rgb(68, 68, 68);
 $mainNavColor    :#0058a8;
 $textColorSubtitle : #85868f;
+$placeholderColor: #2C2D3040;
 
 html {
   height: 100%;
@@ -225,17 +226,23 @@ h2 {
   border-color: $mainNavColor;
 }
 
-a {
+.content-link {
   text-decoration: none;
   color: #000;
 }
 
-a:hover {
+.content-link:hover {
   color: #000
 }
 
-a:visited {
+.content-link:visited {
   color: #000
+}
+
+.content-button  {
+  size: 16px;
+  line-height: 19px;
+  font-weight: 400;
 }
 
 .content-button:hover {
@@ -257,8 +264,10 @@ a:visited {
   min-height: 10vh;
   justify-content: flex-start;
   // align-items: center;
-  padding: 47px 60px 55px 42px;
-  box-shadow: 0 0.05px 5px rgba(0, 0, 0, 0.1);
+  padding: 37px 42px 37px 42px;
+  // box-shadow: 0 0.05px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 30px rgba(82, 63, 105, 0.05);
+  border: none;
 
   .head-table{
     display: flex;
@@ -323,15 +332,56 @@ a:visited {
 }
 
 .card-main-content-title {
-  font-weight: 600;
+  font-weight: 700;
+  size: 22px;
+  line-height: 27px;
 }
 
 .card-main-content-subtitle {
-  color: $textColorSubtitle
+  color: $textColorSubtitle;
+  margin-bottom: 37px;
 }
 
-.button-submit {
-  margin-bottom: 32px !important;
+.card-main-content .form-control {
+  padding: 7px 18px 7px 18px;
+}
+
+.form-label {
+  color: #2C2D30;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 25.6px;
+}
+
+.form-control::placeholder {
+  color: $placeholderColor;
+  font-weight: 500;
+  opacity: 1;
+  size: 16px;
+  line-height: 25.6px
+}
+
+.content-button-submit {
+  margin: 42px 10px 42px 10px;
+  padding: 10px 28px 10px 28px;
+  border-radius: 6px;
+  size: 16px;
+  line-height: 19px;
+  font-weight: 400;
+  background-color: $mainNavColor;
+  border-color: $mainNavColor;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+}
+.content-button-submit:hover {
+  background-color: $mainNavColor;
+  border-color: $mainNavColor;
+}
+
+.content-button-submit:focus {
+  background-color: $mainNavColor;
+  border-color: $mainNavColor;
 }
 
 .main-content {

@@ -19,6 +19,8 @@ const iconPerson = new L.Icon({
 });
 
 const Jabatan = () => {
+    const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 }
+
     return (
         <div>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -26,7 +28,7 @@ const Jabatan = () => {
                     <h3 className="content-title">Jabatan</h3>
                 </div>
                 <div>
-                    <Link to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus/>&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style}/>&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
