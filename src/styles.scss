@@ -211,26 +211,37 @@ h2 {
   // }
 }
 
+.content-title {
+  margin: 30px 0px 30px 10px;
+  font-weight: 600;
+}
+
+.content-button {
+  // margin: 30px 10px 30px 10px;
+  padding: 10px 20px 10px 20px;
+  margin-right: 10px;
+  background-color: $mainNavColor;
+  border-color: $mainNavColor;
+}
+
+.content-button:hover {
+  background-color: $mainNavColor;
+  border-color: $mainNavColor;
+}
+
+.content-button:focus {
+  background-color: $mainNavColor;
+  border-color: $mainNavColor;
+}
 
 .card-main-content {
   background: #fff;
-  margin: 10px;
-  border-radius: 8px;
-  display: flex;
-  min-height: 10vh;
-  padding: 42px;
-  justify-content: flex-start;
-  box-shadow: 0 0.05px 5px rgba(0, 0, 0, 0.1);
-}
-
-.my-home-card {
-  background: #fff;
-  margin: 10px;
+  margin-inline: 10px;
   border-radius: 8px;
   display: flex;
   min-height: 10vh;
   justify-content: flex-start;
-  align-items: center;
+  // align-items: center;
   box-shadow: 0 0.05px 5px rgba(0, 0, 0, 0.1);
 
   .title {
