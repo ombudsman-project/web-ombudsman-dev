@@ -6,6 +6,10 @@ import LoginView from '../pages/Login';
 
 import DashboardView from "../pages/Dashboard";
 import JadwalWFHView from "../components/JadwalWFH";
+
+//MASTER DATA
+import JabatanView from "../pages/master/Jabatan"
+
 import useLocalStorage from "../hooks/useLocalStorage";
 
 import PresenceContext from "../context/OmbudsmanContext";
@@ -68,6 +72,9 @@ const AppRouter = () => {
                   />
                   <Route component={DashboardView} path="/dashboard" />
                   <Route component={JadwalWFHView} path="/jadwal_wfh" exact />
+
+                  {/* MASTER DATA */}
+                  <Route component={JabatanView} path="/master/jabatan" exact />
 
                   {/* <Route component={() => <Redirect to="/" />} /> */}
                 </PresenceContext.Provider>

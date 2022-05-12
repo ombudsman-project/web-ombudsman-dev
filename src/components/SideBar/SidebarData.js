@@ -123,7 +123,7 @@ export const SidebarData = [
             },
             {
                 title: "Jabatan",
-                path: "/messages/message2",
+                path: "/master/jabatan",
                 icon: <Dot />,
             },
             {
