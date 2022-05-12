@@ -212,6 +212,17 @@ h2 {
 }
 
 
+.card-main-content {
+  background: #fff;
+  margin: 10px;
+  border-radius: 8px;
+  display: flex;
+  min-height: 10vh;
+  padding: 42px;
+  justify-content: flex-start;
+  box-shadow: 0 0.05px 5px rgba(0, 0, 0, 0.1);
+}
+
 .my-home-card {
   background: #fff;
   margin: 10px;
