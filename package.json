@@ -1,6 +1,7 @@
 {
   "name": "my-web-ombudsman",
   "version": "0.1.1",
+  "homepage": "/ombudsman-dev",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",

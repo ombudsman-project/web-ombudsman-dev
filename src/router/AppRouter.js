@@ -52,7 +52,7 @@ const AppRouter = () => {
   // };
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/ombudsman-dev">
       <Switch>
         {_.size(remember) > 0 ? (
           <React.Fragment>
