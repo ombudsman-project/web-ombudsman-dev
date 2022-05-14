@@ -59,14 +59,14 @@ const AppRouter = () => {
   }
 
   return (
-    <BrowserRouter basename="/ombudsman-dev">
+    <BrowserRouter>
       <Switch>
         {_.size(remember) > 0 ? (
           <React.Fragment>
             <nav className="sidebar">
               <Sidebar parentCallback={callbackSideBar} />
             </nav>
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%" }} className="main-animation">
               <main id="page-wrap" className={sidebar ? "main-content wrapper-hide" : "main-content wrapper"}>
                 <PresenceContext.Provider value={{ remember, setRemember }}>
                   <Route

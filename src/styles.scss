@@ -491,9 +491,6 @@ h2 {
   }
 }
 
-button {
-  margin-right: 5px;
-}
 
 .submit-btn {
   margin-top: 1rem;
@@ -578,7 +575,6 @@ button {
 .login-form .form-title {
   color: #2b2d31;
   font-weight: 600;
-  margin-bottom: 20px;
 }
 
 .login-form .form-subtitle {
@@ -594,7 +590,6 @@ button {
 .login-form .form-control {
   border-radius: 5px;
   padding: 8px;
-  margin-bottom: 20px;
   color: #4f5359;
 }
 
@@ -1037,16 +1032,28 @@ nav ul li a:hover:before {
   width: 100%;
 }
 
-.wrapper {
-  margin-left: 300px;
+.main-animation {
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.wrapper{
+  margin-left:300px;
   transition: 350ms;
-  overflow: hidden;
+  overflow:hidden;
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 .wrapper-hide {
   //margin-left:300px;
   transition: 350ms;
-  overflow: hidden;
+  overflow:hidden;
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 .section {
@@ -1055,8 +1062,17 @@ nav ul li a:hover:before {
   min-height: 100vh;
   text-align: center;
 }
+  
+.box-area h2{
+  text-transform:uppercase;
+  font-size:30px;
+}
 
-.box-area h2 {
-  text-transform: uppercase;
-  font-size: 30px;
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+   }
 }
