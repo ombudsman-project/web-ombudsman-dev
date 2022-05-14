@@ -85,10 +85,15 @@ const Jabatan = () => {
                             <div>data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                            <div id="filter-table" className="filter-table">
-                                <AiIcons.AiFillFilter />
-                                Filter
-                            </div>
+                            {/* <div id="filter-table" className="filter-table">
+                                <FiIcons.FiFilter />&nbsp;Filter
+                            </div> */}
+                            {/* <Button className="filter-table" variant="link"><FiIcons.FiFilter />&nbsp; Filter</Button> */}
+                            <button type="button" class="btn btn-link filter-table">
+                                <div className="d-flex justify-content-center align-items-center">
+                                    <FiIcons.FiFilter />&nbsp;Filter
+                                </div>
+                            </button>
                             <div id="search-table" className="search-table">
                                 <FaIcons.FaSearch
                                     style={{ marginLeft: "1rem", position: "absolute" }}
@@ -118,11 +123,12 @@ const Jabatan = () => {
                                     <td>Otto</td>
                                     <td>@mdo</td>
                                     <td className="action-column">
-                                        <Link to={{ pathname: `/master/jabatan/detail` }}><button type="button" class="btn btn-warning button-view">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                            </div>
-                                        </button>
+                                        <Link to={{ pathname: `/master/jabatan/detail` }}>
+                                            <button type="button" class="btn btn-warning button-view">
+                                                <div className="d-flex justify-content-center align-items-center">
+                                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                                </div>
+                                            </button>
                                         </Link>
                                         <button type="button" class="btn btn-info button-edit">
                                             <div className="d-flex justify-content-center align-items-center">
