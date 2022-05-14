@@ -22,7 +22,7 @@ const Jabatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 }
 
     return (
-        <div>
+        <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
                     <h3 className="content-title">Jabatan</h3>

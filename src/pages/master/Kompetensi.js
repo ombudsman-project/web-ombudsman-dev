@@ -18,7 +18,7 @@ const iconPerson = new L.Icon({});
 
 const Kompetensi = () => {
   return (
-    <div>
+    <div className="main-animation">
       <div className="d-flex flex-row justify-content-between align-items-center">
         <div>
           <h3 className="content-title">Kompetensi</h3>
