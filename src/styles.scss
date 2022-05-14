@@ -29,6 +29,10 @@ body {
   max-height: 100%;
 }
 
+dl, ol, ul {
+  margin: 0;
+}
+
 header {
   //padding: 20px 0px 0px 0px;
   //margin: 10px 0 10px 0;
@@ -284,6 +288,14 @@ h2 {
   .size-table {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .select-row-table {
+    width: 65px;
+    background-color: rgba(243, 246, 249, 1);
+    border: none;
   }
 
   .filter-table {
@@ -298,6 +310,7 @@ h2 {
     color: $textColorSubtitle;
     font-weight: 500;
     width: 40px;
+    margin-right: 10px;
     text-decoration: none;
     // font-size: 18px;
   }
@@ -368,6 +381,10 @@ h2 {
     .button-delete {
       background-color: #FD3D00;
     }
+
+    .footer-table {
+      margin-top: 50px;
+    }
   }
 }
 
@@ -411,7 +428,7 @@ h2 {
   background-color: $mainNavColor;
   border-color: $mainNavColor;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 19px;
 }
 .content-button-submit:hover {
