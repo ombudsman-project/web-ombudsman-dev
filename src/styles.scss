@@ -11,6 +11,11 @@ $mainNavColor: #0058a8;
 $textColorSubtitle: #85868f;
 $placeholderColor: #2c2d3040;
 
+* {
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+  font-family: 'Poppins', sans-serif;
+}
+
 html {
   height: 100%;
 }
@@ -31,7 +36,8 @@ header {
   background: $mainHeaderColor;
   padding-bottom: 1px;
   margin-bottom: 10px;
-  box-shadow: 0px 10px 10px $shadowMainBg;
+  // box-shadow: 0px 10px 10px $shadowMainBg;
+  box-shadow: 0px 0px 30px rgba(82, 63, 105, 0.05);
 
   .links {
     text-transform: uppercase;
@@ -265,7 +271,6 @@ h2 {
   justify-content: flex-start;
   // align-items: center;
   padding: 37px 42px 37px 42px;
-  // box-shadow: 0 0.05px 5px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 0px 30px rgba(82, 63, 105, 0.05);
   border: none;
 
@@ -285,11 +290,16 @@ h2 {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around;
-    padding: 10px;
+    justify-content: center;
+    padding: 8px;
     background: rgba(243, 246, 249, 1);
     border-radius: 4px;
     min-width: 100px;
+    color: $textColorSubtitle;
+    font-weight: 500;
+    width: 40px;
+    text-decoration: none;
+    // font-size: 18px;
   }
 
   .search-table {
@@ -539,21 +549,14 @@ button {
 
 .login-logo {
   text-align: center;
-  // background-color: $primaryColor !important;
   border-top-left-radius: 19px;
   border-bottom-left-radius: 19px;
-  background-image: linear-gradient(
-    to bottom,
-    #374373,
-    #344880,
-    #2d4d8d,
-    #21529a,
-    #0058a8
-  );
+  background: linear-gradient(180deg, rgba(55,67,112,1) 25%, rgba(0,88,168,1) 85%);
 }
 
 .logo-img {
-  margin-bottom: 3rem;
+  margin-bottom: 40px;
+  width: 170px;
 }
 
 .logo-title {
