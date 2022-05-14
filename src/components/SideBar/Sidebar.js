@@ -18,7 +18,7 @@ const Nav = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0.05px 5px rgb(0 0 0 / 0.2);
+  box-shadow: 0px 0px 30px rgba(82, 63, 105, 0.05);
 `;
 
 const NavIcon = styled(Link)`
