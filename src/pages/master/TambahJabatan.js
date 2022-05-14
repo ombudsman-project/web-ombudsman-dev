@@ -24,7 +24,7 @@ const TambahJabatan = () => {
         <div>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" style={{ fontWeight: '500' }} />&nbsp; Tambah Jabatan</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Jabatan</h3></Link>
                 </div>
             </div>
 
@@ -38,7 +38,7 @@ const TambahJabatan = () => {
                                 Jenis Kepegawaian
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="password" placeholder="Masukkan jenis kepegawaian" />
+                                <Form.Control type="text" placeholder="Masukkan jenis kepegawaian" />
                             </Col>
                         </Form.Group>
                     </Card.Body>
