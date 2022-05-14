@@ -5,7 +5,7 @@ import _ from "lodash";
 import LoginView from '../pages/Login';
 
 import DashboardView from "../pages/Dashboard";
-import JadwalWFHView from "../components/JadwalWFH";
+import RekapitulasiView from "../pages/Rekapitulasi";
 
 //MASTER DATA
 import JabatanView from "../pages/master/Jabatan"
@@ -23,6 +23,7 @@ import Sidebar from "../components/SideBar/Sidebar";
 
 const AppRouter = () => {
   const [remember, setRemember] = useLocalStorage("remember_me", []);
+  const [sidebar, setSidebar] = useState(false);
   // const [menuOpen, setMenuOpen] = useState(false);
   // const { t, i18n } = useTranslation();
 
@@ -51,16 +52,21 @@ const AppRouter = () => {
   //   i18n.changeLanguage(lng);
   // };
 
+  const callbackSideBar = (cond) => {
+    setSidebar(cond)
+    // do something with value in parent component, like save to state
+  }
+
   return (
     <BrowserRouter basename="/ombudsman-dev">
       <Switch>
         {_.size(remember) > 0 ? (
           <React.Fragment>
             <nav className="sidebar">
-              <Sidebar/>
+              <Sidebar parentCallback={callbackSideBar} />
             </nav>
             <div style={{ width: "100%" }}>
-              <main id="page-wrap" className="main-content wrapper">
+              <main id="page-wrap" className={sidebar ? "main-content wrapper-hide" : "main-content wrapper"}>
                 <PresenceContext.Provider value={{ remember, setRemember }}>
                   <Route
                     component={() => <Redirect to="/dashboard" />}
@@ -74,7 +80,7 @@ const AppRouter = () => {
                     exact
                   />
                   <Route component={DashboardView} path="/dashboard" />
-                  <Route component={JadwalWFHView} path="/jadwal_wfh" exact />
+                  <Route component={RekapitulasiView} path="/rekapitulasi" exact />
 
                   {/* MASTER DATA */}
                   <Route component={JabatanView} path="/master/jabatan" exact />

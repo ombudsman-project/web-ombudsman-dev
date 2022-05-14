@@ -973,6 +973,13 @@ nav ul li a:hover:before{
 
 .wrapper{
   margin-left:300px;
+  transition: 350ms;
+  overflow:hidden;
+}
+
+.wrapper-hide{
+  //margin-left:300px;
+  transition: 350ms;
   overflow:hidden;
 }
 

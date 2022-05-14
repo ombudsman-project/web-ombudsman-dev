@@ -10,7 +10,7 @@ export const SidebarData = [
     },
     {
         title: "Rekapitulasi",
-        path: "/jadwal_wfh",
+        path: "/rekapitulasi",
         icon: <img src={require('../../icons/icon-rekapitulasi.svg').default} alt='mySvgImage' />,
     },
     {

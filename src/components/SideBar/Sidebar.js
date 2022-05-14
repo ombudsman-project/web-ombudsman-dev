@@ -13,7 +13,6 @@ import { Form } from "react-bootstrap";
 
 const Nav = styled.div`
   background: #fff;
-  margin: 10px 10px 0px 310px;
   border-radius: 8px;
   height: 80px;
   display: flex;
@@ -43,9 +42,8 @@ const SidebarNav = styled.nav`
   position: fixed;
   top: 10px;
   bottom: 10px;
-  left: 10px;
   transition: 350ms;
-  left: ${({ sidebar }) => (sidebar ? "10" : "-100%")};
+  left: ${({ sidebar }) => (sidebar ? "10px" : "-100%")};
   z-index: 10;
 `;
 //left: ${({ sidebar }) => (sidebar ? '10' : '-100%')};
@@ -90,17 +88,19 @@ const RightContent = styled.div`
   align-items: center;
 `;
 
-const Sidebar = () => {
+const Sidebar = ({ parentCallback }) => {
   const [sidebar, setSidebar] = useState(true);
-
-  const showSidebar = () => setSidebar(!sidebar);
+  const showSidebar = () => {
+    parentCallback(sidebar);
+    setSidebar(!sidebar);
+  };
 
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
-        <Nav>
+        <Nav style={sidebar ? { margin: '10px 10px 0px 310px', transition: '350ms'} : {margin: '10px 10px 0px 10px', transition: '350ms'}}>
           {/* <NavIcon to="#">
-            <FaIcons.FaBars onClick={showSidebar} />
+            <FaIcons.FaBars onClick={showSidebar} color={"#000"} />
           </NavIcon> */}
           <Search>
             <FaIcons.FaSearch
