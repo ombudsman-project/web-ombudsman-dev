@@ -40,7 +40,7 @@ const Login = () => {
     }
 
     return (
-        <div className="login">
+        <div className="container login">
             <Card className="login-card">
                 <Card.Body className="p-0">
                     <Row>

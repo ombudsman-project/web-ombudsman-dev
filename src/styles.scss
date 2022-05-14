@@ -462,7 +462,20 @@ button {
 
 .login {
   height: 100vh;
+  //padding: 5rem 30rem 5rem 30rem;
+  padding: 100px 50px 100px 50px;
+  // height: 100%;
+  // line-height: 200px;
+
+  button {
+    font-size: 20px;
+  }
+}
+
+.loginv1 {
+  height: 100vh;
   padding: 5rem 30rem 5rem 30rem;
+  //padding: 100px 50px 100px 50px;
   // height: 100%;
   // line-height: 200px;
 
@@ -596,7 +609,7 @@ button {
   margin-left: 10px;
 }
 
-@media (min-width:320px)  { /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
+@media only screen and (min-width: 320px)  { /* smartphones, portrait iPhone, portrait 480x320 phones (Android) */
   header {
     position: sticky;
     top: 0;
@@ -609,10 +622,6 @@ button {
     z-index: 1;
   }
   
-  .login-card {
-    min-width: 300px;
-  }
-  
   .my-menu {
     .menu-item {
       .my-item-icon {
@@ -622,7 +631,24 @@ button {
     }
   }
 }
-@media (min-width:480px)  { /* smartphones, Android phones, landscape iPhone */
+@media only screen and (max-width: 480px)  { /* smartphones, Android phones, landscape iPhone */
+  .login-logo {
+    text-align: center;
+    // background-color: $primaryColor !important;
+    border-radius: 19px;
+  }
+
+  .login {
+    height: auto;
+    padding: 30px;
+  }
+
+  .login-card {
+    height: auto;
+    padding-bottom: 10px;
+  }
+
+  
   .my-menu {
     .menu-item {
       .my-item-icon {
