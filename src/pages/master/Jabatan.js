@@ -15,16 +15,53 @@ import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import ServiceApi from '../../api/MyApi';
 
 const iconPerson = new L.Icon({
 
 });
 
 const Jabatan = () => {
-    const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 }
+    const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
+    const [listPegawai, setListPegawai] = useState([]);
+
+    useEffect(() => {
+        //Cara V2 Amed
+        new ServiceApi().getListPegawai().then(x => {
+            //Do The Data...
+            setListPegawai(x.data.data)
+            console.log(x)
+        }).catch((err) => {
+            //Do Error...
+        })
+
+        //Cara Fikr
+        // ServiceApi.getListPegawai().then(x => {
+        //     //Do The Data...
+        //     setListPegawai(x.data.data)
+        //     console.log(x)
+        // }).catch((err) => {
+        //     //Do Error...
+        // })
+    }, [])
 
     return (
         <div className='main-animation'>
+            {
+                !_.isEmpty(listPegawai) ? (
+                    <>
+                        {listPegawai.map((x, key) => {
+                            return (
+                                <div key={key}>
+                                    <p>{x.nama}</p>
+                                </div>
+                            )
+                        })}
+                    </>
+                ) : (
+                    <></>
+                )
+            }
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
                     <h3 className="content-title">Jabatan</h3>

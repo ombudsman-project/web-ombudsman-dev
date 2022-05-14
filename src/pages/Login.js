@@ -8,9 +8,7 @@ import Logo from '../img/logo.png';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
-import {
-    authUsers
-} from "../api/MyApi";
+import ServiceApi from "../api/MyApi";
 
 const Login = () => {
     const { setRemember } = useContext(PresenceContext);
@@ -23,26 +21,9 @@ const Login = () => {
 
     const sampleLogin = async (e) => {
         e.preventDefault();
-        await authUsers({
-                email: e.target.email.value,
-                password: e.target.password.value
-        }).then(response => {
-            setRemember({ remember: rmb, ...response.data });
-        }).catch(err => {
-            Swal.fire({
-                title: 'Gagal!',
-                text: err.response.data.message,
-                icon: 'error'
-            });
-        });
-        // axios({
-        //     method: 'post',
-        //     url: process.env.REACT_APP_BASE_API + '/web/verifyAuth',
-        //     headers: {},
-        //     data: {
+        // await ServiceApi.authUsers({
         //         email: e.target.email.value,
         //         password: e.target.password.value
-        //     }
         // }).then(response => {
         //     setRemember({ remember: rmb, ...response.data });
         // }).catch(err => {
@@ -50,10 +31,25 @@ const Login = () => {
         //         title: 'Gagal!',
         //         text: err.response.data.message,
         //         icon: 'error'
-        //     }).then(x => {
-
         //     });
         // });
+        axios({
+            method: 'post',
+            url: process.env.REACT_APP_BASE_API + '/login',
+            headers: {},
+            data: {
+                email: e.target.email.value,
+                password: e.target.password.value
+            }
+        }).then(response => {
+            setRemember({ remember: rmb, ...response.data });
+        }).catch(err => {
+            Swal.fire({
+                title: 'Gagal!',
+                text: err.response.data.message,
+                icon: 'error'
+            })
+        });
     }
 
     return (
