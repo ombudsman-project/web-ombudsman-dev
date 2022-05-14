@@ -1034,16 +1034,28 @@ nav ul li a:hover:before {
   width: 100%;
 }
 
-.wrapper {
-  margin-left: 300px;
+.main-animation {
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.wrapper{
+  margin-left:300px;
   transition: 350ms;
-  overflow: hidden;
+  overflow:hidden;
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 .wrapper-hide {
   //margin-left:300px;
   transition: 350ms;
-  overflow: hidden;
+  overflow:hidden;
+  animation: fadeInAnimation ease 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
 
 .section {
@@ -1052,8 +1064,17 @@ nav ul li a:hover:before {
   min-height: 100vh;
   text-align: center;
 }
+  
+.box-area h2{
+  text-transform:uppercase;
+  font-size:30px;
+}
 
-.box-area h2 {
-  text-transform: uppercase;
-  font-size: 30px;
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+   }
 }
