@@ -1,11 +1,16 @@
 import React, { useContext, useState } from 'react';
 //import { useHistory } from 'react-router-dom';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import PresenceContext from '../context/OmbudsmanContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Logo from '../img/logo.png'
+import Logo from '../img/logo.png';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import {
+    authUsers
+} from "../api/MyApi";
 
 const Login = () => {
     const { setRemember } = useContext(PresenceContext);
@@ -16,16 +21,11 @@ const Login = () => {
         setPasswordShown(passwordShown ? false : true);
     }
 
-    const sampleLogin = e => {
+    const sampleLogin = async (e) => {
         e.preventDefault();
-        axios({
-            method: 'post',
-            url: process.env.REACT_APP_BASE_API + '/web/verifyAuth',
-            headers: {},
-            data: {
+        await authUsers({
                 email: e.target.email.value,
                 password: e.target.password.value
-            }
         }).then(response => {
             setRemember({ remember: rmb, ...response.data });
         }).catch(err => {
@@ -33,10 +33,27 @@ const Login = () => {
                 title: 'Gagal!',
                 text: err.response.data.message,
                 icon: 'error'
-            }).then(x => {
-
             });
         });
+        // axios({
+        //     method: 'post',
+        //     url: process.env.REACT_APP_BASE_API + '/web/verifyAuth',
+        //     headers: {},
+        //     data: {
+        //         email: e.target.email.value,
+        //         password: e.target.password.value
+        //     }
+        // }).then(response => {
+        //     setRemember({ remember: rmb, ...response.data });
+        // }).catch(err => {
+        //     Swal.fire({
+        //         title: 'Gagal!',
+        //         text: err.response.data.message,
+        //         icon: 'error'
+        //     }).then(x => {
+
+        //     });
+        // });
     }
 
     return (
@@ -62,17 +79,31 @@ const Login = () => {
                                 <Form onSubmit={sampleLogin}>
                                     <Form.Group controlId="formBasicEmail">
                                         <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email" name="email" autoComplete="off" />
+                                        <Form.Control type="email" name="email" autoComplete="off" defaultValue={process.env.REACT_APP_BASE_EMAIL} />
                                     </Form.Group>
 
-                                    <Form.Group controlId="formBasicPassword">
+                                    {/* <Form.Group controlId="formBasicPassword">
                                         <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" name="password" autoComplete="off" />
+                                        <Form.Control type={passwordShown ? "text" : "password"} name="password" autoComplete="off" defaultValue={process.env.REACT_APP_BASE_PASS} />
+                                    </Form.Group> */}
+                                    <br />
+                                    <Form.Group>
+                                        <Form.Label>Password</Form.Label>
+                                        <InputGroup className="mb-3">
+                                            <Form.Control
+                                                type={passwordShown ? "text" : "password"}
+                                                name="password" autoComplete="off"
+                                                defaultValue={process.env.REACT_APP_BASE_PASS}
+                                            />
+                                            <Button variant="outline-secondary" id="button-addon2" className='text-white' onClick={handleChange}>
+                                                <FontAwesomeIcon icon={passwordShown ? faEyeSlash : faEye} />
+                                            </Button>
+                                        </InputGroup>
                                     </Form.Group>
                                     <Form.Group controlId="formBasicCheckbox">
                                         <Row className="form-checkbox">
                                             <Col lg="6">
-                                                <Form.Check type="checkbox" label="Remember me" />
+                                                <Form.Check type="checkbox" label="Remember me" onChange={() => setRmb(!rmb)} />
                                             </Col>
                                             <Col lg="6" className="text-end">
                                                 <Link>Forgot your password?</Link>
