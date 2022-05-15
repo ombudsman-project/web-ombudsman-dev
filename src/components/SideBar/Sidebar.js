@@ -97,10 +97,10 @@ const Sidebar = ({ parentCallback }) => {
   const { height, width } = useWindowDimensions();
 
   useEffect(() => {
-    if(width < 600){
-      setSidebar(false)
-      parentCallback(sidebar);
-    }
+    // if(width < 600){
+    //   setSidebar(false)
+    //   parentCallback(sidebar);
+    // }
   }, []);
   
   const showSidebar = () => {
@@ -168,7 +168,7 @@ const Sidebar = ({ parentCallback }) => {
                   <br />
                   PENGEMBANGAN
                   <br />
-                  <div className="second-text">KOMPETENSI</div>
+                  KOMPETENSI
                 </p>
               </div>
             </div>

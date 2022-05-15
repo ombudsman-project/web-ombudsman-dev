@@ -1,79 +1,232 @@
 import React, { useState, useEffect } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import L from 'leaflet';
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Button, Card, Col, Container, Form, Pagination, Row } from 'react-bootstrap';
+import { faArrowLeft, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
+import { Button, Card, Col, Container, Form, Row, Pagination } from 'react-bootstrap';
 import _ from 'lodash';
-import Skeleton from 'react-loading-skeleton'
-import { useTranslation } from 'react-i18next';
-import moment from 'moment';
-import axios from 'axios';
-import Swal from 'sweetalert2'
+import Skeleton from 'react-loading-skeleton';
+import { Link } from 'react-router-dom';
+import {
+    Chart as ChartJS,
+    RadialLinearScale,
+    PointElement,
+    LineElement,
+    Filler,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+import { Radar } from 'react-chartjs-2';
 import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
-import * as IoIcons from 'react-icons/io';
-import { Link } from 'react-router-dom';
-import ServiceApi from '../../../api/MyApi';
 
-const iconPerson = new L.Icon({
+ChartJS.register(
+    RadialLinearScale,
+    PointElement,
+    LineElement,
+    Filler,
+    Tooltip,
+    Legend
+);
 
-});
+export const myData = [
+    {
+        title: "Mengelola Perubahan",
+        content: 3
+    },
+    {
+        title: "Kerja Sama",
+        content: 3
+    },
+    {
+        title: "Komunikasi",
+        content: 3
+    },
+    {
+        title: "Orientasi Pada Hasil",
+        content: 3
+    },
+    {
+        title: "Pengembangan Diri dan Orang Lain",
+        content: 3
+    },
+    {
+        title: "Pelayanan Publik",
+        content: 3
+    },
+    {
+        title: "Integritas",
+        content: 3
+    },
+    {
+        title: "Pengambilan Keputusan",
+        content: 3
+    },
+];
 
-const Jabatan = () => {
-    const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [listPegawai, setListPegawai] = useState([]);
+export const data = {
+    labels: myData.map(x => x.title),
+    datasets: [
+        {
+            label: 'Standar Nilai Kompetensi',
+            fill: true,
+            data: myData.map(x => x.content),
+            backgroundColor: 'rgba(166, 25, 45, 0.3)',
+            borderColor: '#A6192D',
+            borderWidth: 3,
+            pointRadius: 1
+        }, {
+            label: 'Hasil Asesmen',
+            data: myData.map(x => x.title == 'Pelayanan Publik' ? 2 : x.content),
+            fill: true,
+            backgroundColor: 'rgba(255, 143, 42, 0.3)',
+            borderColor: '#FF8F2A',
+            pointBackgroundColor: 'rgb(54, 162, 235)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgb(54, 162, 235)',
+            borderWidth: 3,
+            pointRadius: 0
+          }
+    ],
+};
+
+export const option = {
+    scales: {
+        r: {
+            angleLines: {
+                display: true
+            },
+            suggestedMin: 0,
+            suggestedMax: 6
+        }
+    },
+    elements: {
+      line: {
+        borderWidth: 3
+      }
+    }
+};
+
+const DetailKompetensiPegawai = () => {
+    const [myPemetaan, setMyPemetaan] = useState([]);
+
+    const location = useLocation();
+    const myparam = location.state.label;
 
     useEffect(() => {
-        //Cara V2 Amed
-        new ServiceApi().getListPegawai().then(x => {
-            //Do The Data...
-            setListPegawai(x.data.data)
-            console.log(x)
-        }).catch((err) => {
-            //Do Error...
-        })
-
-        //Cara Fikr
-        // ServiceApi.getListPegawai().then(x => {
-        //     //Do The Data...
-        //     setListPegawai(x.data.data)
-        //     console.log(x)
-        // }).catch((err) => {
-        //     //Do Error...
-        // })
-    }, [])
+        var data = [
+            {
+                title: "Integritas",
+                content: 3
+            },
+            {
+                title: "Kerja Sama",
+                content: 3
+            },
+            {
+                title: "Komunikasi",
+                content: 3
+            },
+            {
+                title: "Orientasi Pada Hasil",
+                content: 3
+            },
+            {
+                title: "Pelayanan Publik",
+                content: 3
+            },
+            {
+                title: "Pengembangan Diri dan Orang Lain",
+                content: 3
+            },
+            {
+                title: "Mengelola Perubahan",
+                content: 3
+            },
+            {
+                title: "Pengambilan Keputusan",
+                content: 3
+            },
+        ]
+        setMyPemetaan(data);
+    }, [data]);
 
     return (
         <div className='main-animation'>
-            {
-                !_.isEmpty(listPegawai) ? (
-                    <>
-                        {listPegawai.map((x, key) => {
-                            return (
-                                <div key={key}>
-                                    <p>{x.nama}</p>
-                                </div>
-                            )
-                        })}
-                    </>
-                ) : (
-                    <></>
-                )
-            }
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Jabatan</h3>
-                </div>
-                <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/analisa_kompetensi/kompetensi_pegawai` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Detail Kompetensi Pegawai</h3></Link>
                 </div>
             </div>
 
             <Card className="card-main-content">
                 <Card.Body>
+                    <h4><b>Detail Pegawai</b></h4>
+                    <p className="card-main-content-subtitle">Data lengkap dari pegawai.</p>
+                    <Row>
+                        <Col lg="3"><p>Nama</p></Col>
+                        <Col className="text-secondary" lg="3"><p>{myparam}</p></Col>
+                        <Col lg="4">Jumlah JP</Col>
+                        <Col className="text-secondary" lg="2"><p>110</p></Col>
+
+                        <Col lg="3"><p>Jabatan</p></Col>
+                        <Col className="text-secondary" lg="3"><p>PNS</p></Col>
+                        <Col lg="4">Keterangan JP</Col>
+                        <Col className="text-secondary" lg="2"><p>110</p></Col>
+
+                        <Col lg="3"><p>Penempatan</p></Col>
+                        <Col className="text-secondary" lg="3"><p>Pusat</p></Col>
+                        <Col lg="6"></Col>
+
+                        <Col lg="3"><p>Unit Kerja</p></Col>
+                        <Col className="text-secondary" lg="9"><p>Administrasi Pengawasan Penyelenggaraan Pelayanan Publik</p></Col>
+                    </Row>
+                </Card.Body>
+            </Card>
+            <br />
+            <Card className="card-main-content">
+                <Card.Body>
+                    <h4><b>Pemetaan Kompetensi Manajerial</b></h4>
+                    <p className="card-main-content-subtitle">Data lengkap dari pegawai.</p>
+                    <Row>
+                        <Col>
+                            <Radar data={data} options={option}/>
+                        </Col>
+                        <Col>
+                            <Row>
+                                {
+                                    _.size(myPemetaan) > 0 ?
+                                        (
+                                            myPemetaan.map((x, key) => {
+                                                return (
+                                                    <ContentPemetaan data={x} key={key} />
+                                                )
+                                            })
+                                        )
+                                        :
+                                        <></>
+                                }
+                                <Col lg={12}>
+                                    <hr />
+                                    <Row>
+                                        <Col lg="10"><p>Nilai Job Person Match (JPM)</p></Col>
+                                        <Col className="text-secondary" lg="2"><p className='text-center'>138,89%</p></Col>
+                                        
+                                        <Col lg="10"><p>Kategori Hasil Penilaian</p></Col>
+                                        <Col className="text-secondary" lg="2"><Button variant='success'>Optimal</Button></Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Card.Body>
+            </Card>
+            <br/>
+            <Card className="card-main-content">
+                <Card.Body>
+                    <h4><b>Kegiatan yang Diikuti</b></h4>
+                    <p className="card-main-content-subtitle">Daftar kegiatan yang telah diikuti oleh pegawai.</p>
                     <div className="head-table">
                         <div id="size-table" className="size-table">
                             <div>Lihat &nbsp;</div>
@@ -209,8 +362,17 @@ const Jabatan = () => {
                     </div>
                 </Card.Body>
             </Card>
+            <br/>
         </div>
     );
 };
 
-export default Jabatan;
+function ContentPemetaan({ data }) {
+    return (
+        <>
+            <Col lg="10"><p>{data.title}</p></Col>
+            <Col className="text-secondary" lg="2"><p className='text-center'>{data.content}</p></Col>
+        </>
+    )
+}
+export default DetailKompetensiPegawai;

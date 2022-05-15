@@ -58,7 +58,7 @@ const Kompetensi = () => {
             </div>
           </div>
           <div id="content-table" className="content-table">
-            <table class="table table-hover">
+            <table className="table table-hover">
               <thead>
                 <tr>
                   <th scope="col" style={{ width: 46 }}>
@@ -77,13 +77,13 @@ const Kompetensi = () => {
                   <td>Otto</td>
                   <td>@mdo</td>
                   <td className="action-column">
-                    <button type="button" class="btn btn-warning">
+                    <button type="button" className="btn btn-warning">
                       Warning
                     </button>
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" className="btn btn-primary">
                       Primary
                     </button>
-                    <button type="button" class="btn btn-danger">
+                    <button type="button" className="btn btn-danger">
                       Danger
                     </button>
                   </td>
@@ -94,29 +94,29 @@ const Kompetensi = () => {
                   <td>Thornton</td>
                   <td>@fat</td>
                   <td className="action-column">
-                    <button type="button" class="btn btn-warning">
+                    <button type="button" className="btn btn-warning">
                       Warning
                     </button>
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" className="btn btn-primary">
                       Primary
                     </button>
-                    <button type="button" class="btn btn-danger">
+                    <button type="button" className="btn btn-danger">
                       Danger
                     </button>
                   </td>
                 </tr>
                 <tr>
                   <td scope="row">3</td>
-                  <td colspan="2">Larry the Bird</td>
+                  <td colSpan="2">Larry the Bird</td>
                   <td>@twitter</td>
                   <td className="action-column">
-                    <button type="button" class="btn btn-warning">
+                    <button type="button" className="btn btn-warning">
                       Warning
                     </button>
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" className="btn btn-primary">
                       Primary
                     </button>
-                    <button type="button" class="btn btn-danger">
+                    <button type="button" className="btn btn-danger">
                       Danger
                     </button>
                   </td>
