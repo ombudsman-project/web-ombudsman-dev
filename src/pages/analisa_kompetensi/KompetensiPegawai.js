@@ -8,13 +8,42 @@ import Skeleton from 'react-loading-skeleton'
 import Select from 'react-select'
 
 const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
 ]
 
 const KompetensiPegawai = () => {
-    const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 }
+    const customStyles = {
+        option: (provided, state) => ({
+            ...provided,
+            zIndex: 9999
+        }),
+        singleValue: (provided, state) => {
+            const opacity = state.isDisabled ? 0.5 : 1;
+            const transition = 'opacity 300ms';
+
+            return { ...provided, opacity, transition };
+        }
+    }
 
     return (
         <div class="main-animation">
@@ -28,7 +57,7 @@ const KompetensiPegawai = () => {
                 <Card.Body>
                     <h4><b>Nama Pegawai</b></h4>
                     <p className="card-main-content-subtitle">Silahkan pilih pegawai untuk dapat melihat kompetensi pegawai</p>
-                    <Select options={options} menuIsOpen/>
+                    <Select options={options} />
                 </Card.Body>
             </Card>
         </div>
