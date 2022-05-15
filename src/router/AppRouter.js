@@ -9,8 +9,9 @@ import RekapitulasiView from "../pages/Rekapitulasi";
 
 //MASTER DATA
 import JabatanView from "../pages/master/Jabatan"
-import TambahJabatanView from "../pages/master/TambahJabatan"
 import DetailJabatanView from "../pages/master/DetailJabatan"
+import TambahJabatanView from "../pages/master/TambahJabatan"
+import EditJabatanView from "../pages/master/EditJabatan"
 
 import KompetensiView from "../pages/master/Kompetensi"
 
@@ -85,8 +86,9 @@ const AppRouter = () => {
 
                   {/* MASTER DATA */}
                   <Route component={JabatanView} path="/master/jabatan" exact />
-                  <Route component={TambahJabatanView} path="/master/jabatan/tambah" />
                   <Route component={DetailJabatanView} path="/master/jabatan/detail" />
+                  <Route component={TambahJabatanView} path="/master/jabatan/tambah" />
+                  <Route component={EditJabatanView} path="/master/jabatan/edit" />
 
 
                   <Route component={KompetensiView} path="/master/kompetensi" exact />

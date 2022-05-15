@@ -31,36 +31,31 @@ const DetailJabatan = () => {
             <Form>
                 <Card className="card-main-content">
                     <Card.Body>
-                        <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
-                        <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jenis kepegawaian</p>
-                        <p>
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                                <div>Jabatan</div>
-                                <div>Sekretaris Jendral</div>
+                        <div className="d-flex flex-row justify-content-between">
+                            <div>
+                                <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
+                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jenis kepegawaian</p>
                             </div>
-                        </p>
-                        <p>
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                                <div>Jabatan</div>
-                                <div>Sekretaris Jendral</div>
+                            <div>
+                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots  /></Button>
                             </div>
-                        </p>
-                        <p>
-                            <div className="d-flex flex-row justify-content-between align-items-center">
-                                <div>Jabatan</div>
-                                <div>Sekretaris Jendral</div>
-                            </div>
-                        </p>
+                        </div>
+                        <Row>
+                            <Col lg="3"><p>Jabatan</p></Col>
+                            <Col className="text-secondary" lg="3"><p>Sekretaris Jendral</p></Col>
+                            <Col lg="6"></Col>
+
+                            <Col lg="3"><p>Klasifikasi</p></Col>
+                            <Col className="text-secondary" lg="3"><p>Pimpinan Tinggi Madya</p></Col>
+                            <Col lg="6"></Col>
+
+                            <Col lg="3"><p>Kategori</p></Col>
+                            <Col className="text-secondary" lg="3"><p>JPT</p></Col>
+                            <Col lg="6"></Col>
+                        </Row>
                     </Card.Body>
                 </Card>
             </Form>
-
-            <div className="button-submit d-flex flex-row justify-content-between align-items-center">
-                <div></div>
-                <div>
-                    <Button className="content-button-submit" variant="primary" type="submit">Simpan</Button>
-                </div>
-            </div>
         </div>
     );
 };
