@@ -92,7 +92,7 @@ const RightContent = styled.div`
 
 const Sidebar = ({ parentCallback }) => {
   const [sidebar, setSidebar] = useState(true);
-  const [remember, setRemember] = useLocalStorage('remember_me', []);
+  const [remember, setRemember] = useLocalStorage();
 
   const showSidebar = () => {
     parentCallback(sidebar);
@@ -106,10 +106,12 @@ const Sidebar = ({ parentCallback }) => {
       icon: 'question',
       showCancelButton: true,
     }).then((result) => {
-      setRemember(null);
-      window.localStorage.clear();
-      window.sessionStorage.clear();
-      window.location.reload()
+      if(result.isConfirmed){
+        setRemember();
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+        window.location.reload();
+      }
     })
   }
 
