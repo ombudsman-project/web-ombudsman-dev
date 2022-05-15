@@ -275,7 +275,7 @@ h2 {
   margin-inline: 10px;
   border-radius: 20px;
   display: flex;
-  min-height: 10vh;
+  // min-height: 10vh;
   justify-content: flex-start;
   // align-items: center;
   padding: 37px 42px 37px 42px;
@@ -1094,6 +1094,7 @@ nav ul li a:hover:before {
   animation: fadeInAnimation ease 1s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+  min-height: 100vh;
 }
 
 .wrapper{

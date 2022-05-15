@@ -20,8 +20,8 @@ const Login = () => {
 
     const sampleLogin = async (e) => {
         e.preventDefault();
-        const token = {"access_token":"Tes"};
-        setRemember({ remember: rmb, token});
+        // const token = {"access_token":"Tes"};
+        // setRemember({ remember: rmb, token});
         axios({
             method: 'post',
             url: process.env.REACT_APP_BASE_API + '/login',
