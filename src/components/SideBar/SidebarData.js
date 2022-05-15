@@ -138,7 +138,7 @@ export const SidebarData = [
             },
             {
                 title: "Unit Kerja",
-                path: "/messages/message2",
+                path: "/master/unit_kerja",
                 icon: <Dot />,
             },
             {

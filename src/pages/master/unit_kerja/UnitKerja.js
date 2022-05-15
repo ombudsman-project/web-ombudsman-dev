@@ -24,51 +24,69 @@ const iconPerson = new L.Icon({
 
 const UnitKerja = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [listPegawai, setListPegawai] = useState([]);
+    const [listUnit, setListUnit] = useState([]);
+    sessionStorage.removeItem("unit_kerja")
 
     useEffect(() => {
-        //Cara V2 Amed
-        new ServiceApi().getListPegawai().then(x => {
-            //Do The Data...
-            setListPegawai(x.data.data)
-            console.log(x)
-        }).catch((err) => {
-            //Do Error...
-        })
-
-        //Cara Fikr
-        // ServiceApi.getListPegawai().then(x => {
-        //     //Do The Data...
-        //     setListPegawai(x.data.data)
-        //     console.log(x)
-        // }).catch((err) => {
-        //     //Do Error...
-        // })
+        viewData();
     }, [])
+
+    const viewData = () => {
+        new ServiceApi().getListUnit().then(x => {
+            setListUnit(x.data.data)
+        }).catch((err) => {
+        })
+    }
+
+    const deleteData = (x) => {
+
+        const data = {
+            'key': x.id,
+        }
+
+        Swal.fire({
+            title: 'Perhatian!',
+            html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
+            showCancelButton: true,
+            confirmButtonText: 'Simpan',
+            confirmButtonColor: '#0058a8',
+            cancelButtonColor: '#FD3D00',
+        }).then(function (response) {
+            if (response.isConfirmed) {
+                new ServiceApi().deleteUnitKerja(data)
+                    .then(response => {
+                        Swal.fire({
+                            title: 'Sukses!',
+                            html: '<i>Berhasil menghapus data</i>',
+                            icon: 'success'
+                        })
+                        viewData();
+                    }).catch(err => {
+                        Swal.fire({
+                            title: 'Gagal!',
+                            html: '<i>' + err.response.data.message + '</i>',
+                            icon: 'error',
+                            confirmButtonColor: '#0058a8',
+                        })
+                    })
+            }
+        })
+    }
+
+    const sessData = (x) => {
+        const obj = x;
+        const data = JSON.stringify(obj)
+        sessionStorage.setItem('unit_kerja', data);
+    }
 
     return (
         <div className='main-animation'>
-            {
-                !_.isEmpty(listPegawai) ? (
-                    <>
-                        {listPegawai.map((x, key) => {
-                            return (
-                                <div key={key}>
-                                    <p>{x.nama}</p>
-                                </div>
-                            )
-                        })}
-                    </>
-                ) : (
-                    <></>
-                )
-            }
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Jabatan</h3>
+                    <h3 className="content-title">Unit Kerja</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/unit_kerja/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -109,85 +127,50 @@ const UnitKerja = () => {
                                     <th className="table-title" scope="col" style={{ width: 46 }}>
                                         #
                                     </th>
-                                    <th className="table-title" scope="col">Jabatan</th>
-                                    <th className="table-title" scope="col">Klasifikasi</th>
-                                    <th className="table-title" scope="col">Kategori</th>
+                                    <th className="table-title" scope="col">Unit Kerja</th>
+                                    <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
                                     <th className="table-title text-center" scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>Riski</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td className="action-column">
-                                        <Link to={{ pathname: `/master/jabatan/detail` }}>
-                                            <button type="button" class="btn btn-warning button-view">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <AiIcons.AiOutlineEye />&nbsp;View
-                                                </div>
-                                            </button>
-                                        </Link>
-                                        <Link to={{ pathname: `/master/jabatan/edit` }}>
-                                            <button type="button" class="btn btn-info button-edit">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <FiIcons.FiEdit />&nbsp;Edit
-                                                </div>
-                                            </button>
-                                        </Link>
-                                        <button type="button" class="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                    <td className="action-column">
-                                        <button type="button" class="btn btn-warning button-view">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                            </div>
-                                        </button>
-                                        <button type="button" class="btn btn-info button-edit">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiEdit />&nbsp;Edit
-                                            </div>
-                                        </button>
-                                        <button type="button" class="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">3</td>
-                                    <td colspan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
-                                    <td className="action-column">
-                                        <button type="button" class="btn btn-warning button-view">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                            </div>
-                                        </button>
-                                        <button type="button" class="btn btn-info button-edit">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiEdit />&nbsp;Edit
-                                            </div>
-                                        </button>
-                                        <button type="button" class="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
+                                {
+                                    !_.isEmpty(listUnit) ? (
+                                        <>
+                                            {listUnit.map((x, key) => {
+                                                return (
+                                                    <tr key={x.id}>
+                                                        <td>{key + 1}</td>
+                                                        <td>{x.name}</td>
+                                                        <td className="text-center">0</td>
+                                                        <td className="action-column">
+                                                            <Link to={{ pathname: `/master/unit_kerja/detail` }}>
+                                                                <button type="button" class="btn btn-warning button-view" onClick={() => sessData(x)}>
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <Link to={{ pathname: `/master/unit_kerja/edit` }}>
+                                                                <button type="button" class="btn btn-info button-edit" onClick={() => sessData(x)}>
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <FiIcons.FiEdit />&nbsp;Edit
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <button type="button" class="btn btn-danger button-delete" onClick={() => deleteData(x)}>
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <FiIcons.FiTrash2 />&nbsp;Delete
+                                                                </div>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
                             </tbody>
                         </table>
                         <div className="footer-table d-flex justify-content-between align-items-center">
