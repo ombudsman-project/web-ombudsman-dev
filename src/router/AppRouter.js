@@ -8,10 +8,10 @@ import DashboardView from "../pages/Dashboard";
 import RekapitulasiView from "../pages/Rekapitulasi";
 
 //MASTER DATA
-import JabatanView from "../pages/master/Jabatan"
-import DetailJabatanView from "../pages/master/DetailJabatan"
-import TambahJabatanView from "../pages/master/TambahJabatan"
-import EditJabatanView from "../pages/master/EditJabatan"
+import JabatanView from "../pages/master/Jabatan/Jabatan"
+import DetailJabatanView from "../pages/master/Jabatan/DetailJabatan"
+import TambahJabatanView from "../pages/master/Jabatan/TambahJabatan"
+import EditJabatanView from "../pages/master/Jabatan/EditJabatan"
 
 import KompetensiView from "../pages/master/Kompetensi"
 

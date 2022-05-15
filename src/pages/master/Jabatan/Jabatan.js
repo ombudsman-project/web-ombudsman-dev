@@ -16,7 +16,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import ServiceApi from '../../api/MyApi';
+import ServiceApi from '../../../api/MyApi';
 
 const iconPerson = new L.Icon({
 
