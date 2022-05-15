@@ -10,6 +10,8 @@ import { IconContext } from "react-icons/lib";
 
 import Logo from "../../img/logo.png";
 import { Form } from "react-bootstrap";
+import Swal from "sweetalert2";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 const Nav = styled.div`
   background: #fff;
@@ -90,15 +92,31 @@ const RightContent = styled.div`
 
 const Sidebar = ({ parentCallback }) => {
   const [sidebar, setSidebar] = useState(true);
+  const [remember, setRemember] = useLocalStorage('remember_me', []);
+
   const showSidebar = () => {
     parentCallback(sidebar);
     setSidebar(!sidebar);
   };
 
+  const showSwall = () => {
+    Swal.fire({
+      title: 'Logout',
+      text: 'Konfirmasi Keluar',
+      icon: 'question',
+      showCancelButton: true,
+    }).then((result) => {
+      setRemember(null);
+      window.localStorage.clear();
+      window.sessionStorage.clear();
+      window.location.reload()
+    })
+  }
+
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
-        <Nav style={sidebar ? { margin: '10px 10px 0px 310px', transition: '350ms'} : {margin: '10px 10px 0px 10px', transition: '350ms'}}>
+        <Nav style={sidebar ? { margin: '10px 10px 0px 310px', transition: '350ms' } : { margin: '10px 10px 0px 10px', transition: '350ms' }}>
           {/* <NavIcon to="#">
             <FaIcons.FaBars onClick={showSidebar} color={"#000"} />
           </NavIcon> */}
@@ -114,14 +132,15 @@ const Sidebar = ({ parentCallback }) => {
             ></SearchBar>
           </Search>
           <RightContent>
-            <FiIcons.FiBell color="rgba(119, 119, 119, 1)" size={24}/>
+            <FiIcons.FiBell color="rgba(119, 119, 119, 1)" size={24} />
             <div style={{ width: 26 }}></div>
             <div>
               <img
                 src="https://www.diethelmtravel.com/wp-content/uploads/2016/04/bill-gates-wealthiest-person.jpg"
                 width={56}
                 height={56}
-                style={{ borderRadius: '50%' }}
+                style={{ borderRadius: '50%', cursor: 'pointer' }}
+                onClick={showSwall}
               />
             </div>
           </RightContent>

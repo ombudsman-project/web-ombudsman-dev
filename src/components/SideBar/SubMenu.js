@@ -1,4 +1,4 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useLocation } from 'react-router-dom';
@@ -23,6 +23,7 @@ const SidebarLink = styled(Link)`
 
 const SidebarLabel = styled.span`
   margin-left: 16px;
+  font-size: 14px;
 `;
 
 const DropdownLink = styled(Link)`
@@ -42,42 +43,42 @@ background: #0058a8;
 `;
 
 const SubMenu = ({ item }) => {
-    const [subnav, setSubnav] = useState(false);
-    const [myPath, setMyPath] = useState('my_path', []);
-    const location = useLocation();
+  const [subnav, setSubnav] = useState(false);
+  const [myPath, setMyPath] = useState('my_path', []);
+  const location = useLocation();
 
-    const showSubnav = () => setSubnav(!subnav);
-  
-    useEffect(() => {
-      setMyPath(location.pathname);
-    }, [location.pathname]);
+  const showSubnav = () => setSubnav(!subnav);
 
-    return (
-        <>
-            <SidebarLink to={item.path} style={ myPath.includes(item.path) ? { backgroundColor: 'rgba(0, 81, 154, 1)' } : {backgroundColor: '#0058a8'} } onClick={item.subNav && showSubnav}>
-                <div>
-                    {item.icon}
-                    <SidebarLabel>{item.title}</SidebarLabel>
-                </div>
-                <div>
-                    {item.subNav && subnav
-                        ? item.iconOpened
-                        : item.subNav
-                            ? item.iconClosed
-                            : null}
-                </div>
-            </SidebarLink>
-            {subnav &&
-                item.subNav.map((item, index) => {
-                    return (
-                        <DropdownLink to={item.path} key={index}>
-                            {item.icon}
-                            <SidebarLabel>{item.title}</SidebarLabel>
-                        </DropdownLink>
-                    );
-                })}
-        </>
-    );
+  useEffect(() => {
+    setMyPath(location.pathname);
+  }, [location.pathname]);
+
+  return (
+    <>
+      <SidebarLink to={item.path} style={myPath.includes(item.path) ? { backgroundColor: 'rgba(0, 81, 154, 1)' } : { backgroundColor: '#0058a8' }} onClick={item.subNav && showSubnav}>
+        <div>
+          {item.icon}
+          <SidebarLabel>{item.title}</SidebarLabel>
+        </div>
+        <div>
+          {item.subNav && subnav
+            ? item.iconOpened
+            : item.subNav
+              ? item.iconClosed
+              : null}
+        </div>
+      </SidebarLink>
+      {subnav &&
+        item.subNav.map((item, index) => {
+          return (
+            <DropdownLink to={item.path} key={index} style={myPath.includes(item.path) ? { backgroundColor: 'rgba(0, 81, 154, 1)' } : { backgroundColor: '#0058a8' }}>
+              {item.icon}
+              <SidebarLabel>{item.title}</SidebarLabel>
+            </DropdownLink>
+          );
+        })}
+    </>
+  );
 };
 
 export default SubMenu;
