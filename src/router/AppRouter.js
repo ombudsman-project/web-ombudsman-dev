@@ -13,10 +13,18 @@ import KompetensiPegawaiView from "../pages/analisa_kompetensi/KompetensiPegawai
 import DetailKompetensiPegawaiView from "../pages/analisa_kompetensi/DetailKompetensiPegawai"
 
 //MASTER DATA
+//JABATAN
 import JabatanView from "../pages/master/jabatan/Jabatan"
 import DetailJabatanView from "../pages/master/jabatan/DetailJabatan"
 import TambahJabatanView from "../pages/master/jabatan/TambahJabatan"
 import EditJabatanView from "../pages/master/jabatan/EditJabatan"
+
+//UNIT KERJA
+import UnitView from "../pages/master/unit_kerja/UnitKerja";
+import DetailUnitView from "../pages/master/unit_kerja/DetailUnitKerja";
+import TambahUnitView from "../pages/master/unit_kerja/TambahUnitKerja";
+import EditUnitView from "../pages/master/unit_kerja/EditUnitKerja";
+
 
 import KompetensiView from "../pages/master/Kompetensi"
 
@@ -95,11 +103,18 @@ const AppRouter = () => {
                   <Route component={DetailKompetensiPegawaiView} path="/analisa_kompetensi/kompetensi_pegawai/detail" exact />
 
                   {/* MASTER DATA */}
+
+                  {/* JABATAN */}
                   <Route component={JabatanView} path="/master/jabatan" exact />
                   <Route component={DetailJabatanView} path="/master/jabatan/detail" />
                   <Route component={TambahJabatanView} path="/master/jabatan/tambah" />
                   <Route component={EditJabatanView} path="/master/jabatan/edit" />
 
+                  {/* UNIT KERJA */}
+                  <Route component={UnitView} path="/master/unit_kerja" exact />
+                  <Route component={DetailUnitView} path="/master/unit_kerja/detail" />
+                  <Route component={TambahUnitView} path="/master/unit_kerja/tambah" />
+                  <Route component={EditUnitView} path="/master/unit_kerja/edit" />
 
                   <Route component={KompetensiView} path="/master/kompetensi" exact />
 

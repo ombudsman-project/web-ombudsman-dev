@@ -27,6 +27,18 @@ class ServiceApi {
     getListPegawai(){
         return apiClient.get(`/master/pegawai/getData?page=&length=&search=`);
     }
+
+    getListUnit(){
+        return apiClient.get(`/master/unit-kerja/getData?page=&length=&search=`)
+    }
+
+    addUnitKerja(data){
+        return apiClient.post(`/master/unit-kerja/create`, data)
+    }
+
+    deleteUnitKerja(data){
+        return apiClient.post(`/master/unit-kerja/delete`, data)
+    }
 }
 export default ServiceApi;
 
