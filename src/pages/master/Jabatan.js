@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Pagination, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
+import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 
@@ -75,20 +76,18 @@ const Jabatan = () => {
                 <Card.Body>
                     <div className="head-table">
                         <div id="size-table" className="size-table">
-                            <div>Lihat</div>
+                            <div>Lihat &nbsp;</div>
                             <div>
-                                <select>
-                                    <option selected>5</option>
-                                    <option></option>
-                                </select>
+                                <Form.Control className="select-row-table" as="select">
+                                    <option>5</option>
+                                    <option>10</option>
+                                    <option>50</option>
+                                    <option>100</option>
+                                </Form.Control>
                             </div>
-                            <div>data</div>
+                            <div>&nbsp; data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                            {/* <div id="filter-table" className="filter-table">
-                                <FiIcons.FiFilter />&nbsp;Filter
-                            </div> */}
-                            {/* <Button className="filter-table" variant="link"><FiIcons.FiFilter />&nbsp; Filter</Button> */}
                             <button type="button" class="btn btn-link filter-table">
                                 <div className="d-flex justify-content-center align-items-center">
                                     <FiIcons.FiFilter />&nbsp;Filter
@@ -97,9 +96,9 @@ const Jabatan = () => {
                             <div id="search-table" className="search-table">
                                 <FaIcons.FaSearch
                                     style={{ marginLeft: "1rem", position: "absolute" }}
-                                    color="rgba(99, 99, 99, 1)"
+                                    color="#2c2d3040"
                                 />
-                                <input placeholder="Cari"></input>
+                                <Form.Control type="text" placeholder="Cari" />
                             </div>
                         </div>
                     </div>
@@ -189,6 +188,22 @@ const Jabatan = () => {
                                 </tr>
                             </tbody>
                         </table>
+                        <div className="footer-table d-flex justify-content-between align-items-center">
+                            <div>Menampilkan data 6 - 13 dari 23 data</div>
+                            <div>
+                                <Pagination>
+                                    <Pagination.First />
+                                    <Pagination.Prev />
+                                    <Pagination.Ellipsis />
+                                    <Pagination.Item>{1}</Pagination.Item>
+                                    <Pagination.Item>{2}</Pagination.Item>
+                                    <Pagination.Item>{3}</Pagination.Item>
+                                    <Pagination.Ellipsis />
+                                    <Pagination.Next />
+                                    <Pagination.Last />
+                                </Pagination>
+                            </div>
+                        </div>
                     </div>
                 </Card.Body>
             </Card>
