@@ -118,7 +118,7 @@ const Jabatan = () => {
                             <tbody>
                                 <tr>
                                     <td scope="row">1</td>
-                                    <td>Mark</td>
+                                    <td>Riski</td>
                                     <td>Otto</td>
                                     <td>@mdo</td>
                                     <td className="action-column">
@@ -129,11 +129,13 @@ const Jabatan = () => {
                                                 </div>
                                             </button>
                                         </Link>
-                                        <button type="button" class="btn btn-info button-edit">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiEdit />&nbsp;Edit
-                                            </div>
-                                        </button>
+                                        <Link to={{ pathname: `/master/jabatan/edit` }}>
+                                            <button type="button" class="btn btn-info button-edit">
+                                                <div className="d-flex justify-content-center align-items-center">
+                                                    <FiIcons.FiEdit />&nbsp;Edit
+                                                </div>
+                                            </button>
+                                        </Link>
                                         <button type="button" class="btn btn-danger button-delete">
                                             <div className="d-flex justify-content-center align-items-center">
                                                 <FiIcons.FiTrash2 />&nbsp;Delete
