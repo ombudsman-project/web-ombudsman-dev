@@ -55,13 +55,13 @@ export const SidebarData = [
         subNav: [
             {
                 title: "Lihat Dashboard",
-                path: "/pengajuan_izin",
+                path: "/analisa_kompetensi/kompetensi_dashboard",
                 icon: <Dot />,
                 cName: "sub-nav",
             },
             {
                 title: "Kompetensi Pegawai",
-                path: "/reports/reports2",
+                path: "/analisa_kompetensi/kompetensi_pegawai",
                 icon: <Dot />,
                 cName: "sub-nav",
             },

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
@@ -12,6 +12,7 @@ import Logo from "../../img/logo.png";
 import { Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import useLocalStorage from "../../hooks/useLocalStorage";
+import useWindowDimensions from '../../hooks/useWindowDimensions'
 
 const Nav = styled.div`
   background: #fff;
@@ -93,7 +94,15 @@ const RightContent = styled.div`
 const Sidebar = ({ parentCallback }) => {
   const [sidebar, setSidebar] = useState(true);
   const [remember, setRemember] = useLocalStorage();
+  const { height, width } = useWindowDimensions();
 
+  useEffect(() => {
+    if(width < 600){
+      setSidebar(false)
+      parentCallback(sidebar);
+    }
+  }, []);
+  
   const showSidebar = () => {
     parentCallback(sidebar);
     setSidebar(!sidebar);

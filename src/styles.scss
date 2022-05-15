@@ -8,7 +8,7 @@ $sideMenu: #fff;
 $textColor: #fff;
 $textColorSide: rgb(68, 68, 68);
 $mainNavColor: #0058a8;
-$textColorSubtitle: #85868f;
+$textColorSubtitle: rgba(44, 45, 48, 0.5);
 $placeholderColor: #2c2d3040;
 
 * {
@@ -396,6 +396,38 @@ h2 {
       margin-top: 50px;
     }
   }
+
+  .subcard-content {
+    cursor: pointer;
+    border: solid #F1F1F1 1px;
+    padding: 19px;
+    border-radius: 10px;
+    margin: 10px 0px 10px 0px;
+    transition: 500ms;
+
+    .horizontal-line {
+      width: 4px;
+      border-radius: 4px;
+      margin: 0px 15px 0px 0px;
+    }
+    
+    .success {
+      background-color: #74B816;
+    }
+
+    .primary {
+      background-color: #1BC5BD;
+    }
+
+    .danger {
+      background-color: #E8001C;
+    }
+  }
+
+  .subcard-content:hover {
+    background-color: #f3f3f3;
+    transition: 500ms;
+  }
 }
 
 .card-main-content-title {
@@ -406,7 +438,6 @@ h2 {
 
 .card-main-content-subtitle {
   color: $textColorSubtitle;
-  margin-bottom: 37px;
 }
 
 .card-main-content .form-control {

@@ -7,6 +7,10 @@ import LoginView from '../pages/Login';
 import DashboardView from "../pages/Dashboard";
 import RekapitulasiView from "../pages/Rekapitulasi";
 
+//Analisa Kompetensi
+import KompetensiDashboardView from "../pages/analisa_kompetensi/Dashboard"
+import KompetensiPegawaiView from "../pages/analisa_kompetensi/KompetensiPegawai"
+
 //MASTER DATA
 import JabatanView from "../pages/master/Jabatan"
 import DetailJabatanView from "../pages/master/DetailJabatan"
@@ -83,6 +87,10 @@ const AppRouter = () => {
                   />
                   <Route component={DashboardView} path="/dashboard" />
                   <Route component={RekapitulasiView} path="/rekapitulasi" exact />
+
+                  {/* ANALISA KOMPETENSI */}
+                  <Route component={KompetensiDashboardView} path="/analisa_kompetensi/kompetensi_dashboard" exact />
+                  <Route component={KompetensiPegawaiView} path="/analisa_kompetensi/kompetensi_pegawai" exact />
 
                   {/* MASTER DATA */}
                   <Route component={JabatanView} path="/master/jabatan" exact />
