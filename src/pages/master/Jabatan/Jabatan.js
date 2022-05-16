@@ -122,14 +122,14 @@ const Jabatan = () => {
                                     <td>Otto</td>
                                     <td>@mdo</td>
                                     <td className="action-column">
-                                        <Link to={{ pathname: `/master/jabatan/detail` }}>
+                                        <Link to={{ pathname: `/master/jabatan/detail`}}>
                                             <button type="button" className="btn btn-warning button-view">
                                                 <div className="d-flex justify-content-center align-items-center">
                                                     <AiIcons.AiOutlineEye />&nbsp;View
                                                 </div>
                                             </button>
                                         </Link>
-                                        <Link to={{ pathname: `/master/jabatan/edit` }}>
+                                        <Link to={{ pathname: `/master/jabatan/edit`, state: {name: '', jenis_peg: 'Tess' } }}>
                                             <button type="button" className="btn btn-info button-edit">
                                                 <div className="d-flex justify-content-center align-items-center">
                                                     <FiIcons.FiEdit />&nbsp;Edit

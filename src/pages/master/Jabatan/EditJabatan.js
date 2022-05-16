@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Carousel } from 'react-responsive-carousel';
-import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
-import { useTranslation } from 'react-i18next';
-import moment from 'moment';
-import axios from 'axios';
-import Swal from 'sweetalert2'
-import * as AiIcons from 'react-icons/ai';
-import * as BsIcons from 'react-icons/bs';
+import { useLocation } from "react-router-dom";
 import { Link } from 'react-router-dom';;
 
-const iconPerson = new L.Icon({
-
-});
-
 const EditJabatan = () => {
+    const location = useLocation();
+    const myparam = location.state;
+
+    const dataSubmit = (e) => {
+        e.preventDefault();
+        console.log(e.target.anggota.value);
+        console.log(myparam)
+    }
+
+
     return (
         <div>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -28,7 +27,7 @@ const EditJabatan = () => {
                 </div>
             </div>
 
-            <Form>
+            <Form onSubmit={dataSubmit}>
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
@@ -38,19 +37,19 @@ const EditJabatan = () => {
                                 Jenis Kepegawaian
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" placeholder="Anggota" />
+                                <Form.Control type="text" placeholder="Anggota" name="anggota"/>
                             </Col>
                         </Form.Group>
                     </Card.Body>
                 </Card>
-            </Form>
 
-            <div className="button-submit d-flex flex-row justify-content-between align-items-center">
-                <div></div>
-                <div>
-                    <Button className="content-button-submit" variant="primary" type="submit">Simpan</Button>
+                <div className="button-submit d-flex flex-row justify-content-between align-items-center">
+                    <div></div>
+                    <div>
+                        <Button className="content-button-submit" variant="primary" type="submit">Simpan</Button>
+                    </div>
                 </div>
-            </div>
+            </Form>
         </div>
     );
 };
