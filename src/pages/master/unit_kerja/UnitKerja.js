@@ -73,12 +73,6 @@ const UnitKerja = () => {
         })
     }
 
-    const sessData = (x) => {
-        const obj = x;
-        const data = JSON.stringify(obj)
-        sessionStorage.setItem('unit_kerja', data);
-    }
-
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -144,7 +138,7 @@ const UnitKerja = () => {
                                                         <td className="text-center">0</td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/unit_kerja/detail`, state: {id: x.id, unit_kerja: x.name } }}>
-                                                                <button type="button" class="btn btn-warning button-view" onClick={() => sessData(x)}>
+                                                                <button type="button" class="btn btn-warning button-view">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <AiIcons.AiOutlineEye />&nbsp;View
                                                                     </div>
