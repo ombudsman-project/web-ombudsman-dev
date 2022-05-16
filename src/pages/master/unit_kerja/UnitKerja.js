@@ -17,6 +17,7 @@ import * as FiIcons from 'react-icons/fi';
 import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
+import ReactPaginate from 'react-paginate';
 
 const iconPerson = new L.Icon({
 
@@ -24,8 +25,10 @@ const iconPerson = new L.Icon({
 
 const UnitKerja = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
+    const [perPage, setPerPage] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
     const [listUnit, setListUnit] = useState([]);
-    sessionStorage.removeItem("unit_kerja")
+
 
     useEffect(() => {
         viewData();
@@ -33,9 +36,54 @@ const UnitKerja = () => {
 
     const viewData = () => {
         new ServiceApi().getListUnit().then(x => {
+            setPerPage(x.data.length)
             setListUnit(x.data.data)
         }).catch((err) => {
         })
+    }
+
+    function handlePerPage(e) {
+        setPerPage(e.target.value)
+    }
+
+    const PER_PAGE = perPage;
+    const offset = currentPage * PER_PAGE;
+    const currentPageData = listUnit
+        .slice(offset, offset + PER_PAGE)
+        .map((x, key) => {
+            return (
+                <tr key={x.id}>
+                    <td>{key + 1}</td>
+                    <td>{x.name}</td>
+                    <td className="text-center">0</td>
+                    <td className="action-column">
+                        <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
+                            <button type="button" class="btn btn-warning button-view">
+                                <div className="d-flex justify-content-center align-items-center">
+                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                </div>
+                            </button>
+                        </Link>
+                        <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
+                            <button type="button" class="btn btn-info button-edit">
+                                <div className="d-flex justify-content-center align-items-center">
+                                    <FiIcons.FiEdit />&nbsp;Edit
+                                </div>
+                            </button>
+                        </Link>
+                        <button type="button" class="btn btn-danger button-delete" onClick={() => deleteData(x)}>
+                            <div className="d-flex justify-content-center align-items-center">
+                                <FiIcons.FiTrash2 />&nbsp;Delete
+                            </div>
+                        </button>
+                    </td>
+                </tr>
+            )
+        });
+    const pageCount = Math.ceil(listUnit.length / PER_PAGE);
+
+    function handlePageClick({ selected: selectedPage }) {
+        setCurrentPage(selectedPage);
     }
 
     const deleteData = (x) => {
@@ -90,11 +138,11 @@ const UnitKerja = () => {
                         <div id="size-table" className="size-table">
                             <div>Lihat &nbsp;</div>
                             <div>
-                                <Form.Control className="select-row-table" as="select">
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>50</option>
-                                    <option>100</option>
+                                <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
                                 </Form.Control>
                             </div>
                             <div>&nbsp; data</div>
@@ -127,7 +175,8 @@ const UnitKerja = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {
+                                {currentPageData}
+                                {/* {
                                     !_.isEmpty(listUnit) ? (
                                         <>
                                             {listUnit.map((x, key) => {
@@ -137,14 +186,14 @@ const UnitKerja = () => {
                                                         <td>{x.name}</td>
                                                         <td className="text-center">0</td>
                                                         <td className="action-column">
-                                                            <Link to={{ pathname: `/master/unit_kerja/detail`, state: {id: x.id, unit_kerja: x.name } }}>
+                                                            <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
                                                                 <button type="button" class="btn btn-warning button-view">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <AiIcons.AiOutlineEye />&nbsp;View
                                                                     </div>
                                                                 </button>
                                                             </Link>
-                                                            <Link to={{ pathname: `/master/unit_kerja/edit`, state: {id: x.id, unit_kerja: x.name } }}>
+                                                            <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
                                                                 <button type="button" class="btn btn-info button-edit">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <FiIcons.FiEdit />&nbsp;Edit
@@ -164,23 +213,32 @@ const UnitKerja = () => {
                                     ) : (
                                         <></>
                                     )
-                                }
+                                } */}
                             </tbody>
                         </table>
                         <div className="footer-table d-flex justify-content-between align-items-center">
-                            <div>Menampilkan data 6 - 13 dari 23 data</div>
                             <div>
-                                <Pagination>
-                                    <Pagination.First />
-                                    <Pagination.Prev />
-                                    <Pagination.Ellipsis />
-                                    <Pagination.Item>{1}</Pagination.Item>
-                                    <Pagination.Item>{2}</Pagination.Item>
-                                    <Pagination.Item>{3}</Pagination.Item>
-                                    <Pagination.Ellipsis />
-                                    <Pagination.Next />
-                                    <Pagination.Last />
-                                </Pagination>
+                                Menampilkan data 6 - 13 dari 23 data
+                            </div>
+                            <div>
+                                <ReactPaginate
+                                    pageCount={pageCount}
+                                    onPageChange={handlePageClick}
+                                    previousLabel="Sebelumnya"
+                                    nextLabel="Selanjutnya"
+                                    pageClassName="page-item"
+                                    pageLinkClassName="page-link"
+                                    previousClassName="page-item"
+                                    previousLinkClassName="page-link"
+                                    nextClassName="page-item"
+                                    nextLinkClassName="page-link"
+                                    breakLabel="..."
+                                    breakClassName="page-item"
+                                    breakLinkClassName="page-link"
+                                    containerClassName="pagination"
+                                    activeClassName="active"
+                                    renderOnZeroPageCount={null}
+                                />
                             </div>
                         </div>
                     </div>
