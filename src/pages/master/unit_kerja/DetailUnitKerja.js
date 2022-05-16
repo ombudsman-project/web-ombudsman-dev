@@ -25,7 +25,7 @@ const DetailUnitKerja = () => {
     const myparam = location.state;
 
     return (
-        <div>
+        <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
                     <Link className="content-link" to={{ pathname: `/master/unit_kerja` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Detail Unit Kerja</h3></Link>
