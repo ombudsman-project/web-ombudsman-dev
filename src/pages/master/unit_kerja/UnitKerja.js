@@ -64,6 +64,16 @@ const UnitKerja = () => {
         })
     }
 
+    const searchData = async (e) => {
+        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
+        await new ServiceApi().getListUnit(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListUnit(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
+
     const deleteData = (x) => {
         const data = {
             'key': x.id,
@@ -135,7 +145,7 @@ const UnitKerja = () => {
                                     style={{ marginLeft: "1rem", position: "absolute" }}
                                     color="#2c2d3040"
                                 />
-                                <Form.Control type="text" placeholder="Cari" />
+                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)}/>
                             </div>
                         </div>
                     </div>
