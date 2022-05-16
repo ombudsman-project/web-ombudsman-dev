@@ -36,6 +36,10 @@ class ServiceApi {
         return apiClient.post(`/master/unit-kerja/create`, data)
     }
 
+    editUnitKerja(data){
+        return apiClient.post(`/master/unit-kerja/update`, data)
+    }
+
     deleteUnitKerja(data){
         return apiClient.post(`/master/unit-kerja/delete`, data)
     }

@@ -13,15 +13,48 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';;
+import { Link, useLocation } from 'react-router-dom';
+import ServiceApi from '../../../api/MyApi';
 
 const iconPerson = new L.Icon({
 
 });
 
 const EditUnitKerja = () => {
-    const data = JSON.parse(sessionStorage.getItem("unit_kerja"));
-    const [ setChange ] = useState('');
+    const location = useLocation();
+    const myparam = location.state;
+    const [input, setInput] = useState('');
+
+    useEffect(() => {
+        setInput(myparam.unit_kerja);
+    }, [])
+
+    const updateUnit = async (e) => {
+        e.preventDefault();
+
+        const data = {
+            'key': myparam.id,
+            'unit_kerja': e.target.elements.unit_kerja.value
+        }
+
+        new ServiceApi().editUnitKerja(data)
+            .then(response => {
+                Swal.fire({
+                    title: 'Sukses!',
+                    html: '<i>' + myparam.unit_kerja + ' berhasil diupdate</i>',
+                    icon: 'success'
+                }).then(function () {
+                    window.location = '/master/unit_kerja'
+                })
+            }).catch(err => {
+                Swal.fire({
+                    title: 'Gagal!',
+                    html: '<i>' + err.response.data.message + '</i>',
+                    icon: 'error',
+                    confirmButtonColor: '#0058a8',
+                })
+            });
+    }
 
     return (
         <div>
@@ -31,7 +64,7 @@ const EditUnitKerja = () => {
                 </div>
             </div>
 
-            <Form>
+            <Form onSubmit={updateUnit}>
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Unit Kerja</h4>
@@ -41,19 +74,19 @@ const EditUnitKerja = () => {
                                 Unit Kerja
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={data.name} placeholder="Masukkan nama unit kerja" onChange={e => setChange(e.target.value)} autoComplete="off" required />
+                                <Form.Control type="text" value={input} name="unit_kerja" placeholder="Masukkan nama unit kerja" onChange={(e) => setInput(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>
                 </Card>
-            </Form>
 
-            <div className="button-submit d-flex flex-row justify-content-between align-items-center">
-                <div></div>
-                <div>
-                    <Button className="content-button-submit" variant="primary" type="submit">Simpan</Button>
+                <div className="button-submit d-flex flex-row justify-content-between align-items-center">
+                    <div></div>
+                    <div>
+                        <Button className="content-button-submit" variant="primary" type="submit">Simpan</Button>
+                    </div>
                 </div>
-            </div>
+            </Form>
         </div>
     );
 };

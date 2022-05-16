@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';;
+import { Link, useLocation } from 'react-router-dom';;
 
 const iconPerson = new L.Icon({
 
@@ -21,8 +21,8 @@ const iconPerson = new L.Icon({
 
 
 const DetailUnitKerja = () => {
-    // const [listUnit, setListUnit] = useState([]);
-    const data = JSON.parse(sessionStorage.getItem("unit_kerja"))
+    const location = useLocation();
+    const myparam = location.state;
 
     return (
         <div>
@@ -46,7 +46,7 @@ const DetailUnitKerja = () => {
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Golongan</p></Col>
-                            <Col className="text-secondary" lg="6"><p>{data.name}</p></Col>
+                            <Col className="text-secondary" lg="6"><p>{myparam.unit_kerja}</p></Col>
                             <Col lg="3"></Col>
 
                             <Col lg="3"><p>Jumlah Pegawai</p></Col>
