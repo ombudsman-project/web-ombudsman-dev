@@ -26,7 +26,7 @@ const iconPerson = new L.Icon({
 const UnitKerja = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const [perPage, setPerPage] = useState(5);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [listUnit, setListUnit] = useState([]);
 
@@ -69,40 +69,40 @@ const UnitKerja = () => {
 
     const viewData = () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        // new ServiceApi().getListUnit(param).then(x => {
+        new ServiceApi().getListUnit(param).then(x => {
+        listUnit(currentPageData(x.data.data));
+        setPageCount(Math.ceil(listUnit.length / perPage))
+        }).catch((err) => {
+        })
+        // const data = [
+        //     {
+        //         "id": "eyJpdiI6IktMRnFDRXZjelpNV083TEl3bnBGM3c9PSIsInZhbHVlIjoiZEhub2JtSWFIR2NiVW40MldSRUFuUT09IiwibWFjIjoiMzEzZmM0MDI2Y2U3YjFkNDRmMjJmYTBmZTc4YWZmMmRhZmJjMTI5Yzk5MzNiNjA5Y2E5OWU3MjFkYTk3MWIwZCIsInRhZyI6IiJ9",
+        //         "name": "data"
+        //     },
+        //     {
+        //         "id": "eyJpdiI6InVsQlkxcTlTdVN0RkZVQnFRSjNGVmc9PSIsInZhbHVlIjoiY2cwUDZhQ3MrNEtIK1h6RktRZVpSUT09IiwibWFjIjoiYTlmMDQ1Yjg2YjZhN2I2NzU1OTJjNmJhYzdhMThhZTU0OTA3MGNiMmI4NmNhNTE0OWI5MDdlNTVjMGVjZTkzNyIsInRhZyI6IiJ9",
+        //         "name": "data10"
+        //     },
+        //     {
+        //         "id": "eyJpdiI6IndHazVIc0xOWGVqbVdCRXlLR0xwV2c9PSIsInZhbHVlIjoiMjVWNTl6M1hHcVV2NmQ1Q0V4SndXdz09IiwibWFjIjoiMjVjNzYxYzc0MjYzNzUyMjUwZjQ4NDkwYjhjOWQ3ODkzOGQ0MjgzZWQ5N2RjY2I2M2MzMTQ2MzZkMGRiYTU1YSIsInRhZyI6IiJ9",
+        //         "name": "data11"
+        //     },
+        //     {
+        //         "id": "eyJpdiI6IkkxK0l0QjlVd1BlN2JINGViSVFyVGc9PSIsInZhbHVlIjoiTjZEanR3STFYZjh2ZWJXcE01SDBGQT09IiwibWFjIjoiZTdmNzhkOGNiM2JhODlmZmZiMTI0ZWI3MDUyZGZlZWFiZTVhZjJiMDQ3NzY1NDAyZGQwMGZmMDkzYmUxZjYzOSIsInRhZyI6IiJ9",
+        //         "name": "data12"
+        //     },
+        //     {
+        //         "id": "eyJpdiI6ImFpcFFrMTBLd01NaTg1WHppSE5vQXc9PSIsInZhbHVlIjoiWHBUWG0yMm9qNVB1R2RkNGZjZjZkQT09IiwibWFjIjoiMzk3ZmNmZTdkYzY4YjA0NWNlZTQ2NjExMGQ0YTg2ZjFiYmM3NzlhYzEwYWNjOTcyMGVhNDBlMmE4MDA4OWM2MCIsInRhZyI6IiJ9",
+        //         "name": "data2"
+        //     },
+        //     {
+        //         "id": "eyJpdiI6Im5CQ1RJcDRjMTAxNHladHlMMVhpMnc9PSIsInZhbHVlIjoic0JjMlpieDBBS3JmUlRjR25ZMmxWUT09IiwibWFjIjoiZWMxOWYxZGFhNjVlMjMwNzMxMmFhYTA0ZTU5YmRhZjc2NDRmMDcwYTNlZWRlMGQ2Y2RjOWFhN2U0YTQyZTIzNCIsInRhZyI6IiJ9",
+        //         "name": "data3"
+        //     },
+        // ];
+
         // setListUnit(currentPageData(data));
         // setPageCount(Math.ceil(listUnit.length / perPage))
-        // }).catch((err) => {
-        // })
-        const data = [
-            {
-                "id": "eyJpdiI6IktMRnFDRXZjelpNV083TEl3bnBGM3c9PSIsInZhbHVlIjoiZEhub2JtSWFIR2NiVW40MldSRUFuUT09IiwibWFjIjoiMzEzZmM0MDI2Y2U3YjFkNDRmMjJmYTBmZTc4YWZmMmRhZmJjMTI5Yzk5MzNiNjA5Y2E5OWU3MjFkYTk3MWIwZCIsInRhZyI6IiJ9",
-                "name": "data"
-            },
-            {
-                "id": "eyJpdiI6InVsQlkxcTlTdVN0RkZVQnFRSjNGVmc9PSIsInZhbHVlIjoiY2cwUDZhQ3MrNEtIK1h6RktRZVpSUT09IiwibWFjIjoiYTlmMDQ1Yjg2YjZhN2I2NzU1OTJjNmJhYzdhMThhZTU0OTA3MGNiMmI4NmNhNTE0OWI5MDdlNTVjMGVjZTkzNyIsInRhZyI6IiJ9",
-                "name": "data10"
-            },
-            {
-                "id": "eyJpdiI6IndHazVIc0xOWGVqbVdCRXlLR0xwV2c9PSIsInZhbHVlIjoiMjVWNTl6M1hHcVV2NmQ1Q0V4SndXdz09IiwibWFjIjoiMjVjNzYxYzc0MjYzNzUyMjUwZjQ4NDkwYjhjOWQ3ODkzOGQ0MjgzZWQ5N2RjY2I2M2MzMTQ2MzZkMGRiYTU1YSIsInRhZyI6IiJ9",
-                "name": "data11"
-            },
-            {
-                "id": "eyJpdiI6IkkxK0l0QjlVd1BlN2JINGViSVFyVGc9PSIsInZhbHVlIjoiTjZEanR3STFYZjh2ZWJXcE01SDBGQT09IiwibWFjIjoiZTdmNzhkOGNiM2JhODlmZmZiMTI0ZWI3MDUyZGZlZWFiZTVhZjJiMDQ3NzY1NDAyZGQwMGZmMDkzYmUxZjYzOSIsInRhZyI6IiJ9",
-                "name": "data12"
-            },
-            {
-                "id": "eyJpdiI6ImFpcFFrMTBLd01NaTg1WHppSE5vQXc9PSIsInZhbHVlIjoiWHBUWG0yMm9qNVB1R2RkNGZjZjZkQT09IiwibWFjIjoiMzk3ZmNmZTdkYzY4YjA0NWNlZTQ2NjExMGQ0YTg2ZjFiYmM3NzlhYzEwYWNjOTcyMGVhNDBlMmE4MDA4OWM2MCIsInRhZyI6IiJ9",
-                "name": "data2"
-            },
-            {
-                "id": "eyJpdiI6Im5CQ1RJcDRjMTAxNHladHlMMVhpMnc9PSIsInZhbHVlIjoic0JjMlpieDBBS3JmUlRjR25ZMmxWUT09IiwibWFjIjoiZWMxOWYxZGFhNjVlMjMwNzMxMmFhYTA0ZTU5YmRhZjc2NDRmMDcwYTNlZWRlMGQ2Y2RjOWFhN2U0YTQyZTIzNCIsInRhZyI6IiJ9",
-                "name": "data3"
-            },
-        ];
-
-        setListUnit(currentPageData(data));
-        setPageCount(Math.ceil(listUnit.length / perPage))
     }
 
     function handlePerPage(e) {
@@ -112,10 +112,10 @@ const UnitKerja = () => {
     function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage);
         const param = `page=${selectedPage}&length=${perPage}&search=`;
-        // new ServiceApi().getListUnit(param).then(x => {
-        // setListUnit(currentPageData(x.data.data));
-        // }).catch((err) => {
-        // })
+        new ServiceApi().getListUnit(param).then(x => {
+        setListUnit(currentPageData(x.data.data));
+        }).catch((err) => {
+        })
     }
 
     const deleteData = (x) => {
