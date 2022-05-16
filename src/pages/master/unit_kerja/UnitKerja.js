@@ -35,44 +35,11 @@ const UnitKerja = () => {
         viewData();
     }, [])
 
-    function currentPageData(data) {
-        return data.map((x, key) => {
-            return (
-                <tr key={x.id}>
-                    <td>{currentPage > 1 ? ((currentPage-1) * perPage) + key + 1 : key + 1}</td>
-                    <td>{x.name}</td>
-                    <td className="text-center">0</td>
-                    <td className="action-column">
-                        <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
-                            <button type="button" className="btn btn-warning button-view">
-                                <div className="d-flex justify-content-center align-items-center">
-                                    <AiIcons.AiOutlineEye />&nbsp;View
-                                </div>
-                            </button>
-                        </Link>
-                        <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
-                            <button type="button" className="btn btn-info button-edit">
-                                <div className="d-flex justify-content-center align-items-center">
-                                    <FiIcons.FiEdit />&nbsp;Edit
-                                </div>
-                            </button>
-                        </Link>
-                        <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                            <div className="d-flex justify-content-center align-items-center">
-                                <FiIcons.FiTrash2 />&nbsp;Delete
-                            </div>
-                        </button>
-                    </td>
-                </tr>
-            )
-        });
-    };
-
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
         await new ServiceApi().getListUnit(param).then(x => {
             setDataCount(x.data.total_data);
-            setListUnit(currentPageData(x.data.data));
+            setListUnit(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -82,7 +49,7 @@ const UnitKerja = () => {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
         new ServiceApi().getListUnit(param).then(x => {
-            setListUnit(currentPageData(x.data.data));
+            setListUnit(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -92,7 +59,7 @@ const UnitKerja = () => {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
         await new ServiceApi().getListUnit(param).then(x => {
-            setListUnit(currentPageData(x.data.data));
+            setListUnit(x.data.data);
         }).catch((err) => {
         })
     }
@@ -185,50 +152,55 @@ const UnitKerja = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {listUnit}
-                                {/* {
-                                    !_.isEmpty(listUnit) ? (
-                                        <>
-                                            {listUnit.map((x, key) => {
-                                                return (
-                                                    <tr key={x.id}>
-                                                        <td>{key + 1}</td>
-                                                        <td>{x.name}</td>
-                                                        <td className="text-center">0</td>
-                                                        <td className="action-column">
-                                                            <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
-                                                                <button type="button" className="btn btn-warning button-view">
-                                                                    <div className="d-flex justify-content-center align-items-center">
-                                                                        <AiIcons.AiOutlineEye />&nbsp;View
-                                                                    </div>
-                                                                </button>
-                                                            </Link>
-                                                            <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
-                                                                <button type="button" className="btn btn-info button-edit">
-                                                                    <div className="d-flex justify-content-center align-items-center">
-                                                                        <FiIcons.FiEdit />&nbsp;Edit
-                                                                    </div>
-                                                                </button>
-                                                            </Link>
-                                                            <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                                <div className="d-flex justify-content-center align-items-center">
-                                                                    <FiIcons.FiTrash2 />&nbsp;Delete
-                                                                </div>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })}
-                                        </>
-                                    ) : (
-                                        <></>
-                                    )
-                                } */}
+                                {
+                                !_.isEmpty(listUnit) ?
+                                    listUnit.map((x, key) => {
+                                        return (
+                                            <tr key={x.id}>
+                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                <td>{x.name}</td>
+                                                <td className="text-center">0</td>
+                                                <td className="action-column">
+                                                    <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                        <button type="button" className="btn btn-warning button-view">
+                                                            <div className="d-flex justify-content-center align-items-center">
+                                                                <AiIcons.AiOutlineEye />&nbsp;View
+                                                            </div>
+                                                        </button>
+                                                    </Link>
+                                                    <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                        <button type="button" className="btn btn-info button-edit">
+                                                            <div className="d-flex justify-content-center align-items-center">
+                                                                <FiIcons.FiEdit />&nbsp;Edit
+                                                            </div>
+                                                        </button>
+                                                    </Link>
+                                                    <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
+                                                        <div className="d-flex justify-content-center align-items-center">
+                                                            <FiIcons.FiTrash2 />&nbsp;Delete
+                                                        </div>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    }) :
+                                    <>
+                                    </>
+                                }
                             </tbody>
                         </table>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
-                                Menampilkan data {dataCount - perPage} - {listUnit.length} dari {dataCount} data
+                                {
+                                    !_.isEmpty(listUnit) ?
+                                    <>
+                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listUnit.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listUnit.length)} dari {dataCount} data
+                                    </>
+                                    :
+                                    <>
+                                        Menampilkan data 0 - 0 dari 0 data
+                                    </>
+                                }
                             </div>
                             <div>
                                 <ReactPaginate
