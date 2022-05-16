@@ -143,15 +143,15 @@ const UnitKerja = () => {
                                                         <td>{x.name}</td>
                                                         <td className="text-center">0</td>
                                                         <td className="action-column">
-                                                            <Link to={{ pathname: `/master/unit_kerja/detail` }}>
+                                                            <Link to={{ pathname: `/master/unit_kerja/detail`, state: {id: x.id, unit_kerja: x.name } }}>
                                                                 <button type="button" class="btn btn-warning button-view" onClick={() => sessData(x)}>
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <AiIcons.AiOutlineEye />&nbsp;View
                                                                     </div>
                                                                 </button>
                                                             </Link>
-                                                            <Link to={{ pathname: `/master/unit_kerja/edit` }}>
-                                                                <button type="button" class="btn btn-info button-edit" onClick={() => sessData(x)}>
+                                                            <Link to={{ pathname: `/master/unit_kerja/edit`, state: {id: x.id, unit_kerja: x.name } }}>
+                                                                <button type="button" class="btn btn-info button-edit">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <FiIcons.FiEdit />&nbsp;Edit
                                                                     </div>
