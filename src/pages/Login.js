@@ -20,26 +20,26 @@ const Login = () => {
 
     const sampleLogin = async (e) => {
         e.preventDefault();
-        const token = {"access_token":"Tes"};
-        setRemember({ remember: rmb, token});
-        // axios({
-        //     method: 'post',
-        //     url: process.env.REACT_APP_BASE_API + '/login',
-        //     headers: {},
-        //     data: {
-        //         email: e.target.email.value,
-        //         password: e.target.password.value
-        //     }
-        // }).then(response => {
-        //     setRemember({ remember: rmb, ...response.data });
-        //     window.location.reload();
-        // }).catch(err => {
-        //     Swal.fire({
-        //         title: 'Gagal!',
-        //         text: err.response.data.message,
-        //         icon: 'error'
-        //     })
-        // });
+        // const token = {"access_token":"Tes"};
+        // setRemember({ remember: rmb, token});
+        axios({
+            method: 'post',
+            url: process.env.REACT_APP_BASE_API + '/login',
+            headers: {},
+            data: {
+                email: e.target.email.value,
+                password: e.target.password.value
+            }
+        }).then(response => {
+            setRemember({ remember: rmb, ...response.data });
+            window.location.reload();
+        }).catch(err => {
+            Swal.fire({
+                title: 'Gagal!',
+                text: err.response.data.message,
+                icon: 'error'
+            })
+        });
     }
 
     return (

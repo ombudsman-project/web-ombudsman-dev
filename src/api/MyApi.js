@@ -28,8 +28,8 @@ class ServiceApi {
         return apiClient.get(`/master/pegawai/getData?page=&length=&search=`);
     }
 
-    getListUnit(){
-        return apiClient.get(`/master/unit-kerja/getData?page=&length=&search=`)
+    getListUnit(param){
+        return apiClient.get(`/master/unit-kerja/getData?${param}`)
     }
 
     addUnitKerja(data){
