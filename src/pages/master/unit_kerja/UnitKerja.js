@@ -30,6 +30,7 @@ const UnitKerja = () => {
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
     const [listUnit, setListUnit] = useState([]);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
         viewData();
@@ -57,7 +58,7 @@ const UnitKerja = () => {
 
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
+        const param = `page=${selectedPage + 1}&length=${perPage}&search=${search}`;
         await new ServiceApi().getListUnit(param).then(x => {
             setListUnit(x.data.data);
         }).catch((err) => {
@@ -65,7 +66,8 @@ const UnitKerja = () => {
     }
 
     const searchData = async (e) => {
-        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
+        setSearch(e.target.value);
+        const param = `page=1&length=${perPage}&search=${e.target.value}`;
         await new ServiceApi().getListUnit(param).then(x => {
             setDataCount(x.data.total_data);
             setListUnit(x.data.data);
