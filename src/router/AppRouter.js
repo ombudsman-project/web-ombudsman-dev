@@ -19,6 +19,12 @@ import DetailJabatanView from "../pages/master/jabatan/DetailJabatan"
 import TambahJabatanView from "../pages/master/jabatan/TambahJabatan"
 import EditJabatanView from "../pages/master/jabatan/EditJabatan"
 
+//KLASIFIKASI JABATAN
+import KlasifikasiView from "../pages/master/klasifikasi/Klasifikasi"
+import DetailKlasifikasiView from "../pages/master/klasifikasi/DetailKlasifikasi"
+import TambahKlasifikasiView from "../pages/master/klasifikasi/TambahKlasifikasi"
+import EditKlasifikasiView from "../pages/master/klasifikasi/EditKlasifikasi"
+
 //KATEGORI JABATAN
 import KategoriView from "../pages/master/kategori/Kategori"
 import DetailKategoriView from "../pages/master/kategori/DetailKategori"
@@ -116,7 +122,13 @@ const AppRouter = () => {
                   <Route component={TambahJabatanView} path="/master/jabatan/tambah" />
                   <Route component={EditJabatanView} path="/master/jabatan/edit" />
 
-                  {/* KATEGORI */}
+                  {/* KLASIFIKASI JABATAN */}
+                  <Route component={KlasifikasiView} path="/master/klasifikasi_jabatan" exact />
+                  <Route component={DetailKlasifikasiView} path="/master/klasifikasi_jabatan/detail" exact />
+                  <Route component={TambahKlasifikasiView} path="/master/klasifikasi_jabatan/tambah" exact />
+                  <Route component={EditKlasifikasiView} path="/master/klasifikasi_jabatan/edit" exact />
+
+                  {/* KATEGORI JABATAN */}
                   <Route component={KategoriView} path="/master/kategori_jabatan" exact />
                   <Route component={DetailKategoriView} path="/master/kategori_jabatan/detail" exact />
                   <Route component={TambahKategoriView} path="/master/kategori_jabatan/tambah" exact />
