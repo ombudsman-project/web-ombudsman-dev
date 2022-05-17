@@ -88,7 +88,7 @@ const Kategori = () => {
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteKategori(data)
+                new ServiceApi().deleteUnitKerja(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -169,14 +169,14 @@ const Kategori = () => {
                                                 <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                 <td>{x.name}</td>
                                                 <td className="action-column">
-                                                    <Link to={{ pathname: `/master/kategori_jabatan/detail`, state: { id: x.id, kategori: x.name } }}>
+                                                    <Link to={{ pathname: `/master/kategori_jabatan/detail`, state: { id: x.id, unit_kerja: x.name } }}>
                                                         <button type="button" className="btn btn-warning button-view">
                                                             <div className="d-flex justify-content-center align-items-center">
                                                                 <AiIcons.AiOutlineEye />&nbsp;View
                                                             </div>
                                                         </button>
                                                     </Link>
-                                                    <Link to={{ pathname: `/master/kategori_jabatan/edit`, state: { id: x.id, kategori: x.name } }}>
+                                                    <Link to={{ pathname: `/master/kategori_jabatan/edit`, state: { id: x.id, unit_kerja: x.name } }}>
                                                         <button type="button" className="btn btn-info button-edit">
                                                             <div className="d-flex justify-content-center align-items-center">
                                                                 <FiIcons.FiEdit />&nbsp;Edit
