@@ -37,12 +37,26 @@ const TambahUnitKerja = () => {
                     html: '<i>' + response.data.data.unit_kerja + ' berhasil ditambahkan</i>',
                     icon: 'success'
                 }).then(function () {
-                    window.location = '/master/unit_kerja/tambah'
+                    window.location = '/master/unit_kerja'
                 })
             }).catch(err => {
+                const err_data = err.response.data;
+                const data = err_data.data;
+                console.log(data)
+
+                // if(err_data){
+                //     data.map((x, i) => {
+                //         return (
+                //             console.log(x)
+                //         )
+                //     })
+                // } else {
+                    
+                // }
+
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.message + '</i>',
+                    html: '<i>' + err.response.data.data.unit_kerja + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
