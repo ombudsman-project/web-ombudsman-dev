@@ -17,6 +17,7 @@ import * as FiIcons from 'react-icons/fi';
 import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
+import ReactPaginate from 'react-paginate';
 
 const iconPerson = new L.Icon({
 
@@ -24,51 +25,97 @@ const iconPerson = new L.Icon({
 
 const Jabatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [listPegawai, setListPegawai] = useState([]);
+    const [perPage, setPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageCount, setPageCount] = useState(0);
+    const [dataCount, setDataCount] = useState(0);
+    const [listJabatan, setListJabatan] = useState([]);
 
     useEffect(() => {
-        //Cara V2 Amed
-        new ServiceApi().getListPegawai().then(x => {
-            //Do The Data...
-            setListPegawai(x.data.data)
-            console.log(x)
-        }).catch((err) => {
-            //Do Error...
-        })
-
-        //Cara Fikr
-        // ServiceApi.getListPegawai().then(x => {
-        //     //Do The Data...
-        //     setListPegawai(x.data.data)
-        //     console.log(x)
-        // }).catch((err) => {
-        //     //Do Error...
-        // })
+        viewData();
     }, [])
+
+    const viewData = async () => {
+        const param = `page=${currentPage}&length=${perPage}&search=`;
+        await new ServiceApi().getJabatan(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListJabatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
+
+    function handlePerPage(e) {
+        setPerPage(e.target.value)
+        const param = `page=${currentPage}&length=${e.target.value}&search=`;
+        new ServiceApi().getlistJabatan(param).then(x => {
+            setListJabatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / e.target.value));
+        }).catch((err) => {
+        })
+    }
+
+    async function handlePageClick({ selected: selectedPage }) {
+        setCurrentPage(selectedPage + 1);
+        const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
+        await new ServiceApi().getlistJabatan(param).then(x => {
+            setListJabatan(x.data.data);
+        }).catch((err) => {
+        })
+    }
+
+    const searchData = async (e) => {
+        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
+        await new ServiceApi().getlistJabatan(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListJabatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
+
+    const deleteData = (x) => {
+        const data = {
+            'key': x.id,
+        }
+
+        Swal.fire({
+            title: 'Perhatian!',
+            html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
+            showCancelButton: true,
+            confirmButtonText: 'Simpan',
+            confirmButtonColor: '#0058a8',
+            cancelButtonColor: '#FD3D00',
+        }).then(function (response) {
+            if (response.isConfirmed) {
+                new ServiceApi().deleteUnitKerja(data)
+                    .then(response => {
+                        Swal.fire({
+                            title: 'Sukses!',
+                            html: '<i>Berhasil menghapus data</i>',
+                            icon: 'success'
+                        })
+                        viewData();
+                    }).catch(err => {
+                        Swal.fire({
+                            title: 'Gagal!',
+                            html: '<i>' + err.response.data.message + '</i>',
+                            icon: 'error',
+                            confirmButtonColor: '#0058a8',
+                        })
+                    })
+            }
+        })
+    }
 
     return (
         <div className='main-animation'>
-            {
-                !_.isEmpty(listPegawai) ? (
-                    <>
-                        {listPegawai.map((x, key) => {
-                            return (
-                                <div key={key}>
-                                    <p>{x.nama}</p>
-                                </div>
-                            )
-                        })}
-                    </>
-                ) : (
-                    <></>
-                )
-            }
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
                     <h3 className="content-title">Jabatan</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/unit_kerja/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -78,11 +125,11 @@ const Jabatan = () => {
                         <div id="size-table" className="size-table">
                             <div>Lihat &nbsp;</div>
                             <div>
-                                <Form.Control className="select-row-table" as="select">
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>50</option>
-                                    <option>100</option>
+                                <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
                                 </Form.Control>
                             </div>
                             <div>&nbsp; data</div>
@@ -98,7 +145,7 @@ const Jabatan = () => {
                                     style={{ marginLeft: "1rem", position: "absolute" }}
                                     color="#2c2d3040"
                                 />
-                                <Form.Control type="text" placeholder="Cari" />
+                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)}/>
                             </div>
                         </div>
                     </div>
@@ -110,100 +157,80 @@ const Jabatan = () => {
                                         #
                                     </th>
                                     <th className="table-title" scope="col">Jabatan</th>
-                                    <th className="table-title" scope="col">Klasifikasi</th>
-                                    <th className="table-title" scope="col">Kategori</th>
+                                    <th className="table-title text-center" scope="col">Klasifikasi</th>
                                     <th className="table-title text-center" scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>Riski</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td className="action-column">
-                                        <Link to={{ pathname: `/master/jabatan/detail`}}>
-                                            <button type="button" className="btn btn-warning button-view">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <AiIcons.AiOutlineEye />&nbsp;View
-                                                </div>
-                                            </button>
-                                        </Link>
-                                        <Link to={{ pathname: `/master/jabatan/edit`, state: {name: '', jenis_peg: 'Tess' } }}>
-                                            <button type="button" className="btn btn-info button-edit">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <FiIcons.FiEdit />&nbsp;Edit
-                                                </div>
-                                            </button>
-                                        </Link>
-                                        <button type="button" className="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                    <td className="action-column">
-                                        <button type="button" className="btn btn-warning button-view">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-info button-edit">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiEdit />&nbsp;Edit
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">3</td>
-                                    <td colSpan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
-                                    <td className="action-column">
-                                        <button type="button" className="btn btn-warning button-view">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-info button-edit">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiEdit />&nbsp;Edit
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
+                                {
+                                !_.isEmpty(listJabatan) ?
+                                    listJabatan.map((x, key) => {
+                                        return (
+                                            <tr key={x.id}>
+                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                <td>{x.name}</td>
+                                                <td className="text-center">0</td>
+                                                <td className="action-column">
+                                                    <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                        <button type="button" className="btn btn-warning button-view">
+                                                            <div className="d-flex justify-content-center align-items-center">
+                                                                <AiIcons.AiOutlineEye />&nbsp;View
+                                                            </div>
+                                                        </button>
+                                                    </Link>
+                                                    <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                        <button type="button" className="btn btn-info button-edit">
+                                                            <div className="d-flex justify-content-center align-items-center">
+                                                                <FiIcons.FiEdit />&nbsp;Edit
+                                                            </div>
+                                                        </button>
+                                                    </Link>
+                                                    <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
+                                                        <div className="d-flex justify-content-center align-items-center">
+                                                            <FiIcons.FiTrash2 />&nbsp;Delete
+                                                        </div>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    }) :
+                                    <>
+                                    </>
+                                }
                             </tbody>
                         </table>
                         <div className="footer-table d-flex justify-content-between align-items-center">
-                            <div>Menampilkan data 6 - 13 dari 23 data</div>
                             <div>
-                                <Pagination>
-                                    <Pagination.First />
-                                    <Pagination.Prev />
-                                    <Pagination.Ellipsis />
-                                    <Pagination.Item>{1}</Pagination.Item>
-                                    <Pagination.Item>{2}</Pagination.Item>
-                                    <Pagination.Item>{3}</Pagination.Item>
-                                    <Pagination.Ellipsis />
-                                    <Pagination.Next />
-                                    <Pagination.Last />
-                                </Pagination>
+                                {
+                                    !_.isEmpty(listJabatan) ?
+                                    <>
+                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listJabatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listJabatan.length)} dari {dataCount} data
+                                    </>
+                                    :
+                                    <>
+                                        Menampilkan data 0 - 0 dari 0 data
+                                    </>
+                                }
+                            </div>
+                            <div>
+                                <ReactPaginate
+                                    pageCount={pageCount}
+                                    onPageChange={handlePageClick}
+                                    previousLabel="Sebelumnya"
+                                    nextLabel="Selanjutnya"
+                                    pageClassName="page-item"
+                                    pageLinkClassName="page-link"
+                                    previousClassName="page-item"
+                                    previousLinkClassName="page-link"
+                                    nextClassName="page-item"
+                                    nextLinkClassName="page-link"
+                                    breakLabel="..."
+                                    breakClassName="page-item"
+                                    breakLinkClassName="page-link"
+                                    containerClassName="pagination"
+                                    activeClassName="active"
+                                    renderOnZeroPageCount={null}
+                                />
                             </div>
                         </div>
                     </div>

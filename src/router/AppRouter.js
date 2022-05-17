@@ -19,6 +19,12 @@ import DetailJabatanView from "../pages/master/jabatan/DetailJabatan"
 import TambahJabatanView from "../pages/master/jabatan/TambahJabatan"
 import EditJabatanView from "../pages/master/jabatan/EditJabatan"
 
+//KATEGORI JABATAN
+import KategoriView from "../pages/master/kategori/Kategori"
+import DetailKategoriView from "../pages/master/kategori/DetailKategori"
+import TambahKategoriView from "../pages/master/kategori/TambahKategori"
+import EditKategoriView from "../pages/master/kategori/EditKategori"
+
 //UNIT KERJA
 import UnitView from "../pages/master/unit_kerja/UnitKerja";
 import DetailUnitView from "../pages/master/unit_kerja/DetailUnitKerja";
@@ -109,6 +115,12 @@ const AppRouter = () => {
                   <Route component={DetailJabatanView} path="/master/jabatan/detail" />
                   <Route component={TambahJabatanView} path="/master/jabatan/tambah" />
                   <Route component={EditJabatanView} path="/master/jabatan/edit" />
+
+                  {/* KATEGORI */}
+                  <Route component={KategoriView} path="/master/kategori_jabatan" exact />
+                  <Route component={DetailKategoriView} path="/master/kategori_jabatan/detail" exact />
+                  <Route component={TambahKategoriView} path="/master/kategori_jabatan/tambah" exact />
+                  <Route component={EditKategoriView} path="/master/kategori_jabatan/edit" exact />
 
                   {/* UNIT KERJA */}
                   <Route component={UnitView} path="/master/unit_kerja" exact />
