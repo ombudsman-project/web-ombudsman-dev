@@ -133,7 +133,7 @@ export const SidebarData = [
             },
             {
                 title: "Kategori Jabatan",
-                path: "/messages/message2",
+                path: "/master/kategori_jabatan",
                 icon: <Dot />,
             },
             {
