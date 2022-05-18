@@ -80,9 +80,12 @@ const EditKlasifikasi = () => {
                     window.location = '/master/klasifikasi_jabatan'
                 })
             }).catch(err => {
+                const err_data = err.response.data;
+                const data = err_data.data;
+
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.message + '</i>',
+                    html: '<i>' + (err.response.data.data.kategori_id ? 'kategori jabatan kosong' + '<br/>' : '') + (err.response.data.data.klasifikasi ? err.response.data.data.klasifikasi : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })

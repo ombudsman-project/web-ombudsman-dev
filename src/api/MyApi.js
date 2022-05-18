@@ -35,6 +35,22 @@ class ServiceApi {
     getJabatan(param) {
         return apiClient.get(`/master/jabatan/getData?${param}`)
     }
+
+    getDetailJabatan(id) {
+        return apiClient.get(`/master/jabatan/detail/${id}`)
+    }
+
+    addJabatan(data) {
+        return apiClient.post(`/master/jabatan/create`, data)
+    }
+
+    editJabatan(data) {
+        return apiClient.post(`/master/jabatan/update`, data)
+    }
+
+    deleteJabatan(data) {
+        return apiClient.post(`/master/jabatan/delete`, data)
+    }
     
     getKlasifikasi(param) {
         return apiClient.get(`/master/klasifikasi-jabatan/getData?${param}`)
