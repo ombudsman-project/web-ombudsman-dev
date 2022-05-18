@@ -24,6 +24,10 @@ class ServiceApi {
         return axios.post(`${apiURL}/login`, data);
     };
 
+    getSelect() {
+        return apiClient.get(`/data/select-option/default`);
+    }
+
     getListPegawai() {
         return apiClient.get(`/master/pegawai/getData?page=&length=&search=`);
     }
@@ -31,11 +35,14 @@ class ServiceApi {
     getJabatan(param) {
         return apiClient.get(`/master/jabatan/getData?${param}`)
     }
+    
+    getKlasifikasi(param) {
+        return apiClient.get(`/master/klasifikasi-jabatan/getData?${param}`)
+    }
 
     getKategori(param) {
         return apiClient.get(`/master/kategori-jabatan/getData?${param}`)
     }
-
     addKategori(data) {
         return apiClient.post(`/master/kategori-jabatan/create`, data)
     }

@@ -128,7 +128,7 @@ export const SidebarData = [
             },
             {
                 title: "Klasifikasi Jabatan",
-                path: "/messages/message2",
+                path: "/master/klasifikasi_jabatan",
                 icon: <Dot />,
             },
             {
