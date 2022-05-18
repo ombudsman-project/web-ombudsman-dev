@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import ReactPaginate from 'react-paginate';
 
-const iconPerson = new L.Icon({
+const iconPerson = new L.Icon({gio
 
 });
 

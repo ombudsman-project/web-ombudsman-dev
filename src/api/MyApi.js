@@ -6,7 +6,7 @@ const apiClient = axios.create({
     withCredentials: false,
     headers: {
         Accept: 'application/json',
-        Authorization: "Bearer " + token 
+        Authorization: "Bearer " + token
     }
 })
 
@@ -20,27 +20,47 @@ const apiClient = axios.create({
 
 //V2 Cara Alternatif Amed
 class ServiceApi {
-    authUsers(data){
+    authUsers(data) {
         return axios.post(`${apiURL}/login`, data);
     };
 
-    getListPegawai(){
+    getListPegawai() {
         return apiClient.get(`/master/pegawai/getData?page=&length=&search=`);
     }
 
-    getListUnit(param){
+    getJabatan(param) {
+        return apiClient.get(`/master/jabatan/getData?${param}`)
+    }
+
+    getKategori(param) {
+        return apiClient.get(`/master/kategori-jabatan/getData?${param}`)
+    }
+
+    addKategori(data) {
+        return apiClient.post(`/master/kategori-jabatan/create`, data)
+    }
+
+    editKategori(data) {
+        return apiClient.post(`/master/kategori-jabatan/update`, data)
+    }
+
+    deleteKategori(data) {
+        return apiClient.post(`/master/kategori-jabatan/delete`, data)
+    }
+
+    getListUnit(param) {
         return apiClient.get(`/master/unit-kerja/getData?${param}`)
     }
 
-    addUnitKerja(data){
+    addUnitKerja(data) {
         return apiClient.post(`/master/unit-kerja/create`, data)
     }
 
-    editUnitKerja(data){
+    editUnitKerja(data) {
         return apiClient.post(`/master/unit-kerja/update`, data)
     }
 
-    deleteUnitKerja(data){
+    deleteUnitKerja(data) {
         return apiClient.post(`/master/unit-kerja/delete`, data)
     }
 }

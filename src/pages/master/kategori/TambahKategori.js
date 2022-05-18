@@ -20,43 +20,27 @@ const iconPerson = new L.Icon({
 
 });
 
-const TambahUnitKerja = () => {
-    const [listUnit, setListUnit] = useState([]);
-
+const TambahKategori = () => {
     const submitData = async (e) => {
         e.preventDefault();
 
         const data = {
-            'unit_kerja': e.target.elements.unit_kerja.value
+            'kategori': e.target.elements.kategori.value
         }
 
-        new ServiceApi().addUnitKerja(data)
+        new ServiceApi().addKategori(data)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
-                    html: '<i>' + response.data.data.unit_kerja + ' berhasil ditambahkan</i>',
+                    html: '<i>' + response.data.data.kategori + ' berhasil ditambahkan</i>',
                     icon: 'success'
                 }).then(function () {
-                    window.location = '/master/unit_kerja'
+                    window.location = '/master/kategori_jabatan/tambah'
                 })
             }).catch(err => {
-                const err_data = err.response.data;
-                const data = err_data.data;
-                console.log(data)
-
-                // if(err_data){
-                //     data.map((x, i) => {
-                //         return (
-                //             console.log(x)
-                //         )
-                //     })
-                // } else {
-                    
-                // }
-
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.data.unit_kerja + '</i>',
+                    html: '<i>' + err.response.data.message + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -67,21 +51,21 @@ const TambahUnitKerja = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/unit_kerja` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Unit Kerja</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/kategori_jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Kategori Jabatan</h3></Link>
                 </div>
             </div>
 
             <Form onSubmit={submitData}>
                 <Card className="card-main-content">
                     <Card.Body>
-                        <h4 className="card-main-content-title">Detail Unit Kerja</h4>
-                        <p className="card-main-content-subtitle">Masukkan nama unit kerja</p>
+                        <h4 className="card-main-content-title">Detail Kategori Jabatan</h4>
+                        <p className="card-main-content-subtitle">Masukkan detail kategori jabatan</p>
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                             <Form.Label column sm="2">
-                                Unit Kerja
+                                Kategori Jabatan
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" name="unit_kerja" placeholder="Masukkan nama unit kerja" autoComplete="off" required />
+                                <Form.Control type="text" name="kategori" placeholder="Masukkan kategori jabatan" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -98,4 +82,4 @@ const TambahUnitKerja = () => {
     );
 };
 
-export default TambahUnitKerja;
+export default TambahKategori;
