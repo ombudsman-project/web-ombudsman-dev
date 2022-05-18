@@ -24,8 +24,8 @@ class ServiceApi {
         return axios.post(`${apiURL}/login`, data);
     };
 
-    getSelect() {
-        return apiClient.get(`/data/select-option/default`);
+    getSelect(data) {
+        return apiClient.post(`/data/select-option/default`, data);
     }
 
     getListPegawai() {

@@ -74,7 +74,7 @@ export const SidebarData = [
     },
     {
         title: "Riwayat Aktivitas",
-        path: "#",
+        path: "/riwayat_aktivitas",
         icon: <img src={require('../../icons/icon-analisis.svg').default} alt='mySvgImage' />,
     },
     {

@@ -16,6 +16,34 @@ $placeholderColor: #2c2d3040;
   font-family: "Poppins", sans-serif;
 }
 
+/*to hide left panel from date range picker */
+.rdrDefinedRangesWrapper {
+  display: none;
+}
+
+// .rdrStartEdge {
+//   border-bottom-left-radius: 6px !important;
+//   border-top-left-radius: 6px !important;
+//   border-bottom-right-radius: 6px !important;
+//   border-top-right-radius: 6px !important;
+// }
+
+// .rdrDayHovered {
+//   border-bottom-left-radius: 6px !important;
+//   border-top-left-radius: 6px !important;
+//   border-bottom-right-radius: 6px !important;
+//   border-top-right-radius: 6px !important;
+// }
+
+// .rdrDay:hover{
+//   border-bottom-left-radius: 6px !important;
+//   border-top-left-radius: 6px !important;
+//   border-bottom-right-radius: 6px !important;
+//   border-top-right-radius: 6px !important;
+// }
+
+/* END EDIT React Date Range*/
+
 html {
   height: 100%;
 }
@@ -228,6 +256,24 @@ h2 {
 .content-title {
   margin: 30px 0px 30px 10px;
   font-weight: 600;
+}
+
+.content-dropdown {
+  margin-right: 10px;
+
+  .my-dropdown {
+    padding: 10px;
+    background-color: #FFFFFF;
+    color: rgba(97, 98, 100, 1);
+    border: 0px;
+  }
+
+  .my-dropdown:focus {
+    padding: 10px;
+    background-color: #FFFFFF;
+    color: rgba(97, 98, 100, 1);
+    border: 0px;
+  }
 }
 
 .content-button {
