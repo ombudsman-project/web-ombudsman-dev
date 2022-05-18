@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Dropdown, Form, Row } from 'react-bootstrap';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronRight, faUser, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -16,6 +16,10 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { DateRangePicker } from 'react-date-range';
+import { addDays } from 'date-fns';
+import ServiceApi from '../../api/MyApi'
+import * as moment from "moment";
 
 ChartJS.register(
     CategoryScale,
@@ -80,6 +84,34 @@ export const data = {
 };
 
 const DashboardAnalisa = () => {
+    const [listKategori, setListKategori] = useState([]);
+    const [state, setState] = useState([
+        {
+            startDate: new Date(),
+            endDate: addDays(new Date(), 30),
+            key: 'selection'
+        }
+    ]);
+    const [filterDate, setFilterDate] = useState({
+        startDate: moment(new Date()).format('DD/MM/YYYY'),
+        endDate: moment(addDays(new Date(), 30)).format('DD/MM/YYYY'),
+    })
+
+    useEffect(async () => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'all')
+        await new ServiceApi().getSelect(formData).then(x => {
+            setListKategori(x.data.kategori_jabatan)
+        });
+    }, []);
+
+    const setDateRange = (data) => {
+        setState([data.selection]);
+        setFilterDate({
+            startDate: moment(data.selection.startDate).format('DD/MM/YYYY'),
+            endDate: moment(data.selection.endDate).format('DD/MM/YYYY'),
+        })
+    }
 
     return (
         <div className='main-animation'>
@@ -87,9 +119,50 @@ const DashboardAnalisa = () => {
                 <div>
                     <h3 className="content-title">Analisis Kompetensi</h3>
                 </div>
-                {/* <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
-                </div> */}
+                <div className='content-dropdown d-flex flex-row '>
+                    <Dropdown
+                        drop='down'
+                        align="right"
+                        id="dropdown-menu-align-end"
+                    >
+                        <Dropdown.Toggle className='my-dropdown' id="dropdown-basic">
+                            <span><FontAwesomeIcon icon={faCalendar} /></span>&nbsp; {filterDate.startDate} - {filterDate.endDate} &nbsp;
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu style={{ marginTop: 5,  }}>
+                            <DateRangePicker
+                                onChange={(item) => setDateRange(item)}
+                                moveRangeOnFirstSelection={false}
+                                months={2}
+                                ranges={state}
+                                direction="horizontal"
+                            />
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <div style={{ width: 25 }}></div>
+                    <Dropdown>
+                        <Dropdown.Toggle className='my-dropdown' id="dropdown-basic">
+                            <span><FontAwesomeIcon icon={faUser} /></span>&nbsp; Kategori Jabatan &nbsp;
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu style={{ marginTop: 5, width: '100%' }}>
+                            {
+                                !_.isEmpty(listKategori) ?
+                                    <>
+                                        {
+                                            listKategori.map((x, key) => {
+                                                return (
+                                                    <Dropdown.Item href="#/action-1" key={key}>{x.name}</Dropdown.Item>
+                                                )
+                                            })
+                                        }
+                                    </>
+                                    :
+                                    <></>
+                            }
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </div>
             </div>
             <Row>
                 <Col>
