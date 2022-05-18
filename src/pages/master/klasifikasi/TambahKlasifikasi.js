@@ -47,6 +47,7 @@ const options = [
 
 const TambahKlasifikasi = () => {
     const [listKategori, setListKategori] = useState([]);
+    const [addKategori, setAddKategori] = useState('');
 
     useEffect(() => {
         listData();
@@ -54,26 +55,32 @@ const TambahKlasifikasi = () => {
 
 
     const listData = async () => {
-        await new ServiceApi().getSelect().then(x => {
-            // const data_map = x.data.kategori_jabatan.map((row, i) => {
-            //     return (
-            //         { value: row.id, name: row.name }
-            //     )
-            // })
-            console.log(x.data.kategori_jabatan)
-            // setListKategori()
+        let formData = new FormData();
+        formData.append('parameter[]', 'all')
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map = x.data.kategori_jabatan.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListKategori(data_map)
         }).catch((err) => {
         })
+    }
+
+    const selectedKategori = (e) => {
+        setAddKategori(e.value)
     }
 
     const submitData = async (e) => {
         e.preventDefault();
 
         const data = {
+            'kategori_id': addKategori,
             'klasifikasi': e.target.elements.klasifikasi.value
         }
 
-        new ServiceApi().addUnitKerja(data)
+        new ServiceApi().addKlasifikasi(data)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
@@ -88,7 +95,7 @@ const TambahKlasifikasi = () => {
 
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.data.klasifikasi + '</i>',
+                    html: '<i>' + (err.response.data.data.kategori_id ? 'kategori jabatan kosong' + '<br/>' : '') + (err.response.data.data.klasifikasi ? err.response.data.data.klasifikasi : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -108,18 +115,18 @@ const TambahKlasifikasi = () => {
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Klasifikasi Jabatan</h4>
                         <p className="card-main-content-subtitle">Masukkan detail klasifikasi jabatan</p>
-                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+                        <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2" className="mb-3">
                                 Kategori Jabatan
                             </Form.Label>
                             <Col sm="10">
-                                <Select className="select-input" options={options} placeholder="Pilih Pegawai" />
+                                <Select name="kategori_id" options={listKategori} placeholder="Pilih Kategori Jabatan" onChange={(e) => selectedKategori(e)} required />
                             </Col>
                             <Form.Label column sm="2">
                                 Nama Klasifikasi Jabatan
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" name="unit_kerja" placeholder="Masukkan nama unit kerja" autoComplete="off" required />
+                                <Form.Control type="text" name="klasifikasi" placeholder="Masukkan nama klasifikasi jabatan" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>

@@ -40,9 +40,26 @@ class ServiceApi {
         return apiClient.get(`/master/klasifikasi-jabatan/getData?${param}`)
     }
 
+    getDetailKlasifikasi(id) {
+        return apiClient.get(`/master/klasifikasi-jabatan/detail/${id}`)
+    }
+
+    addKlasifikasi(data) {
+        return apiClient.post(`/master/klasifikasi-jabatan/create`, data)
+    }
+
+    editKlasifikasi(data) {
+        return apiClient.post(`/master/klasifikasi-jabatan/update`, data)
+    }
+
+    deleteKlasifikasi(data) {
+        return apiClient.post(`/master/klasifikasi-jabatan/delete`, data)
+    }
+
     getKategori(param) {
         return apiClient.get(`/master/kategori-jabatan/getData?${param}`)
     }
+
     addKategori(data) {
         return apiClient.post(`/master/kategori-jabatan/create`, data)
     }
