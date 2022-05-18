@@ -37,7 +37,7 @@ const Klasifikasi = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getListKlasifikasi(param).then(x => {
+        await new ServiceApi().getKlasifikasi(param).then(x => {
             setDataCount(x.data.total_data);
             setListKlasifikasi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -48,7 +48,7 @@ const Klasifikasi = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getListKlasifikasi(param).then(x => {
+        new ServiceApi().getKlasifikasi(param).then(x => {
             setListKlasifikasi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
@@ -58,7 +58,7 @@ const Klasifikasi = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getListKlasifikasi(param).then(x => {
+        await new ServiceApi().getKlasifikasi(param).then(x => {
             setListKlasifikasi(x.data.data);
         }).catch((err) => {
         })
@@ -66,7 +66,7 @@ const Klasifikasi = () => {
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getListKlasifikasi(param).then(x => {
+        await new ServiceApi().getKlasifikasi(param).then(x => {
             setDataCount(x.data.total_data);
             setListKlasifikasi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -88,7 +88,7 @@ const Klasifikasi = () => {
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteUnitKerja(data)
+                new ServiceApi().deleteKlasifikasi(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -169,7 +169,7 @@ const Klasifikasi = () => {
                                             <tr key={x.id}>
                                                 <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                 <td>{x.name}</td>
-                                                <td className="text-center">0</td>
+                                                <td className="text-center">{x.kategori}</td>
                                                 <td className="action-column">
                                                     <Link to={{ pathname: `/master/klasifikasi_jabatan/detail`, state: { id: x.id, klasifikasi: x.name } }}>
                                                         <button type="button" className="btn btn-warning button-view">
