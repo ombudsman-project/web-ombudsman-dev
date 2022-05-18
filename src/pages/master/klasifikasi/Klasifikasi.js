@@ -171,7 +171,7 @@ const Klasifikasi = () => {
                                                 <td>{x.name}</td>
                                                 <td className="text-center">{x.kategori}</td>
                                                 <td className="action-column">
-                                                    <Link to={{ pathname: `/master/klasifikasi_jabatan/detail`, state: { id: x.id, klasifikasi: x.name } }}>
+                                                    <Link to={{ pathname: `/master/klasifikasi_jabatan/detail`, state: { id: x.id, kategori: x.kategori, klasifikasi: x.name } }}>
                                                         <button type="button" className="btn btn-warning button-view">
                                                             <div className="d-flex justify-content-center align-items-center">
                                                                 <AiIcons.AiOutlineEye />&nbsp;View

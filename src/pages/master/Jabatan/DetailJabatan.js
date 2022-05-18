@@ -13,18 +13,17 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';;
-
-const iconPerson = new L.Icon({
-
-});
+import { Link, useLocation } from 'react-router-dom';;
 
 const DetailJabatan = () => {
+    const location = useLocation();
+    const myparam = location.state;
+
     return (
-        <div>
+        <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Detail Jenis Kepegawaian</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Detail Jabatan</h3></Link>
                 </div>
             </div>
 
@@ -33,25 +32,20 @@ const DetailJabatan = () => {
                     <Card.Body>
                         <div className="d-flex flex-row justify-content-between">
                             <div>
-                                <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
-                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jenis kepegawaian</p>
+                                <h4 className="card-main-content-title">Detail Jabatan</h4>
+                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jabatan</p>
                             </div>
                             <div>
-                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots  /></Button>
+                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
                             </div>
                         </div>
                         <Row>
                             <Col lg="3"><p>Jabatan</p></Col>
-                            <Col className="text-secondary" lg="3"><p>Sekretaris Jendral</p></Col>
-                            <Col lg="6"></Col>
-
+                            <Col className="text-secondary" lg="9"><p>{myparam.jabatan}</p></Col>
                             <Col lg="3"><p>Klasifikasi</p></Col>
-                            <Col className="text-secondary" lg="3"><p>Pimpinan Tinggi Madya</p></Col>
-                            <Col lg="6"></Col>
-
+                            <Col className="text-secondary" lg="9"><p>{myparam.klasifikasi}</p></Col>
                             <Col lg="3"><p>Kategori</p></Col>
-                            <Col className="text-secondary" lg="3"><p>JPT</p></Col>
-                            <Col lg="6"></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.kategori}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>

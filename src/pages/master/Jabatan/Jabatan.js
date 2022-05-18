@@ -48,7 +48,7 @@ const Jabatan = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getlistJabatan(param).then(x => {
+        new ServiceApi().getJabatan(param).then(x => {
             setListJabatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
@@ -58,7 +58,7 @@ const Jabatan = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getlistJabatan(param).then(x => {
+        await new ServiceApi().getJabatan(param).then(x => {
             setListJabatan(x.data.data);
         }).catch((err) => {
         })
@@ -66,7 +66,7 @@ const Jabatan = () => {
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getlistJabatan(param).then(x => {
+        await new ServiceApi().getJabatan(param).then(x => {
             setDataCount(x.data.total_data);
             setListJabatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -88,7 +88,7 @@ const Jabatan = () => {
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteUnitKerja(data)
+                new ServiceApi().deleteJabatan(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -115,7 +115,7 @@ const Jabatan = () => {
                     <h3 className="content-title">Jabatan</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/unit_kerja/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -157,7 +157,8 @@ const Jabatan = () => {
                                         #
                                     </th>
                                     <th className="table-title" scope="col">Jabatan</th>
-                                    <th className="table-title text-center" scope="col">Klasifikasi</th>
+                                    <th className="table-title" scope="col">Klasifikasi</th>
+                                    <th className="table-title text-center" scope="col">Kategori</th>
                                     <th className="table-title text-center" scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -169,16 +170,17 @@ const Jabatan = () => {
                                             <tr key={x.id}>
                                                 <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                 <td>{x.name}</td>
-                                                <td className="text-center">0</td>
+                                                <td>{x.klasifikasi}</td>
+                                                <td className="text-center">{x.kategori}</td>
                                                 <td className="action-column">
-                                                    <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                    <Link to={{ pathname: `/master/jabatan/detail`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
                                                         <button type="button" className="btn btn-warning button-view">
                                                             <div className="d-flex justify-content-center align-items-center">
                                                                 <AiIcons.AiOutlineEye />&nbsp;View
                                                             </div>
                                                         </button>
                                                     </Link>
-                                                    <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                    <Link to={{ pathname: `/master/jabatan/edit`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
                                                         <button type="button" className="btn btn-info button-edit">
                                                             <div className="d-flex justify-content-center align-items-center">
                                                                 <FiIcons.FiEdit />&nbsp;Edit
