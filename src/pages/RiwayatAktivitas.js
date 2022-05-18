@@ -16,14 +16,14 @@ import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
-import ServiceApi from '../../../api/MyApi';
+import ServiceApi from '../api/MyApi';
 import ReactPaginate from 'react-paginate';
 
 const iconPerson = new L.Icon({
 
 });
 
-const UnitKerja = () => {
+const RiwayatAktivitas = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const [perPage, setPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
@@ -114,10 +114,7 @@ const UnitKerja = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Unit Kerja</h3>
-                </div>
-                <div>
-                    <Link className="content-link" to={{ pathname: `/master/unit_kerja/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <h3 className="content-title">Riwayat Pengguna</h3>
                 </div>
             </div>
 
@@ -158,9 +155,9 @@ const UnitKerja = () => {
                                     <th className="table-title" scope="col" style={{ width: 46 }}>
                                         #
                                     </th>
-                                    <th className="table-title" scope="col">Unit Kerja</th>
-                                    <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
-                                    <th className="table-title text-center" scope="col">Action</th>
+                                    <th className="table-title" scope="col">Waktu</th>
+                                    <th className="table-title" scope="col">Nama</th>
+                                    <th className="table-title" scope="col">Aktivitas</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -242,4 +239,4 @@ const UnitKerja = () => {
     );
 };
 
-export default UnitKerja;
+export default RiwayatAktivitas;

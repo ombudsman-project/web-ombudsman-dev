@@ -6,6 +6,7 @@ import LoginView from '../pages/Login';
 
 import DashboardView from "../pages/Dashboard";
 import RekapitulasiView from "../pages/Rekapitulasi";
+import RiwayatAktivitasView from "../pages/RiwayatAktivitas";
 
 //Analisa Kompetensi
 import KompetensiDashboardView from "../pages/analisa_kompetensi/Dashboard"
@@ -108,6 +109,7 @@ const AppRouter = () => {
                   />
                   <Route component={DashboardView} path="/dashboard" />
                   <Route component={RekapitulasiView} path="/rekapitulasi" exact />
+                  <Route component={RiwayatAktivitasView} path="/riwayat_aktivitas" exact />
 
                   {/* ANALISA KOMPETENSI */}
                   <Route component={KompetensiDashboardView} path="/analisa_kompetensi/kompetensi_dashboard" exact />
