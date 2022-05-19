@@ -32,6 +32,22 @@ class ServiceApi {
         return apiClient.get(`/master/pegawai/getData?page=&length=&search=`);
     }
 
+    getPangkat(param) {
+        return apiClient.get(`/master/golongan-pangkat/getData?${param}`)
+    }
+
+    addPangkat(data) {
+        return apiClient.post(`/master/golongan-pangkat/create`, data)
+    }
+
+    editPangkat(data) {
+        return apiClient.post(`/master/golongan-pangkat/update`, data)
+    }
+
+    deletePangkat(data) {
+        return apiClient.post(`/master/golongan-pangkat/delete`, data)
+    }
+
     getJabatan(param) {
         return apiClient.get(`/master/jabatan/getData?${param}`)
     }
@@ -118,6 +134,10 @@ class ServiceApi {
 
     deletePenempatan(data) {
         return apiClient.post(`/master/penempatan/delete`, data)
+    }
+
+    getManajemenUser(param) {
+        return apiClient.get(`/master/user/getData?${param}`)
     }
 }
 export default ServiceApi;

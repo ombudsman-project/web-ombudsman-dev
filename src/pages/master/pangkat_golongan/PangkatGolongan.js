@@ -18,21 +18,18 @@ import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import ReactPaginate from 'react-paginate';
-import * as BiIcons from 'react-icons/bi';
 
 const iconPerson = new L.Icon({
 
 });
 
-const styles = { fontSize: '20px' }
-
-const ManajemenUser = () => {
+const PangkatGolongan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [listUser, setListUser] = useState([]);
+    const [listPangkat, setListPangkat] = useState([]);
 
     useEffect(() => {
         viewData();
@@ -40,9 +37,9 @@ const ManajemenUser = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getManajemenUser(param).then(x => {
+        await new ServiceApi().getPangkat(param).then(x => {
             setDataCount(x.data.total_data);
-            setListUser(x.data.data);
+            setListPangkat(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -51,8 +48,8 @@ const ManajemenUser = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getManajemenUser(param).then(x => {
-            setListUser(x.data.data);
+        new ServiceApi().getPangkat(param).then(x => {
+            setListPangkat(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -61,17 +58,17 @@ const ManajemenUser = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getManajemenUser(param).then(x => {
-            setListUser(x.data.data);
+        await new ServiceApi().getPangkat(param).then(x => {
+            setListPangkat(x.data.data);
         }).catch((err) => {
         })
     }
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getManajemenUser(param).then(x => {
+        await new ServiceApi().getPangkat(param).then(x => {
             setDataCount(x.data.total_data);
-            setListUser(x.data.data);
+            setListPangkat(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -84,14 +81,15 @@ const ManajemenUser = () => {
 
         Swal.fire({
             title: 'Perhatian!',
-            html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
+            html: '<i>Anda yakin ingin menghapus <b>' + 'Pangkat ' + x.pangkat + ' & Golongan ' + x.golongan + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deletePenempatan(data)
+                new ServiceApi().deletePangkat(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -115,10 +113,10 @@ const ManajemenUser = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Manajemen User</h3>
+                    <h3 className="content-title">Pangkat & Golongan</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/manajemen_user/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Pengguna</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/pangkat_golongan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -148,7 +146,7 @@ const ManajemenUser = () => {
                                     style={{ marginLeft: "1rem", position: "absolute" }}
                                     color="#2c2d3040"
                                 />
-                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)}/>
+                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)} />
                             </div>
                         </div>
                     </div>
@@ -159,62 +157,62 @@ const ManajemenUser = () => {
                                     <th className="table-title" scope="col" style={{ width: 46 }}>
                                         #
                                     </th>
-                                    <th className="table-title" scope="col">Nama Pengguna</th>
-                                    <th className="table-title" scope="col">Role</th>
-                                    <th className="table-title" scope="col">Akses</th>
+                                    <th className="table-title" scope="col">Pangkat</th>
+                                    <th className="table-title" scope="col">Golongan Ruang</th>
+                                    <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
                                     <th className="table-title text-center" scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
-                                !_.isEmpty(listUser) ?
-                                    listUser.map((x, key) => {
-                                        return (
-                                            <tr key={x.id}>
-                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                <td>{x.name}</td>
-                                                <td>Super Admin</td>
-                                                <td><BiIcons.BiShield style={styles}/>&nbsp; Akses Penuh</td>
-                                                <td className="action-column">
-                                                    <Link to="#">
-                                                        <button type="button" className="btn btn-warning button-view">
+                                    !_.isEmpty(listPangkat) ?
+                                        listPangkat.map((x, key) => {
+                                            return (
+                                                <tr key={x.id}>
+                                                    <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                    <td>{x.pangkat}</td>
+                                                    <td>{x.golongan}</td>
+                                                    <td className="text-center">0</td>
+                                                    <td className="action-column">
+                                                        <Link to={{ pathname: `/master/pangkat_golongan/detail`, state: { id: x.id, pangkat: x.pangkat, golongan: x.golongan } }}>
+                                                            <button type="button" className="btn btn-warning button-view">
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                                                </div>
+                                                            </button>
+                                                        </Link>
+                                                        <Link to={{ pathname: `/master/pangkat_golongan/edit`, state: { id: x.id, pangkat: x.pangkat, golongan: x.golongan } }}>
+                                                            <button type="button" className="btn btn-info button-edit">
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <FiIcons.FiEdit />&nbsp;Edit
+                                                                </div>
+                                                            </button>
+                                                        </Link>
+                                                        <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
                                                             <div className="d-flex justify-content-center align-items-center">
-                                                                <AiIcons.AiOutlineEye />&nbsp;View
+                                                                <FiIcons.FiTrash2 />&nbsp;Delete
                                                             </div>
                                                         </button>
-                                                    </Link>
-                                                    <Link to="#">
-                                                        <button type="button" className="btn btn-info button-edit">
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiEdit />&nbsp;Edit
-                                                            </div>
-                                                        </button>
-                                                    </Link>
-                                                    <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                        <div className="d-flex justify-content-center align-items-center">
-                                                            <FiIcons.FiTrash2 />&nbsp;Delete
-                                                        </div>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    }) :
-                                    <>
-                                    </>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }) :
+                                        <>
+                                        </>
                                 }
                             </tbody>
                         </table>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {
-                                    !_.isEmpty(listUser) ?
-                                    <>
-                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listUser.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listUser.length)} dari {dataCount} data
-                                    </>
-                                    :
-                                    <>
-                                        Menampilkan data 0 - 0 dari 0 data
-                                    </>
+                                    !_.isEmpty(listPangkat) ?
+                                        <>
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listPangkat.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listPangkat.length)} dari {dataCount} data
+                                        </>
+                                        :
+                                        <>
+                                            Menampilkan data 0 - 0 dari 0 data
+                                        </>
                                 }
                             </div>
                             <div>
@@ -245,4 +243,4 @@ const ManajemenUser = () => {
     );
 };
 
-export default ManajemenUser;
+export default PangkatGolongan;
