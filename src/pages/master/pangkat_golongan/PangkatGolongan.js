@@ -81,14 +81,15 @@ const PangkatGolongan = () => {
 
         Swal.fire({
             title: 'Perhatian!',
-            html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
+            html: '<i>Anda yakin ingin menghapus <b>' + 'Pangkat ' + x.pangkat + ' & Golongan ' + x.golongan + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteJabatan(data)
+                new ServiceApi().deletePangkat(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',

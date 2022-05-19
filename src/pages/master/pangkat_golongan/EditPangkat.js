@@ -22,22 +22,15 @@ const iconPerson = new L.Icon({
 });
 
 const EditPangkat = () => {
-    const [listKlasifikasi, setListKlasifikasi] = useState([]);
-    const [klasifikasiID, setKlasifikasiID] = useState('');
-    const [addKategori, setAddKategori] = useState('');
     const location = useLocation();
     const myparam = location.state;
-    const [input, setInput] = useState('');
+    const [pangkat, setPangkat] = useState('');
+    const [golongan, setGolongan] = useState('');
 
     useEffect(() => {
-        setInput(myparam.pangkat);
+        setPangkat(myparam.pangkat);
         setGolongan(myparam.golongan);
     }, [])
-
-    const selectedKategori = (e) => {
-        setKlasifikasiID(e.value)
-        setAddKategori(e.label)
-    }
 
     const updateUnit = async (e) => {
         e.preventDefault();
@@ -52,7 +45,7 @@ const EditPangkat = () => {
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
-                    html: '<i>' + myparam.pangkat + ' & ' + myparam.golongan + ' berhasil diupdate</i>',
+                    html: '<i>' + 'Pangkat ' + myparam.pangkat + ' & ' + 'Golongan ' + myparam.golongan + ' berhasil diupdate</i>',
                     icon: 'success'
                 }).then(function () {
                     window.location = '/master/pangkat_golongan'
@@ -71,33 +64,27 @@ const EditPangkat = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Update Jabatan</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/pangkat_golongan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Update Pangkat & Golongan</h3></Link>
                 </div>
             </div>
 
             <Form onSubmit={updateUnit}>
                 <Card className="card-main-content">
                     <Card.Body>
-                        <h4 className="card-main-content-title">Detail Jabatan</h4>
-                        <p className="card-main-content-subtitle">Ubah detail jabatan</p>
+                        <h4 className="card-main-content-title">Detail Pangkat & Golongan</h4>
+                        <p className="card-main-content-subtitle">Ubah detail pangkat & golongan</p>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2" className="mb-3">
-                                Kategori Jabatan
+                                Pangkat
                             </Form.Label>
                             <Col sm="10">
-                                <Select
-                                    value={listKlasifikasi.filter((option) => option.value == klasifikasiID)}
-                                    name="kategori_id"
-                                    options={listKlasifikasi}
-                                    onChange={(e) => selectedKategori(e)}
-                                    required
-                                />
+                                <Form.Control type="text" value={pangkat} name="pangkat" placeholder="Masukkan pangkat" onChange={(e) => setPangkat(e.target.value)} autoComplete="off" />
                             </Col>
                             <Form.Label column sm="2">
-                                Nama Klasifikasi Jabatan
+                                Golongan
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={input} name="jabatan" placeholder="Masukkan nama jabatan" onChange={(e) => setInput(e.target.value)} autoComplete="off" required />ß
+                                <Form.Control type="text" value={golongan} name="golongan" placeholder="Masukkan golongan" onChange={(e) => setGolongan(e.target.value)} autoComplete="off" />
                             </Col>
                         </Form.Group>
                     </Card.Body>
