@@ -14,6 +14,12 @@ import KompetensiPegawaiView from "../pages/analisa_kompetensi/KompetensiPegawai
 import DetailKompetensiPegawaiView from "../pages/analisa_kompetensi/DetailKompetensiPegawai"
 
 //MASTER DATA
+//PANGKAT & GOLONGAN
+import PangkatView from "../pages/master/pangkat_golongan/PangkatGolongan"
+import DetailPangkatView from "../pages/master/pangkat_golongan/DetailPangkat"
+import TambahPangkatView from "../pages/master/pangkat_golongan/TambahPangkat"
+import EditPangkatView from "../pages/master/pangkat_golongan/EditPangkat"
+
 //JABATAN
 import JabatanView from "../pages/master/jabatan/Jabatan"
 import DetailJabatanView from "../pages/master/jabatan/DetailJabatan"
@@ -43,6 +49,9 @@ import PenempatanView from "../pages/master/penempatan/Penempatan";
 import DetailPenempatanView from "../pages/master/penempatan/DetailPenempatan";
 import TambahPenempatanView from "../pages/master/penempatan/TambahPenempatan";
 import EditPenempatanView from "../pages/master/penempatan/EditPenempatan";
+
+//MANAJEMEN USER
+import  ManajemenUserView from "../pages/master/manajemen_user/ManajemenUser";
 
 import KompetensiView from "../pages/master/Kompetensi"
 
@@ -123,6 +132,12 @@ const AppRouter = () => {
 
                   {/* MASTER DATA */}
 
+                  {/* PANGKAT & GOLONGAN */}
+                  <Route component={PangkatView} path="/master/pangkat_golongan" exact />
+                  <Route component={DetailPangkatView} path="/master/pangkat_golongan/detail" />
+                  <Route component={TambahPangkatView} path="/master/pangkat_golongan/tambah" />
+                  <Route component={EditPangkatView} path="/master/pangkat_golongan/edit" />
+
                   {/* JABATAN */}
                   <Route component={JabatanView} path="/master/jabatan" exact />
                   <Route component={DetailJabatanView} path="/master/jabatan/detail" />
@@ -152,6 +167,9 @@ const AppRouter = () => {
                   <Route component={DetailPenempatanView} path="/master/penempatan/detail" />
                   <Route component={TambahPenempatanView} path="/master/penempatan/tambah" />
                   <Route component={EditPenempatanView} path="/master/penempatan/edit" />
+
+                  {/* MANAJEMEN USER */}
+                  <Route component={ManajemenUserView} path="/master/manajemen_user" exact />
 
                   <Route component={KompetensiView} path="/master/kompetensi" exact />
 

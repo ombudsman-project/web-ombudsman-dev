@@ -118,7 +118,7 @@ export const SidebarData = [
             },
             {
                 title: "Pangkat & Golongan",
-                path: "/messages/message2",
+                path: "/master/pangkat_golongan",
                 icon: <Dot />,
             },
             {
@@ -146,14 +146,14 @@ export const SidebarData = [
                 path: "/master/penempatan",
                 icon: <Dot />,
             },
-            {
-                title: "Role Akses",
-                path: "/messages/message2",
-                icon: <Dot />,
-            },
+            // {
+            //     title: "Role Akses",
+            //     path: "/messages/message2",
+            //     icon: <Dot />,
+            // },
             {
                 title: "Manajemen User",
-                path: "/messages/message2",
+                path: "/master/manajemen_user",
                 icon: <Dot />,
             },
         ],
