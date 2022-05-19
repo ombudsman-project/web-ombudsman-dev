@@ -143,7 +143,7 @@ export const SidebarData = [
             },
             {
                 title: "Penempatan",
-                path: "/messages/message2",
+                path: "/master/penempatan",
                 icon: <Dot />,
             },
             {

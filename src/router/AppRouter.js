@@ -38,6 +38,11 @@ import DetailUnitView from "../pages/master/unit_kerja/DetailUnitKerja";
 import TambahUnitView from "../pages/master/unit_kerja/TambahUnitKerja";
 import EditUnitView from "../pages/master/unit_kerja/EditUnitKerja";
 
+//PENEMPATAN
+import PenempatanView from "../pages/master/penempatan/Penempatan";
+import DetailPenempatanView from "../pages/master/penempatan/DetailPenempatan";
+import TambahPenempatanView from "../pages/master/penempatan/TambahPenempatan";
+import EditPenempatanView from "../pages/master/penempatan/EditPenempatan";
 
 import KompetensiView from "../pages/master/Kompetensi"
 
@@ -141,6 +146,12 @@ const AppRouter = () => {
                   <Route component={DetailUnitView} path="/master/unit_kerja/detail" />
                   <Route component={TambahUnitView} path="/master/unit_kerja/tambah" />
                   <Route component={EditUnitView} path="/master/unit_kerja/edit" />
+
+                  {/* PENEMPATAN */}
+                  <Route component={PenempatanView} path="/master/penempatan" exact />
+                  <Route component={DetailPenempatanView} path="/master/penempatan/detail" />
+                  <Route component={TambahPenempatanView} path="/master/penempatan/tambah" />
+                  <Route component={EditPenempatanView} path="/master/penempatan/edit" />
 
                   <Route component={KompetensiView} path="/master/kompetensi" exact />
 

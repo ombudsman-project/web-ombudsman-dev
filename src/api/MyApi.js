@@ -103,6 +103,22 @@ class ServiceApi {
     deleteUnitKerja(data) {
         return apiClient.post(`/master/unit-kerja/delete`, data)
     }
+
+    getPenempatan(param) {
+        return apiClient.get(`/master/penempatan/getData?${param}`)
+    }
+
+    addPenempatan(data) {
+        return apiClient.post(`/master/penempatan/create`, data)
+    }
+
+    editPenempatan(data) {
+        return apiClient.post(`/master/penempatan/update`, data)
+    }
+
+    deletePenempatan(data) {
+        return apiClient.post(`/master/penempatan/delete`, data)
+    }
 }
 export default ServiceApi;
 
