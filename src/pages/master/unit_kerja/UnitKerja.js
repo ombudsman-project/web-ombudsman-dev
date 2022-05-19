@@ -25,7 +25,7 @@ const iconPerson = new L.Icon({
 
 const UnitKerja = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
@@ -86,6 +86,7 @@ const UnitKerja = () => {
             html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
@@ -147,7 +148,7 @@ const UnitKerja = () => {
                                     style={{ marginLeft: "1rem", position: "absolute" }}
                                     color="#2c2d3040"
                                 />
-                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)}/>
+                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)} />
                             </div>
                         </div>
                     </div>
@@ -165,39 +166,39 @@ const UnitKerja = () => {
                             </thead>
                             <tbody>
                                 {
-                                !_.isEmpty(listUnit) ?
-                                    listUnit.map((x, key) => {
-                                        return (
-                                            <tr key={x.id}>
-                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                <td>{x.name}</td>
-                                                <td className="text-center">0</td>
-                                                <td className="action-column">
-                                                    <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
-                                                        <button type="button" className="btn btn-warning button-view">
+                                    !_.isEmpty(listUnit) ?
+                                        listUnit.map((x, key) => {
+                                            return (
+                                                <tr key={x.id}>
+                                                    <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                    <td>{x.name}</td>
+                                                    <td className="text-center">0</td>
+                                                    <td className="action-column">
+                                                        <Link to={{ pathname: `/master/unit_kerja/detail?type=` + x.id }}>
+                                                            <button type="button" className="btn btn-warning button-view">
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                                                </div>
+                                                            </button>
+                                                        </Link>
+                                                        <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                            <button type="button" className="btn btn-info button-edit">
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <FiIcons.FiEdit />&nbsp;Edit
+                                                                </div>
+                                                            </button>
+                                                        </Link>
+                                                        <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
                                                             <div className="d-flex justify-content-center align-items-center">
-                                                                <AiIcons.AiOutlineEye />&nbsp;View
+                                                                <FiIcons.FiTrash2 />&nbsp;Delete
                                                             </div>
                                                         </button>
-                                                    </Link>
-                                                    <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
-                                                        <button type="button" className="btn btn-info button-edit">
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiEdit />&nbsp;Edit
-                                                            </div>
-                                                        </button>
-                                                    </Link>
-                                                    <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                        <div className="d-flex justify-content-center align-items-center">
-                                                            <FiIcons.FiTrash2 />&nbsp;Delete
-                                                        </div>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    }) :
-                                    <>
-                                    </>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }) :
+                                        <>
+                                        </>
                                 }
                             </tbody>
                         </table>
@@ -205,13 +206,13 @@ const UnitKerja = () => {
                             <div>
                                 {
                                     !_.isEmpty(listUnit) ?
-                                    <>
-                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listUnit.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listUnit.length)} dari {dataCount} data
-                                    </>
-                                    :
-                                    <>
-                                        Menampilkan data 0 - 0 dari 0 data
-                                    </>
+                                        <>
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listUnit.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listUnit.length)} dari {dataCount} data
+                                        </>
+                                        :
+                                        <>
+                                            Menampilkan data 0 - 0 dari 0 data
+                                        </>
                                 }
                             </div>
                             <div>

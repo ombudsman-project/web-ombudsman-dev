@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';;
+import { Link, useLocation } from 'react-router-dom';
 
 const iconPerson = new L.Icon({
 
