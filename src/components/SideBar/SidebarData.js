@@ -15,7 +15,7 @@ export const SidebarData = [
     },
     {
         title: "Kegiatan",
-        path: "#",
+        path: "!#",
         icon: <img src={require('../../icons/icon-kegiatan.svg').default} alt='mySvgImage' />,
         iconClosed: <RiIcons.RiArrowDownSLine />,
         iconOpened: <RiIcons.RiArrowUpSLine />,
@@ -42,12 +42,12 @@ export const SidebarData = [
     },
     {
         title: "Pencatatan",
-        path: "#",
+        path: "!#",
         icon: <img src={require('../../icons/icon-pencatatan.svg').default} alt='mySvgImage' />,
     },
     {
         title: "Analisa Kompetensi",
-        path: "#",
+        path: "!#",
         icon: <img src={require('../../icons/icon-pegawai.svg').default} alt='mySvgImage' />,
         iconClosed: <RiIcons.RiArrowDownSLine />,
         iconOpened: <RiIcons.RiArrowUpSLine />,
@@ -79,7 +79,7 @@ export const SidebarData = [
     },
     {
         title: "Master Data",
-        path: "#",
+        path: "!#",
         icon: <img src={require('../../icons/icon-master-data.svg').default} alt='mySvgImage' />,
 
         iconClosed: <RiIcons.RiArrowDownSLine />,
