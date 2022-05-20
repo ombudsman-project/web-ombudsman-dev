@@ -443,6 +443,30 @@ h2 {
     .footer-table {
       margin-top: 50px;
     }
+
+    .badge.success {
+      font-weight: 500 !important;
+      padding: 5px 10px 5px 10px !important;
+      background-color: #04990A33 !important;
+      color: #04990A !important;
+      border-radius: 11px;
+    }
+
+    .badge.warning {
+      font-weight: 500 !important;
+      padding: 5px 10px 5px 10px !important;
+      background-color: #FF8F2A33 !important;
+      color: #FF8F2A !important;
+      border-radius: 11px;
+    }
+
+    .badge.danger {
+      font-weight: 500 !important;
+      padding: 5px 10px 5px 10px !important;
+      background-color: #FF3C541A !important;
+      color: #FF3C54 !important;
+      border-radius: 11px;
+    }
   }
 
   .subcard-content {
@@ -543,7 +567,7 @@ h2 {
 
 .form-control::placeholder {
   color: $placeholderColor;
-  font-weight: 500;
+  font-weight: 400;
   opacity: 1;
   size: 16px;
   line-height: 25.6px;

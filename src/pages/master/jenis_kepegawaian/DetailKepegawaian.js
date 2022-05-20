@@ -13,14 +13,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';;
 
-const iconPerson = new L.Icon({
-
-});
-
-
-const DetailUnitKerja = () => {
+const DetailKepegawaian = () => {
     const location = useLocation();
     const myparam = location.state;
 
@@ -28,7 +23,7 @@ const DetailUnitKerja = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/unit_kerja` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Detail Unit Kerja</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jenis_kepegawaian` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Detail Jenis Kepegawaian</h3></Link>
                 </div>
             </div>
 
@@ -37,21 +32,18 @@ const DetailUnitKerja = () => {
                     <Card.Body>
                         <div className="d-flex flex-row justify-content-between">
                             <div>
-                                <h4 className="card-main-content-title">Detail Unit Kerja</h4>
-                                <p className="card-main-content-subtitle">Deskripsi lengkap dari unit kerja pegawai</p>
+                                <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
+                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jenis kepegawaian</p>
                             </div>
                             <div>
                                 <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
                             </div>
                         </div>
                         <Row>
-                            <Col lg="3"><p>Nama Golongan</p></Col>
-                            <Col className="text-secondary" lg="6"><p>{myparam.unit_kerja}</p></Col>
-                            <Col lg="3"></Col>
-
-                            <Col lg="3"><p>Jumlah Pegawai</p></Col>
-                            <Col className="text-secondary" lg="6"><p>0</p></Col>
-                            <Col lg="3"></Col>
+                            <Col lg="3"><p>Jenis Kepegawaian</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.jenis_kepegawaian}</p></Col>
+                            <Col lg="3"><p>Jumlah Kepegawaian</p></Col>
+                            <Col className="text-secondary" lg="9"><p>0</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
@@ -60,4 +52,4 @@ const DetailUnitKerja = () => {
     );
 };
 
-export default DetailUnitKerja;
+export default DetailKepegawaian;
