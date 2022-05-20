@@ -13,39 +13,47 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
+import Select from 'react-select';
 
 const iconPerson = new L.Icon({
 
 });
 
-const TambahUnitKerja = () => {
-    const [listUnit, setListUnit] = useState([]);
+const EditKepegawaian = () => {
+    const [listKlasifikasi, setListKlasifikasi] = useState([]);
+    const [klasifikasiID, setKlasifikasiID] = useState('');
+    const [addKategori, setAddKategori] = useState('');
+    const location = useLocation();
+    const myparam = location.state;
+    const [input, setInput] = useState('');
 
-    const submitData = async (e) => {
+    useEffect(() => {
+        setInput(myparam.jenis_kepegawaian);
+    }, [])
+
+    const updateData = async (e) => {
         e.preventDefault();
 
         const data = {
-            'unit_kerja': e.target.elements.unit_kerja.value
+            'key': myparam.id,
+            'jenis_kepegawaian': e.target.elements.jenis_kepegawaian.value
         }
 
-        new ServiceApi().addUnitKerja(data)
+        new ServiceApi().editKepegawaian(data)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
-                    html: '<i>' + response.data.data.unit_kerja + ' berhasil ditambahkan</i>',
+                    html: '<i>' + myparam.jenis_kepegawaian + ' berhasil diupdate</i>',
                     icon: 'success'
                 }).then(function () {
-                    window.location = '/master/unit_kerja'
+                    window.location = '/master/jenis_kepegawaian'
                 })
             }).catch(err => {
-                const err_data = err.response.data;
-                const data = err_data.data;
-
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.data.unit_kerja + '</i>',
+                    html: '<i>' + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -56,21 +64,21 @@ const TambahUnitKerja = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/unit_kerja` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Unit Kerja</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jenis_kepegawaian` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Update Jenis Kepegawaian</h3></Link>
                 </div>
             </div>
 
-            <Form onSubmit={submitData}>
+            <Form onSubmit={updateData}>
                 <Card className="card-main-content">
                     <Card.Body>
-                        <h4 className="card-main-content-title">Detail Unit Kerja</h4>
-                        <p className="card-main-content-subtitle">Masukkan nama unit kerja</p>
-                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
-                            <Form.Label column sm="2">
-                                Unit Kerja
+                        <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
+                        <p className="card-main-content-subtitle">Ubah detail jenis kepegawaian</p>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="2" className="mb-3">
+                                Jenis Kepegawaian
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" name="unit_kerja" placeholder="Masukkan nama unit kerja" autoComplete="off" required />
+                                <Form.Control type="text" value={input} name="jenis_kepegawaian" placeholder="Masukkan jenis kepegawaian" onChange={(e) => setInput(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -87,4 +95,4 @@ const TambahUnitKerja = () => {
     );
 };
 
-export default TambahUnitKerja;
+export default EditKepegawaian;

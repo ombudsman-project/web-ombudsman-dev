@@ -28,6 +28,38 @@ class ServiceApi {
         return apiClient.post(`/data/select-option/default`, data);
     }
 
+    getPenyelenggara(param) {
+        return apiClient.get(`/master/penyelenggara/getData?${param}`)
+    }
+
+    addPenyelenggara(data) {
+        return apiClient.post(`/master/penyelenggara/create`, data)
+    }
+
+    editPenyelenggara(data) {
+        return apiClient.post(`/master/penyelenggara/update`, data)
+    }
+
+    deletePenyelenggara(data) {
+        return apiClient.post(`/master/penyelenggara/delete`, data)
+    }
+
+    getKepegawaian(param) {
+        return apiClient.get(`/master/jenis-kepegawaian/getData?${param}`)
+    }
+
+    addKepegawaian(data) {
+        return apiClient.post(`/master/jenis-kepegawaian/create`, data)
+    }
+
+    editKepegawaian(data) {
+        return apiClient.post(`/master/jenis-kepegawaian/update`, data)
+    }
+
+    deleteKepegawaian(data) {
+        return apiClient.post(`/master/jenis-kepegawaian/delete`, data)
+    }
+
     getListPegawai() {
         return apiClient.get(`/master/pegawai/getData?page=&length=&search=`);
     }
