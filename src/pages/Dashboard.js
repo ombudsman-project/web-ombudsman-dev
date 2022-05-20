@@ -282,7 +282,7 @@ const DashboardView = () => {
               <Card className="card-main-content">
                 <Card.Body className='information-dashboard'>
                   <Row>
-                    <Col lg={3} className='d-flex flex-column align-items-start justify-content-center'>
+                    <Col sm={12} md={12} lg={4} className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
                         <CircularProgressbarWithChildren value={50} styles={buildStyles({
                           textSize: '16px',
@@ -313,7 +313,7 @@ const DashboardView = () => {
               <Card className="card-main-content">
                 <Card.Body className='information-dashboard'>
                   <Row>
-                    <Col lg={3} className='d-flex flex-column align-items-start justify-content-center'>
+                    <Col sm={12} md={12} lg={4}  className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
                         <CircularProgressbarWithChildren value={38} styles={buildStyles({
                           textSize: '16px',
@@ -322,7 +322,7 @@ const DashboardView = () => {
                           trailColor: 'rgba(255, 244, 222, 1)'
                         })}
                         >
-                          <FontAwesomeIcon icon={faUserAlt} />
+                          <FontAwesomeIcon icon={faClock} size='2x' style={{ color: 'rgba(255, 168, 0, 1)' }} />
                         </CircularProgressbarWithChildren>
                       </div>
                     </Col>
@@ -344,7 +344,7 @@ const DashboardView = () => {
               <Card className="card-main-content">
                 <Card.Body className='information-dashboard'>
                   <Row>
-                    <Col lg={3} className='d-flex flex-column align-items-start justify-content-center'>
+                    <Col  sm={12} md={12} lg={4}  className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
                         <CircularProgressbarWithChildren value={12} styles={buildStyles({
                           textSize: '16px',
@@ -353,7 +353,7 @@ const DashboardView = () => {
                           trailColor: 'rgba(255, 244, 222, 1)'
                         })}
                         >
-                          <FontAwesomeIcon icon={faUserAlt} />
+                          <FontAwesomeIcon icon={faClock} size='2x' style={{ color: 'rgba(166, 25, 45, 1)' }} />
                         </CircularProgressbarWithChildren>
                       </div>
                     </Col>

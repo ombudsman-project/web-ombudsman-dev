@@ -28,7 +28,7 @@ const Rekapitulasi = () => {
                     <h3 className="content-title">Rekapitulasi</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style}/>&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to="#"><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style}/>&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 

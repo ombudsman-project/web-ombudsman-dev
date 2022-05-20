@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import L from 'leaflet';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Button, Card, Col, Container, Form, Pagination, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
-import { useTranslation } from 'react-i18next';
-import moment from 'moment';
-import axios from 'axios';
+import * as moment from 'moment';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
@@ -19,12 +13,8 @@ import { Link } from 'react-router-dom';
 import ServiceApi from '../api/MyApi';
 import ReactPaginate from 'react-paginate';
 
-const iconPerson = new L.Icon({
-
-});
 
 const RiwayatAktivitas = () => {
-    const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const [perPage, setPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
@@ -38,7 +28,7 @@ const RiwayatAktivitas = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getListUnit(param).then(x => {
+        await new ServiceApi().getRiwayatAktivitas(param).then(x => {
             setDataCount(x.data.total_data);
             setListUnit(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -49,7 +39,7 @@ const RiwayatAktivitas = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getListUnit(param).then(x => {
+        new ServiceApi().getRiwayatAktivitas(param).then(x => {
             setListUnit(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
@@ -59,7 +49,7 @@ const RiwayatAktivitas = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=${search}`;
-        await new ServiceApi().getListUnit(param).then(x => {
+        await new ServiceApi().getRiwayatAktivitas(param).then(x => {
             setListUnit(x.data.data);
         }).catch((err) => {
         })
@@ -68,7 +58,7 @@ const RiwayatAktivitas = () => {
     const searchData = async (e) => {
         setSearch(e.target.value);
         const param = `page=1&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getListUnit(param).then(x => {
+        await new ServiceApi().getRiwayatAktivitas(param).then(x => {
             setDataCount(x.data.total_data);
             setListUnit(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -167,29 +157,9 @@ const RiwayatAktivitas = () => {
                                         return (
                                             <tr key={x.id}>
                                                 <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                <td>{x.name}</td>
-                                                <td className="text-center">0</td>
-                                                <td className="action-column">
-                                                    <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name } }}>
-                                                        <button type="button" className="btn btn-warning button-view">
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                                            </div>
-                                                        </button>
-                                                    </Link>
-                                                    <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
-                                                        <button type="button" className="btn btn-info button-edit">
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiEdit />&nbsp;Edit
-                                                            </div>
-                                                        </button>
-                                                    </Link>
-                                                    <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                        <div className="d-flex justify-content-center align-items-center">
-                                                            <FiIcons.FiTrash2 />&nbsp;Delete
-                                                        </div>
-                                                    </button>
-                                                </td>
+                                                <td>{x.waktu ? moment(x.waktu).format('D MMMM YYYY HH:mm:ss') : ''}</td>
+                                                <td>{x.nama}</td>
+                                                <td>{x.aktivitas}</td>
                                             </tr>
                                         )
                                     }) :

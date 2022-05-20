@@ -28,6 +28,10 @@ class ServiceApi {
         return apiClient.post(`/data/select-option/default`, data);
     }
 
+    getRiwayatAktivitas(param) {
+        return apiClient.get(`/data/aktivitas-user?${param}`);
+    }
+
     getPenyelenggara(param) {
         return apiClient.get(`/master/penyelenggara/getData?${param}`)
     }
