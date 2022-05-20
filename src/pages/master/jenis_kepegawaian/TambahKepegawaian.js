@@ -15,37 +15,31 @@ import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
+import Select from 'react-select';
 
-const iconPerson = new L.Icon({
-
-});
-
-const TambahUnitKerja = () => {
-    const [listUnit, setListUnit] = useState([]);
+const TambahKepegawaian = () => {
+    const [listKepegawaian, setListKepegawaian] = useState([]);
 
     const submitData = async (e) => {
         e.preventDefault();
 
         const data = {
-            'unit_kerja': e.target.elements.unit_kerja.value
+            'jenis_kepegawaian': e.target.elements.jenis_kepegawaian.value
         }
 
-        new ServiceApi().addUnitKerja(data)
+        new ServiceApi().addKepegawaian(data)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
-                    html: '<i>' + response.data.data.unit_kerja + ' berhasil ditambahkan</i>',
+                    html: '<i>' + response.data.data.jenis_kepegawaian + ' berhasil ditambahkan</i>',
                     icon: 'success'
                 }).then(function () {
-                    window.location = '/master/unit_kerja'
+                    window.location = '/master/jenis_kepegawaian'
                 })
             }).catch(err => {
-                const err_data = err.response.data;
-                const data = err_data.data;
-
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.data.unit_kerja + '</i>',
+                    html: '<i>' + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -56,21 +50,21 @@ const TambahUnitKerja = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/unit_kerja` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Unit Kerja</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/jenis_kepegawaian` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Jenis Kepegawaian</h3></Link>
                 </div>
             </div>
 
             <Form onSubmit={submitData}>
                 <Card className="card-main-content">
                     <Card.Body>
-                        <h4 className="card-main-content-title">Detail Unit Kerja</h4>
-                        <p className="card-main-content-subtitle">Masukkan nama unit kerja</p>
-                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
-                            <Form.Label column sm="2">
-                                Unit Kerja
+                        <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
+                        <p className="card-main-content-subtitle">Masukkan detail jenis kepegawaian</p>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
+                                Jenis Kepegawaian
                             </Form.Label>
-                            <Col sm="10">
-                                <Form.Control type="text" name="unit_kerja" placeholder="Masukkan nama unit kerja" autoComplete="off" required />
+                            <Col sm="9">
+                                <Form.Control type="text" name="jenis_kepegawaian" placeholder="Masukkan jenis kepegawaian" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -87,4 +81,4 @@ const TambahUnitKerja = () => {
     );
 };
 
-export default TambahUnitKerja;
+export default TambahKepegawaian;

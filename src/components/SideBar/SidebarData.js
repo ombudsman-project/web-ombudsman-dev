@@ -93,7 +93,7 @@ export const SidebarData = [
             },
             {
                 title: "Penyelenggara",
-                path: "/messages/message2",
+                path: "/master/penyelenggara",
                 icon: <Dot />,
             },
             {
@@ -113,7 +113,7 @@ export const SidebarData = [
             },
             {
                 title: "Jenis Kepegawaian",
-                path: "/messages/message2",
+                path: "/master/jenis_kepegawaian",
                 icon: <Dot />,
             },
             {
