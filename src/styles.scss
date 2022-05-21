@@ -448,6 +448,19 @@ h2 {
       text-overflow:ellipsis
     }
 
+    .dropdown-toggle::after {
+      display: none !important; 
+    }
+
+    .dropdown-action {
+      button {
+        border-radius: 50% !important;
+        background-color: #fff;
+        //border-color: #C3C5CC;
+        border: #C3C5CC solid 2px;
+      }
+    }
+
     .scroll-me {
       overflow-x: auto;
     }
@@ -674,9 +687,9 @@ h2 {
   border-color: $mainNavColor;
 }
 
-.main-content {
-  // margin: auto auto auto auto;
-}
+// .main-content {
+//   // margin: auto auto auto auto;
+// }
 
 .main {
   margin-left: 10px;

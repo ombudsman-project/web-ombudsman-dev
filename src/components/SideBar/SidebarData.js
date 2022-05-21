@@ -8,14 +8,14 @@ export const SidebarData = [
         path: "/dashboard",
         icon: <img src={require('../../icons/icon-dashboard.svg').default} alt='mySvgImage' />,
     },
-    {
-        title: "Rekapitulasi",
-        path: "/rekapitulasi",
-        icon: <img src={require('../../icons/icon-rekapitulasi.svg').default} alt='mySvgImage' />,
-    },
+    // {
+    //     title: "Rekapitulasi",
+    //     path: "/rekapitulasi",
+    //     icon: <img src={require('../../icons/icon-rekapitulasi.svg').default} alt='mySvgImage' />,
+    // },
     {
         title: "Kegiatan",
-        path: "!#",
+        path: "#",
         icon: <img src={require('../../icons/icon-kegiatan.svg').default} alt='mySvgImage' />,
         iconClosed: <RiIcons.RiArrowDownSLine />,
         iconOpened: <RiIcons.RiArrowUpSLine />,
@@ -23,7 +23,7 @@ export const SidebarData = [
         subNav: [
             {
                 title: "Daftar Kegiatan",
-                path: "/pengajuan_izin",
+                path: "/kegiatan/daftar_kegiatan",
                 icon: <Dot />,
                 cName: "sub-nav",
             },
@@ -33,21 +33,21 @@ export const SidebarData = [
                 icon: <Dot />,
                 cName: "sub-nav",
             },
-            {
-                title: "Tambah Pendidikan",
-                path: "/reports/reports3",
-                icon: <Dot />,
-            },
+            // {
+            //     title: "Tambah Pendidikan",
+            //     path: "/reports/reports3",
+            //     icon: <Dot />,
+            // },
         ],
     },
     {
         title: "Pencatatan",
-        path: "!#",
+        path: "#",
         icon: <img src={require('../../icons/icon-pencatatan.svg').default} alt='mySvgImage' />,
     },
     {
         title: "Analisa Kompetensi",
-        path: "!#",
+        path: "#",
         icon: <img src={require('../../icons/icon-pegawai.svg').default} alt='mySvgImage' />,
         iconClosed: <RiIcons.RiArrowDownSLine />,
         iconOpened: <RiIcons.RiArrowUpSLine />,
@@ -79,7 +79,7 @@ export const SidebarData = [
     },
     {
         title: "Master Data",
-        path: "!#",
+        path: "#",
         icon: <img src={require('../../icons/icon-master-data.svg').default} alt='mySvgImage' />,
 
         iconClosed: <RiIcons.RiArrowDownSLine />,

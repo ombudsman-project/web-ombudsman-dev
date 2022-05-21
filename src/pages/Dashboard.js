@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 import ReactPaginate from 'react-paginate';
 import { DateRangePicker } from 'react-date-range';
 import { addDays } from 'date-fns';
+import { id as localeID } from 'date-fns/esm/locale';
 import * as moment from "moment";
 import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
@@ -240,6 +241,7 @@ const DashboardView = () => {
                 months={2}
                 ranges={state}
                 direction="horizontal"
+                locale={localeID}
               />
             </Dropdown.Menu>
           </Dropdown>

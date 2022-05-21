@@ -18,6 +18,7 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { DateRangePicker } from 'react-date-range';
 import { addDays } from 'date-fns';
+import { id as localeID } from 'date-fns/esm/locale';
 import ServiceApi from '../../api/MyApi'
 import * as moment from "moment";
 
@@ -140,6 +141,7 @@ const DashboardAnalisa = () => {
                                 months={2}
                                 ranges={state}
                                 direction="horizontal"
+                                locale={localeID}
                             />
                         </Dropdown.Menu>
                     </Dropdown>

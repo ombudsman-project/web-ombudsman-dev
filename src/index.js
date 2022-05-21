@@ -16,6 +16,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import './i18n';
+import { Spinner } from 'react-bootstrap';
 
 const Loader = () => (
     <div className="App">
@@ -24,7 +25,7 @@ const Loader = () => (
   );
   
 ReactDOM.render(
-    <Suspense fallback={<Loader />}><AppRouter /></Suspense>, document.getElementById('root'));
+    <Suspense fallback={<Spinner/>}><AppRouter /></Suspense>, document.getElementById('root'));
 
 
 // If you want your app to work offline and load faster, you can change
