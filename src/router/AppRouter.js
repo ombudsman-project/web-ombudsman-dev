@@ -125,14 +125,13 @@ const AppRouter = () => {
                   <Route
                     component={() => <Redirect to="/dashboard" />}
                     path="/"
-                    exact
                   />
-
+                  {/* 
                   <Route
                     component={() => <Redirect to="/dashboard" />}
                     path="/dashboard"
                     exact
-                  />
+                  /> */}
                   <Route component={DashboardView} path="/dashboard" />
                   <Route component={RekapitulasiView} path="/rekapitulasi" exact />
                   <Route component={RiwayatAktivitasView} path="/riwayat_aktivitas" exact />

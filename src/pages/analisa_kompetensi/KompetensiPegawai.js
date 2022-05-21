@@ -5,7 +5,8 @@ import { faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-i
 import { Button, Card, Col, Container, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
-import Select from 'react-select'
+import Select from 'react-select';
+import ServiceApi from '../../api/MyApi';
 
 const options = [
     { value: '12341-poas', label: 'Syarifudin M. Toha' },
@@ -33,11 +34,29 @@ const options = [
 
 const KompetensiPegawai = () => {
     const history = useHistory();
+    const [listPegawai, setListPegawai] = useState([]);
 
     const selectedUser = (e) => {
         history.push('/analisa_kompetensi/kompetensi_pegawai/detail', e);
         //window.location.href = "/analisa_kompetensi/kompetensi_pegawai/detail"
     }
+
+
+    useEffect(() => {
+        async function fetchGetSelect() {
+            let formData = new FormData();
+            formData.append('parameter[]', 'all');
+            await new ServiceApi().getSelect(formData).then(x => {
+                const data_map = x.data.pegawai.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                })
+                setListPegawai(data_map)
+            });
+        }
+        fetchGetSelect();
+    }, []);
 
     return (
         <div className="main-animation">
@@ -51,7 +70,7 @@ const KompetensiPegawai = () => {
                 <Card.Body>
                     <h4><b>Nama Pegawai</b></h4>
                     <p className="card-main-content-subtitle">Silahkan pilih pegawai untuk dapat melihat kompetensi pegawai</p>
-                    <Select options={options} onChange={(e) => selectedUser(e)} placeholder="Pilih Pegawai"/>
+                    <Select options={listPegawai} onChange={(e) => selectedUser(e)} placeholder="Pilih Pegawai" />
                 </Card.Body>
             </Card>
         </div>

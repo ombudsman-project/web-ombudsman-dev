@@ -90,12 +90,38 @@ const DashboardView = () => {
   const [dataCount, setDataCount] = useState(0);
   const [listUnit, setListUnit] = useState([]);
   const [search, setSearch] = useState('');
-  const [listKategori, setListKategori] = useState([]);
+  const [listJenisKepegawaian, setListJenisKepegawaian] = useState([]);
+  const [listPenempatan, setListPenempatan] = useState([]);
+  const [dataJenisKepegawaian, setJenisKepegawaian] = useState('ASN');
+  const [dataPenempatan, setPenempatan] = useState('Pusat');
 
   const [filterDate, setFilterDate] = useState({
     startDate: moment(new Date()).format('DD/MM/YYYY'),
     endDate: moment(addDays(new Date(), 30)).format('DD/MM/YYYY'),
   })
+
+  useEffect(() => {
+    async function fetchGetSelect() {
+      let formData = new FormData();
+      formData.append('parameter[]', 'all');
+      await new ServiceApi().getSelect(formData).then(x => {
+        setListJenisKepegawaian(x.data.jenis_kepegawaian)
+      });
+    }
+    fetchGetSelect();
+  }, []);
+
+  useEffect(() => {
+    async function fetchGetSelect() {
+      let formData = new FormData();
+      formData.append('parameter[]', 'all');
+      await new ServiceApi().getSelect(formData).then(x => {
+        setListPenempatan(x.data.penempatan)
+      });
+    }
+    fetchGetSelect();
+  }, []);
+
 
   const setDateRange = (data) => {
     setState([data.selection]);
@@ -154,17 +180,17 @@ const DashboardView = () => {
         <div className='content-dropdown d-flex flex-row '>
           <Dropdown>
             <Dropdown.Toggle className='my-dropdown' id="dropdown-basic">
-              <span><FontAwesomeIcon icon={faUser} /></span>&nbsp; PNS &nbsp;
+              <span><FontAwesomeIcon icon={faUser} /></span>&nbsp; {dataJenisKepegawaian} &nbsp;
             </Dropdown.Toggle>
 
             <Dropdown.Menu style={{ marginTop: 5, width: '100%' }}>
               {
-                !_.isEmpty(listKategori) ?
+                !_.isEmpty(listJenisKepegawaian) ?
                   <>
                     {
-                      listKategori.map((x, key) => {
+                      listJenisKepegawaian.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key}>{x.name}</Dropdown.Item>
+                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setJenisKepegawaian(x.name)}>{x.name}</Dropdown.Item>
                         )
                       })
                     }
@@ -177,17 +203,17 @@ const DashboardView = () => {
           <div style={{ width: 25 }}></div>
           <Dropdown>
             <Dropdown.Toggle className='my-dropdown' id="dropdown-basic">
-              <span><FontAwesomeIcon icon={faMapMarkerAlt} /></span>&nbsp; Pusat &nbsp;
+              <span><FontAwesomeIcon icon={faMapMarkerAlt} /></span>&nbsp; {dataPenempatan} &nbsp;
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ marginTop: 5, width: '100%' }}>
+            <Dropdown.Menu style={{ marginTop: 5, width: 300, overflowY: 'auto', maxHeight: 250 }}>
               {
-                !_.isEmpty(listKategori) ?
+                !_.isEmpty(listPenempatan) ?
                   <>
                     {
-                      listKategori.map((x, key) => {
+                      listPenempatan.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key}>{x.name}</Dropdown.Item>
+                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setPenempatan(x.name)}>{x.name}</Dropdown.Item>
                         )
                       })
                     }
@@ -313,7 +339,7 @@ const DashboardView = () => {
               <Card className="card-main-content">
                 <Card.Body className='information-dashboard'>
                   <Row>
-                    <Col sm={12} md={12} lg={4}  className='d-flex flex-column align-items-start justify-content-center'>
+                    <Col sm={12} md={12} lg={4} className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
                         <CircularProgressbarWithChildren value={38} styles={buildStyles({
                           textSize: '16px',
@@ -344,7 +370,7 @@ const DashboardView = () => {
               <Card className="card-main-content">
                 <Card.Body className='information-dashboard'>
                   <Row>
-                    <Col  sm={12} md={12} lg={4}  className='d-flex flex-column align-items-start justify-content-center'>
+                    <Col sm={12} md={12} lg={4} className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
                         <CircularProgressbarWithChildren value={12} styles={buildStyles({
                           textSize: '16px',

@@ -96,13 +96,17 @@ const DashboardAnalisa = () => {
         startDate: moment(new Date()).format('DD/MM/YYYY'),
         endDate: moment(addDays(new Date(), 30)).format('DD/MM/YYYY'),
     })
+    const [dataKategori, setKategori] = useState('Kategori Jabatan');
 
-    useEffect(async () => {
-        let formData = new FormData();
-        formData.append('parameter[]', 'all')
-        await new ServiceApi().getSelect(formData).then(x => {
-            setListKategori(x.data.kategori_jabatan)
-        });
+    useEffect( () => {
+        async function fetchGetSelect(){
+            let formData = new FormData();
+            formData.append('parameter[]', 'all');
+            await new ServiceApi().getSelect(formData).then(x => {
+                setListKategori(x.data.kategori_jabatan)
+            });
+        }
+        fetchGetSelect();
     }, []);
 
     const setDateRange = (data) => {
@@ -142,7 +146,7 @@ const DashboardAnalisa = () => {
                     <div style={{ width: 25 }}></div>
                     <Dropdown>
                         <Dropdown.Toggle className='my-dropdown' id="dropdown-basic">
-                            <span><FontAwesomeIcon icon={faUser} /></span>&nbsp; Kategori Jabatan &nbsp;
+                            <span><FontAwesomeIcon icon={faUser} /></span>&nbsp; {dataKategori} &nbsp;
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu style={{ marginTop: 5, width: '100%' }}>
@@ -152,7 +156,7 @@ const DashboardAnalisa = () => {
                                         {
                                             listKategori.map((x, key) => {
                                                 return (
-                                                    <Dropdown.Item href="#/action-1" key={key}>{x.name}</Dropdown.Item>
+                                                    <Dropdown.Item href="#/action-1" key={key} onClick={() => setKategori(x.name)}>{x.name}</Dropdown.Item>
                                                 )
                                             })
                                         }
