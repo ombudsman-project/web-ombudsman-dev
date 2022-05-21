@@ -14,6 +14,12 @@ import KompetensiPegawaiView from "../pages/analisa_kompetensi/KompetensiPegawai
 import DetailKompetensiPegawaiView from "../pages/analisa_kompetensi/DetailKompetensiPegawai"
 
 //MASTER DATA
+//PEGAWAI
+import PegawaiView from "../pages/master/pegawai/Pegawai"
+import DetailPegawaiView from "../pages/master/pegawai/DetailPegawai"
+import TambahPegawaiView from "../pages/master/pegawai/TambahPegawai"
+import EditPegawaiView from "../pages/master/pegawai/EditPegawai"
+
 //PENYELENGGARA
 import PenyelenggaraView from "../pages/master/penyelenggara/Penyelenggara"
 import DetailPenyelenggaraView from "../pages/master/penyelenggara/DetailPenyelenggara"
@@ -143,6 +149,12 @@ const AppRouter = () => {
                   <Route component={DetailKompetensiPegawaiView} path="/analisa_kompetensi/kompetensi_pegawai/detail" exact />
 
                   {/* MASTER DATA */}
+                  {/* PEGAWAI */}
+                  <Route component={PegawaiView} path="/master/pegawai" exact />
+                  <Route component={DetailPegawaiView} path="/master/pegawai/detail" />
+                  <Route component={TambahPegawaiView} path="/master/pegawai/tambah" />
+                  <Route component={EditPegawaiView} path="/master/pegawai/edit" />
+
                   {/* PENYELENGGARA */}
                   <Route component={PenyelenggaraView} path="/master/penyelenggara" exact />
                   <Route component={DetailPenyelenggaraView} path="/master/penyelenggara/detail" />

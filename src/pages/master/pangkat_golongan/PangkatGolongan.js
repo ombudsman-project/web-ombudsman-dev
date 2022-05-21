@@ -127,6 +127,7 @@ const PangkatGolongan = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="10"></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
@@ -172,16 +173,16 @@ const PangkatGolongan = () => {
                                                     <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                     <td>{x.pangkat}</td>
                                                     <td>{x.golongan}</td>
-                                                    <td className="text-center">0</td>
+                                                    <td className="text-center">{x.jumlah_pegawai}</td>
                                                     <td className="action-column">
-                                                        <Link to={{ pathname: `/master/pangkat_golongan/detail`, state: { id: x.id, pangkat: x.pangkat, golongan: x.golongan } }}>
+                                                        <Link to={{ pathname: `/master/pangkat_golongan/detail`, state: { id: x.id, pangkat: x.pangkat, golongan: x.golongan, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                             <button type="button" className="btn btn-warning button-view">
                                                                 <div className="d-flex justify-content-center align-items-center">
                                                                     <AiIcons.AiOutlineEye />&nbsp;View
                                                                 </div>
                                                             </button>
                                                         </Link>
-                                                        <Link to={{ pathname: `/master/pangkat_golongan/edit`, state: { id: x.id, pangkat: x.pangkat, golongan: x.golongan } }}>
+                                                        <Link to={{ pathname: `/master/pangkat_golongan/edit`, state: { id: x.id, pangkat: x.pangkat, golongan: x.golongan, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                             <button type="button" className="btn btn-info button-edit">
                                                                 <div className="d-flex justify-content-center align-items-center">
                                                                     <FiIcons.FiEdit />&nbsp;Edit
@@ -217,6 +218,7 @@ const PangkatGolongan = () => {
                             </div>
                             <div>
                                 <ReactPaginate
+                                    pageRangeDisplayed={5}
                                     pageCount={pageCount}
                                     onPageChange={handlePageClick}
                                     previousLabel="Sebelumnya"

@@ -30,7 +30,7 @@ const EditPenempatan = () => {
         setInput(myparam.penempatan);
     }, [])
 
-    const updateUnit = async (e) => {
+    const updateData = async (e) => {
         e.preventDefault();
 
         const data = {
@@ -43,7 +43,8 @@ const EditPenempatan = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + myparam.penempatan + ' berhasil diupdate</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/penempatan'
                 })
@@ -65,7 +66,7 @@ const EditPenempatan = () => {
                 </div>
             </div>
 
-            <Form onSubmit={updateUnit}>
+            <Form onSubmit={updateData}>
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Lokasi Penempatan</h4>

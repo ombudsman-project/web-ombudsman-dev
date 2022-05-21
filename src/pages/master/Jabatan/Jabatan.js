@@ -126,6 +126,7 @@ const Jabatan = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="10" selected></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
@@ -145,7 +146,7 @@ const Jabatan = () => {
                                     style={{ marginLeft: "1rem", position: "absolute" }}
                                     color="#2c2d3040"
                                 />
-                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)}/>
+                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)} />
                             </div>
                         </div>
                     </div>
@@ -164,40 +165,40 @@ const Jabatan = () => {
                             </thead>
                             <tbody>
                                 {
-                                !_.isEmpty(listJabatan) ?
-                                    listJabatan.map((x, key) => {
-                                        return (
-                                            <tr key={x.id}>
-                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                <td>{x.name}</td>
-                                                <td>{x.klasifikasi}</td>
-                                                <td className="text-center">{x.kategori}</td>
-                                                <td className="action-column">
-                                                    <Link to={{ pathname: `/master/jabatan/detail`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
-                                                        <button type="button" className="btn btn-warning button-view">
+                                    !_.isEmpty(listJabatan) ?
+                                        listJabatan.map((x, key) => {
+                                            return (
+                                                <tr key={x.id}>
+                                                    <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                    <td>{x.name}</td>
+                                                    <td>{x.klasifikasi}</td>
+                                                    <td className="text-center">{x.kategori}</td>
+                                                    <td className="action-column">
+                                                        <Link to={{ pathname: `/master/jabatan/detail`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
+                                                            <button type="button" className="btn btn-warning button-view">
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                                                </div>
+                                                            </button>
+                                                        </Link>
+                                                        <Link to={{ pathname: `/master/jabatan/edit`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
+                                                            <button type="button" className="btn btn-info button-edit">
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <FiIcons.FiEdit />&nbsp;Edit
+                                                                </div>
+                                                            </button>
+                                                        </Link>
+                                                        <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
                                                             <div className="d-flex justify-content-center align-items-center">
-                                                                <AiIcons.AiOutlineEye />&nbsp;View
+                                                                <FiIcons.FiTrash2 />&nbsp;Delete
                                                             </div>
                                                         </button>
-                                                    </Link>
-                                                    <Link to={{ pathname: `/master/jabatan/edit`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
-                                                        <button type="button" className="btn btn-info button-edit">
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiEdit />&nbsp;Edit
-                                                            </div>
-                                                        </button>
-                                                    </Link>
-                                                    <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                        <div className="d-flex justify-content-center align-items-center">
-                                                            <FiIcons.FiTrash2 />&nbsp;Delete
-                                                        </div>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    }) :
-                                    <>
-                                    </>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }) :
+                                        <>
+                                        </>
                                 }
                             </tbody>
                         </table>
@@ -205,17 +206,18 @@ const Jabatan = () => {
                             <div>
                                 {
                                     !_.isEmpty(listJabatan) ?
-                                    <>
-                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listJabatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listJabatan.length)} dari {dataCount} data
-                                    </>
-                                    :
-                                    <>
-                                        Menampilkan data 0 - 0 dari 0 data
-                                    </>
+                                        <>
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listJabatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listJabatan.length)} dari {dataCount} data
+                                        </>
+                                        :
+                                        <>
+                                            Menampilkan data 0 - 0 dari 0 data
+                                        </>
                                 }
                             </div>
                             <div>
                                 <ReactPaginate
+                                    pageRangeDisplayed={5}
                                     pageCount={pageCount}
                                     onPageChange={handlePageClick}
                                     previousLabel="Sebelumnya"

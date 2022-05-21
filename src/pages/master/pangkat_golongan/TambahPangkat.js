@@ -31,7 +31,8 @@ const TambahPangkat = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + 'Pangkat ' + response.data.data.pangkat + ' & ' + 'Golongan ' + response.data.data.golongan + ' berhasil ditambahkan</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/pangkat_golongan'
                 })
@@ -63,13 +64,13 @@ const TambahPangkat = () => {
                                 Pangkat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="pangkat" placeholder="Masukkan pangkat" autoComplete="off" />
+                                <Form.Control type="text" name="pangkat" placeholder="Masukkan pangkat" autoComplete="off" required />
                             </Col>
                             <Form.Label column sm="3">
                                 Golongan
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="golongan" placeholder="Masukkan golongan" autoComplete="off" />
+                                <Form.Control type="text" name="golongan" placeholder="Masukkan golongan" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>

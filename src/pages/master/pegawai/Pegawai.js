@@ -23,13 +23,13 @@ const iconPerson = new L.Icon({
 
 });
 
-const JenisKepegawaian = () => {
+const Pegawai = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [listJabatan, setListJabatan] = useState([]);
+    const [listPegawai, setListPegawai] = useState([]);
 
     useEffect(() => {
         viewData();
@@ -37,9 +37,9 @@ const JenisKepegawaian = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getKepegawaian(param).then(x => {
+        await new ServiceApi().getPegawai(param).then(x => {
             setDataCount(x.data.total_data);
-            setListJabatan(x.data.data);
+            setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -48,8 +48,8 @@ const JenisKepegawaian = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getKepegawaian(param).then(x => {
-            setListJabatan(x.data.data);
+        new ServiceApi().getPegawai(param).then(x => {
+            setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -58,17 +58,17 @@ const JenisKepegawaian = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getKepegawaian(param).then(x => {
-            setListJabatan(x.data.data);
+        await new ServiceApi().getPegawai(param).then(x => {
+            setListPegawai(x.data.data);
         }).catch((err) => {
         })
     }
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getKepegawaian(param).then(x => {
+        await new ServiceApi().getPegawai(param).then(x => {
             setDataCount(x.data.total_data);
-            setListJabatan(x.data.data);
+            setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -84,18 +84,16 @@ const JenisKepegawaian = () => {
             html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
-            cancelButtonText: 'Batal',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteKepegawaian(data)
+                new ServiceApi().deleteJabatan(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
                             html: '<i>Berhasil menghapus data</i>',
-                            icon: 'success',
-                            confirmButtonColor: '#0058a8',
+                            icon: 'success'
                         })
                         viewData();
                     }).catch(err => {
@@ -114,10 +112,10 @@ const JenisKepegawaian = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Jenis Kepegawaian</h3>
+                    <h3 className="content-title">Jabatan</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jenis_kepegawaian/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/pegawai/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -153,61 +151,77 @@ const JenisKepegawaian = () => {
                         </div>
                     </div>
                     <div id="content-table" className="content-table">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th className="table-title" scope="col" style={{ width: 46 }}>
-                                        #
-                                    </th>
-                                    <th className="table-title" scope="col">Jenis Kepegawaian</th>
-                                    <th className="table-title" scope="col">Jumlah Pegawai</th>
-                                    <th className="table-title text-center" scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    !_.isEmpty(listJabatan) ?
-                                        listJabatan.map((x, key) => {
-                                            return (
-                                                <tr key={x.id}>
-                                                    <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                    <td>{x.name}</td>
-                                                    <td>{x.jumlah_pegawai}</td>
-                                                    <td className="action-column">
-                                                        <Link to={{ pathname: `/master/jenis_kepegawaian/detail`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
-                                                            <button type="button" className="btn btn-warning button-view">
+                        <div className="scroll-me">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th className="table-title" scope="col" width="50">
+                                            #
+                                        </th>
+                                        <th className="table-title" scope="col" width="1000">Nama</th>
+                                        <th className="table-title text-center" scope="col">Jenis Kepegawaian</th>
+                                        <th className="table-title text-center" scope="col">Golongan</th>
+                                        <th className="table-title text-center" scope="col">Pangkat</th>
+                                        <th className="table-title text-center" scope="col">Jabatan</th>
+                                        <th className="table-title text-center" scope="col">Klasifikasi</th>
+                                        <th className="table-title text-center" scope="col">Kategori</th>
+                                        <th className="table-title text-center" scope="col">Unit Kerja</th>
+                                        <th className="table-title text-center" scope="col">Penempatan</th>
+                                        <th className="table-title text-center" scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        !_.isEmpty(listPegawai) ?
+                                            listPegawai.map((x, key) => {
+                                                return (
+                                                    <tr key={x.id}>
+                                                        <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                        <td>{x.nama_pegawai ? x.nama_pegawai : '-'}</td>
+                                                        <td className="text-center">{x.jenis_kepegawaian ? x.jenis_kepegawaian : '-'}</td>
+                                                        <td className="text-center">{x.golongan ? x.golongan : '-'}</td>
+                                                        <td className="text-center">{x.pangkat ? x.pangkat : '-'}</td>
+                                                        <td className="text-center">{x.jabatan ? x.jabatan : '-'}</td>
+                                                        <td className="text-center">{x.klasifikasi_jabatan ? x.klasifikasi_jabatan : '-'}</td>
+                                                        <td className="text-center">{x.kategori_jabatan ? x.kategori_jabatan : '-'}</td>
+                                                        <td className="text-center">{x.unit_kerja ? x.unit_kerja : '-'}</td>
+                                                        <td className="text-center">{x.penempatan ? x.penempatan : '-'}</td>
+                                                        <td className="action-column">
+                                                            <Link to={{ pathname: `/master/pegawai/detail`, state: { id: x.id, nama_pegawai: x.nama_pegawai, jenis_kepegawaian: x.jenis_kepegawaian, golongan: x.golongan, pangkat: x.pangkat, jabatan: x.jabatan, klasifikasi_jabatan: x.klasifikasi_jabatan, kategori_jabatan: x.kategori_jabatan, unit_kerja: x.unit_kerja, penempatan: x.penempatan } }}>
+                                                                <button type="button" className="btn btn-warning button-view">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <Link to={{ pathname: `/master/pegawai/edit`, state: { id: x.id, nama_pegawai: x.nama_pegawai, jenis_kepegawaian: x.jenis_kepegawaian, golongan: x.golongan, pangkat: x.pangkat, jabatan: x.jabatan, klasifikasi_jabatan: x.klasifikasi_jabatan, kategori_jabatan: x.kategori_jabatan, unit_kerja: x.unit_kerja, penempatan: x.penempatan } }}>
+                                                                <button type="button" className="btn btn-info button-edit">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <FiIcons.FiEdit />&nbsp;Edit
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
                                                                 <div className="d-flex justify-content-center align-items-center">
-                                                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    <FiIcons.FiTrash2 />&nbsp;Delete
                                                                 </div>
                                                             </button>
-                                                        </Link>
-                                                        <Link to={{ pathname: `/master/jenis_kepegawaian/edit`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
-                                                            <button type="button" className="btn btn-info button-edit">
-                                                                <div className="d-flex justify-content-center align-items-center">
-                                                                    <FiIcons.FiEdit />&nbsp;Edit
-                                                                </div>
-                                                            </button>
-                                                        </Link>
-                                                        <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                                            </div>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }) :
-                                        <>
-                                        </>
-                                }
-                            </tbody>
-                        </table>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }) :
+                                            <>
+                                            </>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {
-                                    !_.isEmpty(listJabatan) ?
+                                    !_.isEmpty(listPegawai) ?
                                         <>
-                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listJabatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listJabatan.length)} dari {dataCount} data
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listPegawai.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listPegawai.length)} dari {dataCount} data
                                         </>
                                         :
                                         <>
@@ -244,4 +258,4 @@ const JenisKepegawaian = () => {
     );
 };
 
-export default JenisKepegawaian;
+export default Pegawai;

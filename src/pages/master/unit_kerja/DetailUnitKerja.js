@@ -46,12 +46,10 @@ const DetailUnitKerja = () => {
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Golongan</p></Col>
-                            <Col className="text-secondary" lg="6"><p>{myparam.unit_kerja}</p></Col>
-                            <Col lg="3"></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.unit_kerja}</p></Col>
 
                             <Col lg="3"><p>Jumlah Pegawai</p></Col>
-                            <Col className="text-secondary" lg="6"><p>0</p></Col>
-                            <Col lg="3"></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.jumlah_pegawai}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>

@@ -25,7 +25,7 @@ const iconPerson = new L.Icon({
 
 const Kategori = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
@@ -93,7 +93,8 @@ const Kategori = () => {
                         Swal.fire({
                             title: 'Sukses!',
                             html: '<i>Berhasil menghapus data</i>',
-                            icon: 'success'
+                            icon: 'success',
+                            confirmButtonColor: '#0058a8',
                         })
                         viewData();
                     }).catch(err => {
@@ -126,6 +127,7 @@ const Kategori = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="10" selected></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
@@ -212,6 +214,7 @@ const Kategori = () => {
                             </div>
                             <div>
                                 <ReactPaginate
+                                    pageRangeDisplayed={5}
                                     pageCount={pageCount}
                                     onPageChange={handlePageClick}
                                     previousLabel="Sebelumnya"
