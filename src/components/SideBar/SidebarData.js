@@ -88,7 +88,7 @@ export const SidebarData = [
         subNav: [
             {
                 title: "Pegawai",
-                path: "/messages/message1",
+                path: "/master/pegawai",
                 icon: <Dot />,
             },
             {

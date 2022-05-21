@@ -437,6 +437,21 @@ h2 {
   }
 
   .content-table {
+    table th {
+      white-space: nowrap;
+    }
+    
+    table td {
+      // table-layout: fixed;
+      // word-wrap:normal
+      white-space: nowrap;
+      text-overflow:ellipsis
+    }
+
+    .scroll-me {
+      overflow-x: auto;
+    }
+
     .table {
       margin-top: 30px;
     }
