@@ -30,7 +30,8 @@ const TambahPenempatan = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + response.data.data.penempatan + ' berhasil ditambahkan</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/penempatan'
                 })

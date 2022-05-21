@@ -41,8 +41,7 @@ const DetailKategori = () => {
                         </div>
                         <Row>
                             <Col lg="3"><p>Kategori Jabatan</p></Col>
-                            <Col className="text-secondary" lg="6"><p>{myparam.kategori}</p></Col>
-                            <Col lg="3"></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.kategori}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>

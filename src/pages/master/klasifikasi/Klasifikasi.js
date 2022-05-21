@@ -93,7 +93,8 @@ const Klasifikasi = () => {
                         Swal.fire({
                             title: 'Sukses!',
                             html: '<i>Berhasil menghapus data</i>',
-                            icon: 'success'
+                            icon: 'success',
+                            confirmButtonColor: '#0058a8',
                         })
                         viewData();
                     }).catch(err => {
@@ -126,6 +127,7 @@ const Klasifikasi = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="10"></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
@@ -214,6 +216,7 @@ const Klasifikasi = () => {
                             </div>
                             <div>
                                 <ReactPaginate
+                                    pageRangeDisplayed={5}
                                     pageCount={pageCount}
                                     onPageChange={handlePageClick}
                                     previousLabel="Sebelumnya"

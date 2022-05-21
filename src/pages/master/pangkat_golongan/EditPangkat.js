@@ -46,7 +46,8 @@ const EditPangkat = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + 'Pangkat ' + myparam.pangkat + ' & ' + 'Golongan ' + myparam.golongan + ' berhasil diupdate</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/pangkat_golongan'
                 })
@@ -78,13 +79,13 @@ const EditPangkat = () => {
                                 Pangkat
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={pangkat} name="pangkat" placeholder="Masukkan pangkat" onChange={(e) => setPangkat(e.target.value)} autoComplete="off" />
+                                <Form.Control type="text" value={pangkat} name="pangkat" placeholder="Masukkan pangkat" onChange={(e) => setPangkat(e.target.value)} autoComplete="off" required />
                             </Col>
                             <Form.Label column sm="2">
                                 Golongan
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={golongan} name="golongan" placeholder="Masukkan golongan" onChange={(e) => setGolongan(e.target.value)} autoComplete="off" />
+                                <Form.Control type="text" value={golongan} name="golongan" placeholder="Masukkan golongan" onChange={(e) => setGolongan(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>

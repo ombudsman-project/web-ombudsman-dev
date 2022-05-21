@@ -10,15 +10,6 @@ const apiClient = axios.create({
     }
 })
 
-
-//V3 Cara Fikr
-// export default {
-//     getListPegawai(param){
-//         return apiClient.post(`/refresh`);
-//     },
-// }
-
-//V2 Cara Alternatif Amed
 class ServiceApi {
     authUsers(data) {
         return axios.post(`${apiURL}/login`, data);
@@ -30,6 +21,23 @@ class ServiceApi {
 
     getRiwayatAktivitas(param) {
         return apiClient.get(`/data/aktivitas-user?${param}`);
+    }
+
+    // MASTER
+    getPegawai(param) {
+        return apiClient.get(`/master/pegawai/getData?${param}`)
+    }
+
+    addPegawai(data) {
+        return apiClient.post(`/master/pegawai/create`, data)
+    }
+
+    editPegawai(data) {
+        return apiClient.post(`/master/pegawai/update`, data)
+    }
+
+    deletePegawai(data) {
+        return apiClient.post(`/master/pegawai/delete`, data)
     }
 
     getPenyelenggara(param) {

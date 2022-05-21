@@ -15,32 +15,38 @@ import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
-import Select from 'react-select';
 
-const TambahKepegawaian = () => {
-    const [listKepegawaian, setListKepegawaian] = useState([]);
+const iconPerson = new L.Icon({
+
+});
+
+const TambahPegawai = () => {
+    const [listUnit, setListUnit] = useState([]);
 
     const submitData = async (e) => {
         e.preventDefault();
 
         const data = {
-            'jenis_kepegawaian': e.target.elements.jenis_kepegawaian.value
+            'nama_pegawai': e.target.elements.nama_pegawai.value
         }
 
-        new ServiceApi().addKepegawaian(data)
+        new ServiceApi().addPegawai(data)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
-                    html: '<i>' + response.data.data.jenis_kepegawaian + ' berhasil ditambahkan</i>',
+                    html: '<i>' + response.data.data.nama_pegawai + ' berhasil ditambahkan</i>',
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/jenis_kepegawaian'
+                    window.location = '/master/pegawai'
                 })
             }).catch(err => {
+                const err_data = err.response.data;
+                const data = err_data.data;
+
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + '</i>',
+                    html: '<i>' + (err.response.data.data.nama_pegawai ? err.response.data.data.nama_pegawai + '<br/>' : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -51,21 +57,21 @@ const TambahKepegawaian = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jenis_kepegawaian` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Jenis Kepegawaian</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/pegawai` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Pegawai</h3></Link>
                 </div>
             </div>
 
             <Form onSubmit={submitData}>
                 <Card className="card-main-content">
                     <Card.Body>
-                        <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
-                        <p className="card-main-content-subtitle">Masukkan detail jenis kepegawaian</p>
-                        <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm="3" className="mb-3">
-                                Jenis Kepegawaian
+                        <h4 className="card-main-content-title">Detail Pegawai</h4>
+                        <p className="card-main-content-subtitle">Masukkan nama detail pegawai</p>
+                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+                            <Form.Label column sm="2">
+                                Nama Pegawai
                             </Form.Label>
-                            <Col sm="9">
-                                <Form.Control type="text" name="jenis_kepegawaian" placeholder="Masukkan jenis kepegawaian" autoComplete="off" required />
+                            <Col sm="10">
+                                <Form.Control type="text" name="nama_pegawai" placeholder="Masukkan nama pegawai" autoComplete="off"  />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -82,4 +88,4 @@ const TambahKepegawaian = () => {
     );
 };
 
-export default TambahKepegawaian;
+export default TambahPegawai;

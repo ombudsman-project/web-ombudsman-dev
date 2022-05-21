@@ -25,13 +25,14 @@ const iconPerson = new L.Icon({
 
 const Penempatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
     const [listPenempatan, setListPenempatan] = useState([]);
 
     useEffect(() => {
+        console.log(perPage)
         viewData();
     }, [])
 
@@ -84,6 +85,7 @@ const Penempatan = () => {
             html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
@@ -93,7 +95,8 @@ const Penempatan = () => {
                         Swal.fire({
                             title: 'Sukses!',
                             html: '<i>Berhasil menghapus data</i>',
-                            icon: 'success'
+                            icon: 'success',
+                            confirmButtonColor: '#0058a8',
                         })
                         viewData();
                     }).catch(err => {
@@ -126,6 +129,7 @@ const Penempatan = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="10" selected></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
@@ -169,16 +173,16 @@ const Penempatan = () => {
                                             <tr key={x.id}>
                                                 <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                 <td>{x.name}</td>
-                                                <td className="text-center">0</td>
+                                                <td className="text-center">{x.jumlah_pegawai}</td>
                                                 <td className="action-column">
-                                                    <Link to={{ pathname: `/master/penempatan/detail`, state: { id: x.id, penempatan: x.name } }}>
+                                                    <Link to={{ pathname: `/master/penempatan/detail`, state: { id: x.id, penempatan: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                         <button type="button" className="btn btn-warning button-view">
                                                             <div className="d-flex justify-content-center align-items-center">
                                                                 <AiIcons.AiOutlineEye />&nbsp;View
                                                             </div>
                                                         </button>
                                                     </Link>
-                                                    <Link to={{ pathname: `/master/penempatan/edit`, state: { id: x.id, penempatan: x.name } }}>
+                                                    <Link to={{ pathname: `/master/penempatan/edit`, state: { id: x.id, penempatan: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                         <button type="button" className="btn btn-info button-edit">
                                                             <div className="d-flex justify-content-center align-items-center">
                                                                 <FiIcons.FiEdit />&nbsp;Edit
@@ -214,6 +218,7 @@ const Penempatan = () => {
                             </div>
                             <div>
                                 <ReactPaginate
+                                    pageRangeDisplayed={5}
                                     pageCount={pageCount}
                                     onPageChange={handlePageClick}
                                     previousLabel="Sebelumnya"

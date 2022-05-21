@@ -43,7 +43,7 @@ const DetailPenempatan = () => {
                             <Col lg="3"><p>Lokasi Penempatan</p></Col>
                             <Col className="text-secondary" lg="9"><p>{myparam.penempatan}</p></Col>
                             <Col lg="3"><p>Jumlah Pegawai</p></Col>
-                            <Col className="text-secondary" lg="9"><p>0</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.jumlah_pegawai}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
