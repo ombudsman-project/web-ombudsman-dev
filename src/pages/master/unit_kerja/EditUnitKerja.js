@@ -29,7 +29,7 @@ const EditUnitKerja = () => {
         setInput(myparam.unit_kerja);
     }, [])
 
-    const updateUnit = async (e) => {
+    const updateData = async (e) => {
         e.preventDefault();
 
         const data = {
@@ -42,14 +42,15 @@ const EditUnitKerja = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + myparam.unit_kerja + ' berhasil diupdate</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/unit_kerja'
                 })
             }).catch(err => {
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.message + '</i>',
+                    html: '<i>' + (err.response.data.data.unit_kerja ? err.response.data.data.unit_kerja + '<br/>' : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -64,7 +65,7 @@ const EditUnitKerja = () => {
                 </div>
             </div>
 
-            <Form onSubmit={updateUnit}>
+            <Form onSubmit={updateData}>
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Unit Kerja</h4>

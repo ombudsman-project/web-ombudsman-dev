@@ -35,7 +35,8 @@ const TambahUnitKerja = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + response.data.data.unit_kerja + ' berhasil ditambahkan</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/unit_kerja'
                 })
@@ -45,7 +46,7 @@ const TambahUnitKerja = () => {
 
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.data.unit_kerja + '</i>',
+                    html: '<i>' + (err.response.data.data.unit_kerja ? err.response.data.data.unit_kerja + '<br/>' : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })

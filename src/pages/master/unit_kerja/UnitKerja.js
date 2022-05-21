@@ -96,7 +96,8 @@ const UnitKerja = () => {
                         Swal.fire({
                             title: 'Sukses!',
                             html: '<i>Berhasil menghapus data</i>',
-                            icon: 'success'
+                            icon: 'success',
+                            confirmButtonColor: '#0058a8',
                         })
                         viewData();
                     }).catch(err => {
@@ -129,6 +130,7 @@ const UnitKerja = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="10" selected></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
@@ -172,16 +174,16 @@ const UnitKerja = () => {
                                                 <tr key={x.id}>
                                                     <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                     <td>{x.name}</td>
-                                                    <td className="text-center">0</td>
+                                                    <td className="text-center">{x.jumlah_pegawai}</td>
                                                     <td className="action-column">
-                                                        <Link to={{ pathname: `/master/unit_kerja/detail?type=` + x.id }}>
+                                                        <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                             <button type="button" className="btn btn-warning button-view">
                                                                 <div className="d-flex justify-content-center align-items-center">
                                                                     <AiIcons.AiOutlineEye />&nbsp;View
                                                                 </div>
                                                             </button>
                                                         </Link>
-                                                        <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name } }}>
+                                                        <Link to={{ pathname: `/master/unit_kerja/edit`, state: { id: x.id, unit_kerja: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                             <button type="button" className="btn btn-info button-edit">
                                                                 <div className="d-flex justify-content-center align-items-center">
                                                                     <FiIcons.FiEdit />&nbsp;Edit
@@ -217,6 +219,7 @@ const UnitKerja = () => {
                             </div>
                             <div>
                                 <ReactPaginate
+                                    pageRangeDisplayed={5}
                                     pageCount={pageCount}
                                     onPageChange={handlePageClick}
                                     previousLabel="Sebelumnya"

@@ -46,7 +46,8 @@ const EditKepegawaian = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + myparam.jenis_kepegawaian + ' berhasil diupdate</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/jenis_kepegawaian'
                 })

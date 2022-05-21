@@ -61,7 +61,7 @@ const EditKlasifikasi = () => {
         setAddKategori(e.label)
     }
 
-    const updateUnit = async (e) => {
+    const updateData = async (e) => {
         e.preventDefault();
 
         const data = {
@@ -75,7 +75,8 @@ const EditKlasifikasi = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + myparam.klasifikasi + ' berhasil diupdate</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/klasifikasi_jabatan'
                 })
@@ -100,7 +101,7 @@ const EditKlasifikasi = () => {
                 </div>
             </div>
 
-            <Form onSubmit={updateUnit}>
+            <Form onSubmit={updateData}>
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Klasifikasi Jabatan</h4>

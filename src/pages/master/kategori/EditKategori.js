@@ -42,14 +42,15 @@ const EditKategori = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + myparam.kategori + ' berhasil diupdate</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
                     window.location = '/master/kategori_jabatan'
                 })
             }).catch(err => {
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + err.response.data.message + '</i>',
+                    html: '<i>' + (err.response.data.data.kategori ? err.response.data.data.kategori + '<br/>' : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })

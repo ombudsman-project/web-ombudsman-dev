@@ -45,7 +45,7 @@ const DetailPangkat = () => {
                             <Col lg="3"><p>Golongan Ruang</p></Col>
                             <Col className="text-secondary" lg="9"><p>{myparam.golongan}</p></Col>
                             <Col lg="3"><p>Jumlah Pegawai</p></Col>
-                            <Col className="text-secondary" lg="9"><p>0</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.jumlah_pegawai}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
