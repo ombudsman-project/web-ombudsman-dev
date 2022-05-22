@@ -84,6 +84,7 @@ const Kompetensi = () => {
             html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
@@ -161,7 +162,7 @@ const Kompetensi = () => {
                                         </th>
                                         <th className="table-title" scope="col">Nama Kompetensi</th>
                                         <th className="table-title text-center" scope="col">Jumlah Sub Kompetensi</th>
-                                        <th className="table-title text-center" scope="col">Action</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -31,6 +31,7 @@ const EditPenyelenggara = () => {
     const [alamat, setAlamat] = useState('');
     const [email, setEmail] = useState('');
     const [telp, setTelp] = useState('');
+    const history = useHistory();
 
     useEffect(() => {
         setPenyelenggara(myparam.nama_penyelenggara);
@@ -57,9 +58,10 @@ const EditPenyelenggara = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + myparam.nama_penyelenggara + ' berhasil diupdate</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/penyelenggara'
+                    history.push('/master/penyelenggara')
                 })
             }).catch(err => {
                 Swal.fire({

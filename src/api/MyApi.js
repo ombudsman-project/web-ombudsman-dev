@@ -24,8 +24,8 @@ class ServiceApi {
     }
 
     // MASTER
-    getPegawai(param) {
-        return apiClient.get(`/master/pegawai/getData?${param}`)
+    getPegawai(data) {
+        return apiClient.post(`/master/pegawai/getData`, data)
     }
 
     addPegawai(data) {
@@ -44,6 +44,10 @@ class ServiceApi {
         return apiClient.get(`/master/kompetensi/getData?${param}`)
     }
 
+    getDetailKompetensi(id) {
+        return apiClient.get(`/master/kompetensi/getData?${id}`)
+    }
+
     addKompetensi(data) {
         return apiClient.post(`/master/kompetensi/create`, data)
     }
@@ -60,11 +64,15 @@ class ServiceApi {
         return apiClient.get(`/master/sub-kompetensi/getData?${param}`)
     }
 
+    getDetailSubKompetensi(id) {
+        return apiClient.get(`/master/sub-kompetensi/getData?${id}`)
+    }
+
     addSubKompetensi(data) {
         return apiClient.post(`/master/sub-kompetensi/create`, data)
     }
 
-    getDetailKompetensi(id) {
+    getDetailSubKompetensi(id) {
         return apiClient.get(`/master/sub-kompetensi/detail/${id}`)
     }
 
@@ -74,6 +82,22 @@ class ServiceApi {
 
     deleteSubKompetensi(data) {
         return apiClient.post(`/master/sub-kompetensi/delete`, data)
+    }
+
+    getBentukKompetensi(param) {
+        return apiClient.get(`/master/bentuk-jalur-kompetensi/getData?${param}`)
+    }
+
+    addBentukKompetensi(data) {
+        return apiClient.post(`/master/bentuk-jalur-kompetensi/create`, data)
+    }
+
+    editBentukKompetensi(data) {
+        return apiClient.post(`/master/bentuk-jalur-kompetensi/update`, data)
+    }
+
+    deleteBentukKompetensi(data) {
+        return apiClient.post(`/master/bentuk-jalur-kompetensi/delete`, data)
     }
 
     getPenyelenggara(param) {
