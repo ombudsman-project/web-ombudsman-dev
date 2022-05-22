@@ -24,8 +24,8 @@ class ServiceApi {
     }
 
     // MASTER
-    getPegawai(param) {
-        return apiClient.get(`/master/pegawai/getData?${param}`)
+    getPegawai(data) {
+        return apiClient.post(`/master/pegawai/getData`, data)
     }
 
     addPegawai(data) {

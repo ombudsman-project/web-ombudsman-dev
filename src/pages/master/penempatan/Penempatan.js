@@ -149,71 +149,73 @@ const Penempatan = () => {
                                     style={{ marginLeft: "1rem", position: "absolute" }}
                                     color="#2c2d3040"
                                 />
-                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)}/>
+                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)} />
                             </div>
                         </div>
                     </div>
                     <div id="content-table" className="content-table">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th className="table-title" scope="col" style={{ width: 46 }}>
-                                        #
-                                    </th>
-                                    <th className="table-title" scope="col">Lokasi Penempatan</th>
-                                    <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
-                                    <th className="table-title text-center" scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                !_.isEmpty(listPenempatan) ?
-                                    listPenempatan.map((x, key) => {
-                                        return (
-                                            <tr key={x.id}>
-                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                <td>{x.name}</td>
-                                                <td className="text-center">{x.jumlah_pegawai}</td>
-                                                <td className="action-column">
-                                                    <Link to={{ pathname: `/master/penempatan/detail`, state: { id: x.id, penempatan: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
-                                                        <button type="button" className="btn btn-warning button-view">
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                                            </div>
-                                                        </button>
-                                                    </Link>
-                                                    <Link to={{ pathname: `/master/penempatan/edit`, state: { id: x.id, penempatan: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
-                                                        <button type="button" className="btn btn-info button-edit">
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiEdit />&nbsp;Edit
-                                                            </div>
-                                                        </button>
-                                                    </Link>
-                                                    <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                        <div className="d-flex justify-content-center align-items-center">
-                                                            <FiIcons.FiTrash2 />&nbsp;Delete
-                                                        </div>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    }) :
-                                    <>
-                                    </>
-                                }
-                            </tbody>
-                        </table>
+                        <div className="scroll-me">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                                            #
+                                        </th>
+                                        <th className="table-title" scope="col">Lokasi Penempatan</th>
+                                        <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        !_.isEmpty(listPenempatan) ?
+                                            listPenempatan.map((x, key) => {
+                                                return (
+                                                    <tr key={x.id}>
+                                                        <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                        <td>{x.name ?? '-'}</td>
+                                                        <td className="text-center">{x.jumlah_pegawai ?? '-'}</td>
+                                                        <td className="action-column">
+                                                            <Link to={{ pathname: `/master/penempatan/detail`, state: { id: x.id, penempatan: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
+                                                                <button type="button" className="btn btn-warning button-view">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <Link to={{ pathname: `/master/penempatan/edit`, state: { id: x.id, penempatan: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
+                                                                <button type="button" className="btn btn-info button-edit">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <FiIcons.FiEdit />&nbsp;Edit
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
+                                                                <div className="d-flex justify-content-center align-items-center">
+                                                                    <FiIcons.FiTrash2 />&nbsp;Delete
+                                                                </div>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }) :
+                                            <>
+                                            </>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {
                                     !_.isEmpty(listPenempatan) ?
-                                    <>
-                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listPenempatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listPenempatan.length)} dari {dataCount} data
-                                    </>
-                                    :
-                                    <>
-                                        Menampilkan data 0 - 0 dari 0 data
-                                    </>
+                                        <>
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listPenempatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listPenempatan.length)} dari {dataCount} data
+                                        </>
+                                        :
+                                        <>
+                                            Menampilkan data 0 - 0 dari 0 data
+                                        </>
                                 }
                             </div>
                             <div>

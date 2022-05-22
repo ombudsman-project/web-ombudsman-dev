@@ -144,55 +144,57 @@ const JenisKepegawaian = () => {
                         </div>
                     </div>
                     <div id="content-table" className="content-table">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th className="table-title" scope="col" style={{ width: 46 }}>
-                                        #
-                                    </th>
-                                    <th className="table-title" scope="col">Jenis Kepegawaian</th>
-                                    <th className="table-title" scope="col">Jumlah Pegawai</th>
-                                    <th className="table-title text-center" scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    !_.isEmpty(listJabatan) ?
-                                        listJabatan.map((x, key) => {
-                                            return (
-                                                <tr key={x.id}>
-                                                    <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                    <td>{x.name}</td>
-                                                    <td>{x.jumlah_pegawai}</td>
-                                                    <td className="action-column">
-                                                        <Link to={{ pathname: `/master/jenis_kepegawaian/detail`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
-                                                            <button type="button" className="btn btn-warning button-view">
+                        <div className="scroll-me">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                                            #
+                                        </th>
+                                        <th className="table-title" scope="col">Jenis Kepegawaian</th>
+                                        <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
+                                        <th className="table-title text-center" scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        !_.isEmpty(listJabatan) ?
+                                            listJabatan.map((x, key) => {
+                                                return (
+                                                    <tr key={x.id}>
+                                                        <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                        <td>{x.name}</td>
+                                                        <td className="text-center">{x.jumlah_pegawai}</td>
+                                                        <td className="action-column">
+                                                            <Link to={{ pathname: `/master/jenis_kepegawaian/detail`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
+                                                                <button type="button" className="btn btn-warning button-view">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <Link to={{ pathname: `/master/jenis_kepegawaian/edit`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
+                                                                <button type="button" className="btn btn-info button-edit">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <FiIcons.FiEdit />&nbsp;Edit
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
                                                                 <div className="d-flex justify-content-center align-items-center">
-                                                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    <FiIcons.FiTrash2 />&nbsp;Delete
                                                                 </div>
                                                             </button>
-                                                        </Link>
-                                                        <Link to={{ pathname: `/master/jenis_kepegawaian/edit`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
-                                                            <button type="button" className="btn btn-info button-edit">
-                                                                <div className="d-flex justify-content-center align-items-center">
-                                                                    <FiIcons.FiEdit />&nbsp;Edit
-                                                                </div>
-                                                            </button>
-                                                        </Link>
-                                                        <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                                            </div>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }) :
-                                        <>
-                                        </>
-                                }
-                            </tbody>
-                        </table>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }) :
+                                            <>
+                                            </>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {

@@ -45,14 +45,20 @@ const DetailPegawai = () => {
                             </div>
                         </div>
                         <Row>
-                            <Col lg="3" md="3"><p>Nama</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.nama_pegawai ?? '-'}</p></Col>
+                            <Col lg="3" md="3"><p>NIP</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.nip ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Klasifikasi jabatan</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.klasifikasi_jabatan ?? '-'}</p></Col>
 
+                            <Col lg="3" md="3"><p>Nama</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.nama_pegawai ?? '-'}</p></Col>
+
                             <Col lg="3" md="3"><p>Jenis Kepegawaian</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jenis_kepegawaian ?? '-'}</p></Col>
+
+                            <Col lg="3" md="3"><p>Jenis Kelamin</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jenis_kelamin ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Kategori jabatan</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.kategori_jabatan ?? '-'}</p></Col>

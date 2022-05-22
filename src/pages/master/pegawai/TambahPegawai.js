@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -22,11 +22,13 @@ const iconPerson = new L.Icon({
 });
 
 const TambahPegawai = () => {
+    const history = useHistory();
     const [listKepegawaian, setListKepegawaian] = useState([]);
     const [listGolongan, setListGolongan] = useState([]);
     const [listJabatan, setListJabatan] = useState([]);
     const [listUnitKerja, setListUnitKerja] = useState([]);
     const [listPenempatan, setListPenempatan] = useState([]);
+    const [jenisKelamin, setJenisKelamin] = useState([]);
 
     useEffect(() => {
         listData();
@@ -43,7 +45,7 @@ const TambahPegawai = () => {
             })
             const golongan_id = x.data.golongan_pangkat.map((row, i) => {
                 return (
-                    { value: row.id, label: row.golongan+' ('+row.pangkat +')' }
+                    { value: row.id, label: row.golongan + ' (' + row.pangkat + ')' }
                 )
             })
             const jabatan_id = x.data.jabatan.map((row, i) => {
@@ -74,12 +76,14 @@ const TambahPegawai = () => {
         e.preventDefault();
 
         const data = {
+            'nip': e.target.elements.nip.value,
             'nama_pegawai': e.target.elements.nama_pegawai.value,
-            'jenis_kepegawaian_id': e.target.elements.jenis_kepegawaian_id.value,
-            'golongan_pangkat_id': e.target.elements.golongan_pangkat_id.value,
-            'jabatan_id': e.target.elements.jabatan_id.value,
-            'unit_kerja_id': e.target.elements.unit_kerja_id.value,
-            'penempatan_id': e.target.elements.penempatan_id.value,
+            'jenis_kelamin': jenisKelamin,
+            'jenis_kepegawaian': e.target.elements.jenis_kepegawaian_id.value,
+            'golongan_pangkat': e.target.elements.golongan_pangkat_id.value,
+            'jabatan': e.target.elements.jabatan_id.value,
+            'unit_kerja': e.target.elements.unit_kerja_id.value,
+            'penempatan': e.target.elements.penempatan_id.value,
         }
 
         new ServiceApi().addPegawai(data)
@@ -90,7 +94,7 @@ const TambahPegawai = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/pegawai'
+                    history.push('/master/pegawai')
                 })
             }).catch(err => {
                 const err_data = err.response.data;
@@ -118,14 +122,65 @@ const TambahPegawai = () => {
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Pegawai</h4>
                         <p className="card-main-content-subtitle">Masukkan nama detail pegawai</p>
-                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
-                            <Form.Label column sm="3" className="mb-3">
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                NIP
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="text" name="nip" placeholder="Masukkan NIP pegawai" autoComplete="off" required />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Nama Pegawai
                             </Form.Label>
                             <Col sm="9">
                                 <Form.Control type="text" name="nama_pegawai" placeholder="Masukkan nama pegawai" autoComplete="off" required />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Jenis Kelamin
+                            </Form.Label>
+                            <Col sm="9">
+                                <Row>
+                                    <Col md="auto" lg="auto" sm="auto">
+                                        <div
+                                            className='input-radio-custom'
+                                            onClick={() => setJenisKelamin('L')}
+                                        >
+                                            <Form.Check
+                                                inline
+                                                checked={jenisKelamin == 'L'}
+                                                label="Laki - laki"
+                                                name="group1"
+                                                type="radio"
+                                                onChange={() => setJenisKelamin('L')}
+                                                id={`inline-radio-1`}
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Col>
+                                        <div
+                                            className='input-radio-custom'
+                                            onClick={() => setJenisKelamin('P')}
+                                        >
+                                            <Form.Check
+                                                inline
+                                                label="Perempuan"
+                                                checked={jenisKelamin == 'P'}
+                                                name="group2"
+                                                type="radio"
+                                                onChange={() => setJenisKelamin('P')}
+                                                id={`inline-radio-2`}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Jenis Kepegawaian
                             </Form.Label>
                             <Col sm="9">
@@ -136,7 +191,9 @@ const TambahPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Pangkat
                             </Form.Label>
                             <Col sm="9">
@@ -147,7 +204,9 @@ const TambahPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Jabatan
                             </Form.Label>
                             <Col sm="9">
@@ -158,7 +217,9 @@ const TambahPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Unit Kerja
                             </Form.Label>
                             <Col sm="9">
@@ -169,7 +230,9 @@ const TambahPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Penempatan
                             </Form.Label>
                             <Col sm="9">

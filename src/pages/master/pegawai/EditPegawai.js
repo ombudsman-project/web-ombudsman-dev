@@ -13,19 +13,17 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
-const iconPerson = new L.Icon({
-
-});
-
 const EditPegawai = () => {
+    const history = useHistory();
     const location = useLocation();
     const myparam = location.state;
     const [listKepegawaian, setListKepegawaian] = useState([]);
     const [kepegawaianID, setKepegawaianID] = useState('');
+    const [nip, setNip] = useState('');
     const [namaPegawai, setNamaPegawai] = useState('');
     const [listGolongan, setListGolongan] = useState([]);
     const [golonganID, setGolonganID] = useState('');
@@ -35,11 +33,14 @@ const EditPegawai = () => {
     const [unitID, setUnitID] = useState('');
     const [listPenempatan, setListPenempatan] = useState([]);
     const [penempatanID, setPenempatanID] = useState('');
+    const [jenisKelamin, setJenisKelamin] = useState(null);
 
     useEffect(() => {
         listData();
         viewData();
+        setNip(myparam.x.nip);
         setNamaPegawai(myparam.x.nama_pegawai);
+        setJenisKelamin(myparam.x.jenis_kelamin)
     }, [])
 
     const listData = async () => {
@@ -53,7 +54,7 @@ const EditPegawai = () => {
             })
             const golongan_id = x.data.golongan_pangkat.map((row, i) => {
                 return (
-                    { value: row.id, label: row.golongan+' ('+row.pangkat +')' }
+                    { value: row.id, label: row.golongan + ' (' + row.pangkat + ')' }
                 )
             })
             const jabatan_id = x.data.jabatan.map((row, i) => {
@@ -116,7 +117,9 @@ const EditPegawai = () => {
 
         const data = {
             'key': myparam.x.id,
+            'nip': e.target.elements.nip.value,
             'nama_pegawai': e.target.elements.nama_pegawai.value,
+            'jenis_kelamin': jenisKelamin,
             'jenis_kepegawaian': kepegawaianID,
             'golongan_pangkat': golonganID,
             'jabatan': jabatanID,
@@ -124,29 +127,27 @@ const EditPegawai = () => {
             'penempatan': penempatanID,
         }
 
-        console.log(data)
+        new ServiceApi().editPegawai(data)
+            .then(response => {
+                Swal.fire({
+                    title: 'Sukses!',
+                    html: '<i>' + response.data.data.nama_pegawai + ' berhasil diupdate</i>',
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
+                }).then(function () {
+                    history.push('/master/pegawai');
+                })
+            }).catch(err => {
+                const err_data = err.response.data;
+                const data = err_data.data;
 
-        // new ServiceApi().editPegawai(data)
-        //     .then(response => {
-        //         Swal.fire({
-        //             title: 'Sukses!',
-        //             html: '<i>' + myparam.klasifikasi + ' berhasil diupdate</i>',
-        //             icon: 'success',
-        //             confirmButtonColor: '#0058a8',
-        //         }).then(function () {
-        //             window.location = '/master/pegawai'
-        //         })
-        //     }).catch(err => {
-        //         const err_data = err.response.data;
-        //         const data = err_data.data;
-
-        //         Swal.fire({
-        //             title: 'Gagal!',
-        //             html: '<i>' + (err.response.data.data.kategori_id ? 'kategori jabatan kosong' + '<br/>' : '') + (err.response.data.data.klasifikasi ? err.response.data.data.klasifikasi : '') + '</i>',
-        //             icon: 'error',
-        //             confirmButtonColor: '#0058a8',
-        //         })
-        //     });
+                Swal.fire({
+                    title: 'Gagal!',
+                    html: '<i>' + (err.response.data.data.nip ? err.response.data.data.nip + '<br/>' : '') + (err.response.data.data.nama_pegawai ? err.response.data.data.nama_pegawai + '<br/>' : '') + (err.response.data.data.jenis_kelamin ? err.response.data.data.jenis_kelamin : '') + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + (err.response.data.data.golongan_pangkat ? err.response.data.data.golongan_pangkat : '') + (err.response.data.data.jabatan ? err.response.data.data.jabatan : '') + (err.response.data.data.unit_kerja ? err.response.data.data.unit_kerja : '') + (err.response.data.data.penempatan ? err.response.data.data.penempatan : '') + '</i>',
+                    icon: 'error',
+                    confirmButtonColor: '#0058a8',
+                })
+            });
     }
 
     return (
@@ -162,14 +163,65 @@ const EditPegawai = () => {
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Pegawai</h4>
                         <p className="card-main-content-subtitle">Ubah data detail pegawai</p>
-                        <Form.Group as={Row}>
-                            <Form.Label column sm="3" className="mb-3">
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                NIP
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="text" value={nip} name="nip" placeholder="Masukkan NIP pegawai" autoComplete="off" onChange={(e) => setNip(e.target.value)} required />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Nama Pegawai
                             </Form.Label>
                             <Col sm="9">
                                 <Form.Control type="text" value={namaPegawai} name="nama_pegawai" placeholder="Masukkan nama pegawai" autoComplete="off" onChange={(e) => setNamaPegawai(e.target.value)} required />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Jenis Kelamin
+                            </Form.Label>
+                            <Col sm="9">
+                                <Row>
+                                    <Col md="auto" lg="auto" sm="auto">
+                                        <div
+                                            className='input-radio-custom'
+                                            onClick={() => setJenisKelamin('L')}
+                                        >
+                                            <Form.Check
+                                                inline
+                                                checked={jenisKelamin == 'L'}
+                                                label="Laki - laki"
+                                                name="group1"
+                                                type="radio"
+                                                onChange={() => setJenisKelamin('L')}
+                                                id={`inline-radio-1`}
+                                            />
+                                        </div>
+                                    </Col>
+                                    <Col>
+                                        <div
+                                            className='input-radio-custom'
+                                            onClick={() => setJenisKelamin('P')}
+                                        >
+                                            <Form.Check
+                                                inline
+                                                label="Perempuan"
+                                                checked={jenisKelamin == 'P'}
+                                                name="group2"
+                                                type="radio"
+                                                onChange={() => setJenisKelamin('P')}
+                                                id={`inline-radio-2`}
+                                            />
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Jenis Kepegawaian
                             </Form.Label>
                             <Col sm="9">
@@ -182,7 +234,9 @@ const EditPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Pangkat
                             </Form.Label>
                             <Col sm="9">
@@ -195,7 +249,9 @@ const EditPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Jabatan
                             </Form.Label>
                             <Col sm="9">
@@ -208,7 +264,9 @@ const EditPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Unit Kerja
                             </Form.Label>
                             <Col sm="9">
@@ -221,7 +279,9 @@ const EditPegawai = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="3" className="mb-3">
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
                                 Penempatan
                             </Form.Label>
                             <Col sm="9">

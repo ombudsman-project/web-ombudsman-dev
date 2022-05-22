@@ -155,7 +155,7 @@ const Kategori = () => {
                         <table className="table table-hover">
                             <thead>
                                 <tr>
-                                    <th className="table-title" scope="col" style={{ width: 46 }}>
+                                    <th className="table-title" scope="col" style={{ width: 50 }}>
                                         #
                                     </th>
                                     <th className="table-title" scope="col">Jabatan</th>
@@ -169,7 +169,7 @@ const Kategori = () => {
                                         return (
                                             <tr key={x.id}>
                                                 <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                <td>{x.name}</td>
+                                                <td>{x.name ?? '-'}</td>
                                                 <td className="action-column">
                                                     <Link to={{ pathname: `/master/kategori_jabatan/detail`, state: { id: x.id, kategori: x.name } }}>
                                                         <button type="button" className="btn btn-warning button-view">
