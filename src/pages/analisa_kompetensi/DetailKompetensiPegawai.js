@@ -5,7 +5,7 @@ import { faArrowLeft, faClock, faPlus, faSearchLocation } from '@fortawesome/fre
 import { Button, Card, Col, Container, Form, Row, Pagination } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import {
     Chart as ChartJS,
     RadialLinearScale,
@@ -112,7 +112,7 @@ const DetailKompetensiPegawai = () => {
     const [myPemetaan, setMyPemetaan] = useState([]);
 
     const location = useLocation();
-    const myparam = location.state.label;
+    const myparam = location.state;
 
     useEffect(() => {
         var data = [
@@ -152,6 +152,9 @@ const DetailKompetensiPegawai = () => {
         setMyPemetaan(data);
     }, [data]);
 
+
+    if (!myparam) return <Redirect to="/analisa_kompetensi/kompetensi_pegawai" />
+
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -166,7 +169,7 @@ const DetailKompetensiPegawai = () => {
                     <p className="card-main-content-subtitle">Data lengkap dari pegawai.</p>
                     <Row>
                         <Col lg="3"><p>Nama</p></Col>
-                        <Col className="text-secondary" lg="3"><p>{myparam}</p></Col>
+                        <Col className="text-secondary" lg="3"><p>{myparam.label}</p></Col>
                         <Col lg="4">Jumlah JP</Col>
                         <Col className="text-secondary" lg="2"><p>110</p></Col>
 

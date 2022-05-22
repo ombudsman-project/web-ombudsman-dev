@@ -29,7 +29,7 @@ export const SidebarData = [
             },
             {
                 title: "Tambah Pelatihan",
-                path: "/reports/reports2",
+                path: "/kegiatan/tambah_pelatihan",
                 icon: <Dot />,
                 cName: "sub-nav",
             },
