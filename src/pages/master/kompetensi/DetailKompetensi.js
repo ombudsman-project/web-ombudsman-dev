@@ -46,7 +46,7 @@ const DetailKompetensi = () => {
                             <Col lg="3"><p>Nama Kompetensi</p></Col>
                             <Col className="text-secondary" lg="9"><p>{myparam.x.name}</p></Col>
                             <Col lg="3"><p>Jumlah Sub Kompetensi</p></Col>
-                            <Col className="text-secondary" lg="9"><p>0</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.jumlah_sub_kompetensi}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>

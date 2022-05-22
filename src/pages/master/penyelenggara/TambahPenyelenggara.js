@@ -13,11 +13,12 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
 const TambahPenyelenggara = () => {
+    const history = useHistory();
 
     const submitData = async (e) => {
         e.preventDefault();
@@ -34,9 +35,10 @@ const TambahPenyelenggara = () => {
                 Swal.fire({
                     title: 'Sukses!',
                     html: '<i>' + response.data.data.nama_penyelenggara + ' berhasil ditambahkan</i>',
-                    icon: 'success'
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/penyelenggara'
+                    history.push('/master/penyelenggara')
                 })
             }).catch(err => {
                 Swal.fire({
