@@ -94,7 +94,8 @@ const Penyelenggara = () => {
                         Swal.fire({
                             title: 'Sukses!',
                             html: '<i>Berhasil menghapus data</i>',
-                            icon: 'success'
+                            icon: 'success',
+                            confirmButtonColor: '#0058a8',
                         })
                         viewData();
                     }).catch(err => {

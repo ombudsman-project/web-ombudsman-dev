@@ -44,6 +44,10 @@ class ServiceApi {
         return apiClient.get(`/master/kompetensi/getData?${param}`)
     }
 
+    getDetailKompetensi(id) {
+        return apiClient.get(`/master/kompetensi/getData?${id}`)
+    }
+
     addKompetensi(data) {
         return apiClient.post(`/master/kompetensi/create`, data)
     }
@@ -58,6 +62,10 @@ class ServiceApi {
 
     getSubKompetensi(param) {
         return apiClient.get(`/master/sub-kompetensi/getData?${param}`)
+    }
+
+    getDetailSubKompetensi(id) {
+        return apiClient.get(`/master/sub-kompetensi/getData?${id}`)
     }
 
     addSubKompetensi(data) {

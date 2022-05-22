@@ -50,7 +50,7 @@ const EditSubKompetensi = () => {
     }
 
     const viewData = async () => {
-        await new ServiceApi().getDetailKompetensi(myparam.x.id).then(x => {
+        await new ServiceApi().getDetailSubKompetensi(myparam.x.id).then(x => {
             setKompetensiID(x.data.data.kompetensi_id);
         }).catch((err) => {
         })
