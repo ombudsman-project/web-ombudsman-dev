@@ -31,12 +31,17 @@ import DetailKompetensiView from "../pages/master/kompetensi/DetailKompetensi"
 import TambahKompetensiView from "../pages/master/kompetensi/TambahKompetensi"
 import EditKompetensiView from "../pages/master/kompetensi/EditKompetensi"
 
-
 //SUB KOMPETENSI
 import SubKompetensiView from "../pages/master/sub_kompetensi/SubKompetensi"
 import DetailSubKompetensiView from "../pages/master/sub_kompetensi/DetailSubKompetensi"
 import TambahSubKompetensiView from "../pages/master/sub_kompetensi/TambahSubKompetensi"
 import EditSubKompetensiView from "../pages/master/sub_kompetensi/EditSubKompetensi"
+
+//BENTUK & JALUR KOMPETENSI
+import BentukKompetensiView from "../pages/master/bentuk_jalur_kompetensi/BentukKompetensi"
+import DetailBentukKompetensiView from "../pages/master/bentuk_jalur_kompetensi/DetailBentukKompetensi"
+import TambahBentukKompetensiView from "../pages/master/bentuk_jalur_kompetensi/TambahBentukKompetensi"
+import EditBentukKompetensiView from "../pages/master/bentuk_jalur_kompetensi/EditBentukKompetensi"
 
 //PENYELENGGARA
 import PenyelenggaraView from "../pages/master/penyelenggara/Penyelenggara"
@@ -186,6 +191,12 @@ const AppRouter = () => {
                   <Route component={DetailSubKompetensiView} path="/master/sub_kompetensi/detail" />
                   <Route component={TambahSubKompetensiView} path="/master/sub_kompetensi/tambah" />
                   <Route component={EditSubKompetensiView} path="/master/sub_kompetensi/edit" />
+
+                  {/* BENTUK & JALUR KOMPETENSI */}
+                  <Route component={BentukKompetensiView} path="/master/bentuk_jalur_kompetensi" exact />
+                  <Route component={DetailBentukKompetensiView} path="/master/bentuk_jalur_kompetensi/detail" />
+                  <Route component={TambahBentukKompetensiView} path="/master/bentuk_jalur_kompetensi/tambah" />
+                  <Route component={EditBentukKompetensiView} path="/master/bentuk_jalur_kompetensi/edit" />
 
                   {/* PENYELENGGARA */}
                   <Route component={PenyelenggaraView} path="/master/penyelenggara" exact />
