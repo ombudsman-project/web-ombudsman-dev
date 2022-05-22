@@ -103,7 +103,7 @@ export const SidebarData = [
             },
             {
                 title: "Sub Kompetensi",
-                path: "/messages/message2",
+                path: "/master/sub_kompetensi",
                 icon: <Dot />,
             },
             {

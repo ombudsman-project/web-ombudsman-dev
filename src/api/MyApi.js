@@ -56,6 +56,26 @@ class ServiceApi {
         return apiClient.post(`/master/kompetensi/delete`, data)
     }
 
+    getSubKompetensi(param) {
+        return apiClient.get(`/master/sub-kompetensi/getData?${param}`)
+    }
+
+    addSubKompetensi(data) {
+        return apiClient.post(`/master/sub-kompetensi/create`, data)
+    }
+
+    getDetailKompetensi(id) {
+        return apiClient.get(`/master/sub-kompetensi/detail/${id}`)
+    }
+
+    editSubKompetensi(data) {
+        return apiClient.post(`/master/sub-kompetensi/update`, data)
+    }
+
+    deleteSubKompetensi(data) {
+        return apiClient.post(`/master/sub-kompetensi/delete`, data)
+    }
+
     getPenyelenggara(param) {
         return apiClient.get(`/master/penyelenggara/getData?${param}`)
     }

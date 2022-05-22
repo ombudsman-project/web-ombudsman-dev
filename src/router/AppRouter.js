@@ -30,6 +30,13 @@ import DetailKompetensiView from "../pages/master/kompetensi/DetailKompetensi"
 import TambahKompetensiView from "../pages/master/kompetensi/TambahKompetensi"
 import EditKompetensiView from "../pages/master/kompetensi/EditKompetensi"
 
+
+//SUB KOMPETENSI
+import SubKompetensiView from "../pages/master/sub_kompetensi/SubKompetensi"
+import DetailSubKompetensiView from "../pages/master/sub_kompetensi/DetailSubKompetensi"
+import TambahSubKompetensiView from "../pages/master/sub_kompetensi/TambahSubKompetensi"
+import EditSubKompetensiView from "../pages/master/sub_kompetensi/EditSubKompetensi"
+
 //PENYELENGGARA
 import PenyelenggaraView from "../pages/master/penyelenggara/Penyelenggara"
 import DetailPenyelenggaraView from "../pages/master/penyelenggara/DetailPenyelenggara"
@@ -171,6 +178,12 @@ const AppRouter = () => {
                   <Route component={DetailKompetensiView} path="/master/kompetensi/detail" />
                   <Route component={TambahKompetensiView} path="/master/kompetensi/tambah" />
                   <Route component={EditKompetensiView} path="/master/kompetensi/edit" />
+
+                  {/* SUB KOMPETENSI */}
+                  <Route component={SubKompetensiView} path="/master/sub_kompetensi" exact />
+                  <Route component={DetailSubKompetensiView} path="/master/sub_kompetensi/detail" />
+                  <Route component={TambahSubKompetensiView} path="/master/sub_kompetensi/tambah" />
+                  <Route component={EditSubKompetensiView} path="/master/sub_kompetensi/edit" />
 
                   {/* PENYELENGGARA */}
                   <Route component={PenyelenggaraView} path="/master/penyelenggara" exact />
