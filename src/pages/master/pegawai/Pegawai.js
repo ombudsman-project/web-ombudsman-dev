@@ -36,8 +36,9 @@ const Pegawai = () => {
     }, [])
 
     const viewData = async () => {
-        const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getPegawai(param).then(x => {
+        // const data = `page=${currentPage}&length=${perPage}&search=`;
+        const data = { 'page': currentPage, 'length': perPage, 'search': '' }
+        await new ServiceApi().getPegawai(data).then(x => {
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -47,8 +48,9 @@ const Pegawai = () => {
 
     function handlePerPage(e) {
         setPerPage(e.target.value)
-        const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getPegawai(param).then(x => {
+        // const data = `page=${currentPage}&length=${e.target.value}&search=`;
+        const data = { 'page': currentPage, 'length': e.target.value, 'search': '' }
+        new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
@@ -57,16 +59,18 @@ const Pegawai = () => {
 
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getPegawai(param).then(x => {
+        // const data = `page=${selectedPage + 1}&length=${perPage}&search=`;
+        const data = { 'page': selectedPage, 'length': perPage, 'search': '' }
+        await new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
         }).catch((err) => {
         })
     }
 
     const searchData = async (e) => {
-        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getPegawai(param).then(x => {
+        // const data = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
+        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value }
+        await new ServiceApi().getPegawai(data).then(x => {
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -155,10 +159,10 @@ const Pegawai = () => {
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th className="table-title" scope="col" width="50">
-                                            #
-                                        </th>
-                                        <th className="table-title" scope="col" width="1000">Nama</th>
+                                        <th className="table-title" scope="col" width="50">#</th>
+                                        <th className="table-title" scope="col">NIP</th>
+                                        <th className="table-title" scope="col">Nama</th>
+                                        <th className="table-title text-center" scope="col">Jenis Kelamin</th>
                                         <th className="table-title text-center" scope="col">Jenis Kepegawaian</th>
                                         <th className="table-title text-center" scope="col">Golongan</th>
                                         <th className="table-title text-center" scope="col">Pangkat</th>
@@ -167,7 +171,7 @@ const Pegawai = () => {
                                         <th className="table-title text-center" scope="col">Kategori</th>
                                         <th className="table-title text-center" scope="col">Unit Kerja</th>
                                         <th className="table-title text-center" scope="col">Penempatan</th>
-                                        <th className="table-title text-center" scope="col">Action</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -177,7 +181,9 @@ const Pegawai = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                        <td>{x.nip ?? '-'}</td>
                                                         <td>{x.nama_pegawai ?? '-'}</td>
+                                                        <td className="text-center">{x.jenis_kelamin ?? '-'}</td>
                                                         <td className="text-center">{x.jenis_kepegawaian ?? '-'}</td>
                                                         <td className="text-center">{x.golongan ?? '-'}</td>
                                                         <td className="text-center">{x.pangkat ?? '-'}</td>
