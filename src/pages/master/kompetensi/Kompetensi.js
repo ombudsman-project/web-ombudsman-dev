@@ -23,13 +23,13 @@ const iconPerson = new L.Icon({
 
 });
 
-const Jabatan = () => {
+const Kompetensi = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
-    const [perPage, setPerPage] = useState(10);
+    const [perPage, setPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [listJabatan, setListJabatan] = useState([]);
+    const [listKompetensi, setListKompetensi] = useState([]);
 
     useEffect(() => {
         viewData();
@@ -37,9 +37,9 @@ const Jabatan = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getJabatan(param).then(x => {
+        await new ServiceApi().getKompetensi(param).then(x => {
             setDataCount(x.data.total_data);
-            setListJabatan(x.data.data);
+            setListKompetensi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -48,8 +48,8 @@ const Jabatan = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getJabatan(param).then(x => {
-            setListJabatan(x.data.data);
+        new ServiceApi().getKompetensi(param).then(x => {
+            setListKompetensi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -58,17 +58,17 @@ const Jabatan = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getJabatan(param).then(x => {
-            setListJabatan(x.data.data);
+        await new ServiceApi().getKompetensi(param).then(x => {
+            setListKompetensi(x.data.data);
         }).catch((err) => {
         })
     }
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getJabatan(param).then(x => {
+        await new ServiceApi().getKompetensi(param).then(x => {
             setDataCount(x.data.total_data);
-            setListJabatan(x.data.data);
+            setListKompetensi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -88,7 +88,7 @@ const Jabatan = () => {
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteJabatan(data)
+                new ServiceApi().deleteKompetensi(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -113,10 +113,10 @@ const Jabatan = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Jabatan</h3>
+                    <h3 className="content-title">Kompetensi</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/jabatan/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/kompetensi/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -127,7 +127,7 @@ const Jabatan = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
-                                    <option value="10" selected></option>
+                                    <option value="10"></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>
@@ -152,63 +152,63 @@ const Jabatan = () => {
                         </div>
                     </div>
                     <div id="content-table" className="content-table">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th className="table-title" scope="col" style={{ width: 46 }}>
-                                        #
-                                    </th>
-                                    <th className="table-title" scope="col">Jabatan</th>
-                                    <th className="table-title" scope="col">Klasifikasi</th>
-                                    <th className="table-title text-center" scope="col">Kategori</th>
-                                    <th className="table-title text-center" scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    !_.isEmpty(listJabatan) ?
-                                        listJabatan.map((x, key) => {
-                                            return (
-                                                <tr key={x.id}>
-                                                    <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                    <td>{x.name}</td>
-                                                    <td>{x.klasifikasi}</td>
-                                                    <td className="text-center">{x.kategori}</td>
-                                                    <td className="action-column">
-                                                        <Link to={{ pathname: `/master/jabatan/detail`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
-                                                            <button type="button" className="btn btn-warning button-view">
+                        <div className="scroll-me">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th className="table-title" scope="col" style={{ width: 50 }}>
+                                            #
+                                        </th>
+                                        <th className="table-title" scope="col">Nama Kompetensi</th>
+                                        <th className="table-title text-center" scope="col">Jumlah Sub Kompetensi</th>
+                                        <th className="table-title text-center" scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        !_.isEmpty(listKompetensi) ?
+                                            listKompetensi.map((x, key) => {
+                                                return (
+                                                    <tr key={x.id}>
+                                                        <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                        <td>{x.name}</td>
+                                                        <td className="text-center">{x.jumlah_sub_kompetensi}</td>
+                                                        <td className="action-column">
+                                                            <Link to={{ pathname: `/master/kompetensi/detail`, state: { x } }}>
+                                                                <button type="button" className="btn btn-warning button-view">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <Link to={{ pathname: `/master/kompetensi/edit`, state: { x } }}>
+                                                                <button type="button" className="btn btn-info button-edit">
+                                                                    <div className="d-flex justify-content-center align-items-center">
+                                                                        <FiIcons.FiEdit />&nbsp;Edit
+                                                                    </div>
+                                                                </button>
+                                                            </Link>
+                                                            <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
                                                                 <div className="d-flex justify-content-center align-items-center">
-                                                                    <AiIcons.AiOutlineEye />&nbsp;View
+                                                                    <FiIcons.FiTrash2 />&nbsp;Delete
                                                                 </div>
                                                             </button>
-                                                        </Link>
-                                                        <Link to={{ pathname: `/master/jabatan/edit`, state: { id: x.id, jabatan: x.name, klasifikasi: x.klasifikasi, kategori: x.kategori } }}>
-                                                            <button type="button" className="btn btn-info button-edit">
-                                                                <div className="d-flex justify-content-center align-items-center">
-                                                                    <FiIcons.FiEdit />&nbsp;Edit
-                                                                </div>
-                                                            </button>
-                                                        </Link>
-                                                        <button type="button" className="btn btn-danger button-delete" onClick={() => deleteData(x)}>
-                                                            <div className="d-flex justify-content-center align-items-center">
-                                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                                            </div>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }) :
-                                        <>
-                                        </>
-                                }
-                            </tbody>
-                        </table>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }) :
+                                            <>
+                                            </>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {
-                                    !_.isEmpty(listJabatan) ?
+                                    !_.isEmpty(listKompetensi) ?
                                         <>
-                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listJabatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listJabatan.length)} dari {dataCount} data
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listKompetensi.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listKompetensi.length)} dari {dataCount} data
                                         </>
                                         :
                                         <>
@@ -245,4 +245,4 @@ const Jabatan = () => {
     );
 };
 
-export default Jabatan;
+export default Kompetensi;

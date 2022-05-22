@@ -40,6 +40,22 @@ class ServiceApi {
         return apiClient.post(`/master/pegawai/delete`, data)
     }
 
+    getKompetensi(param) {
+        return apiClient.get(`/master/kompetensi/getData?${param}`)
+    }
+
+    addKompetensi(data) {
+        return apiClient.post(`/master/kompetensi/create`, data)
+    }
+
+    editKompetensi(data) {
+        return apiClient.post(`/master/kompetensi/update`, data)
+    }
+
+    deleteKompetensi(data) {
+        return apiClient.post(`/master/kompetensi/delete`, data)
+    }
+
     getPenyelenggara(param) {
         return apiClient.get(`/master/penyelenggara/getData?${param}`)
     }
@@ -74,6 +90,10 @@ class ServiceApi {
 
     getListPegawai() {
         return apiClient.get(`/master/pegawai/getData?page=&length=&search=`);
+    }
+
+    getDetailPegawai(id) {
+        return apiClient.get(`/master/pegawai/detail/${id}`)
     }
 
     getPangkat(param) {

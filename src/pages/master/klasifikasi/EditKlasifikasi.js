@@ -112,7 +112,6 @@ const EditKlasifikasi = () => {
                             </Form.Label>
                             <Col sm="10">
                                 <Select
-                                    // value={kategoriID != '' ? listKategori.filter((option) => option.value == kategoriID)[0].label : ''}
                                     value={listKategori.filter((option) => option.value == kategoriID)}
                                     name="kategori_id"
                                     options={listKategori}

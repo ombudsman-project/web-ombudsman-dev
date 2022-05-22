@@ -46,31 +46,31 @@ const DetailPegawai = () => {
                         </div>
                         <Row>
                             <Col lg="3" md="3"><p>Nama</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.nama_pegawai ? myparam.nama_pegawai : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.nama_pegawai ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Klasifikasi jabatan</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.klasifikasi_jabatan ? myparam.klasifikasi_jabatan : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.klasifikasi_jabatan ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Jenis Kepegawaian</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.jenis_kepegawaian ? myparam.jenis_kepegawaian : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jenis_kepegawaian ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Kategori jabatan</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.kategori_jabatan ? myparam.kategori_jabatan : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.kategori_jabatan ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Pangkat</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.pangkat ? myparam.pangkat : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.pangkat ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Unit Kerja</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.unit_kerja ? myparam.unit_kerja : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.unit_kerja ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Golongan</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.golongan ? myparam.golongan : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.golongan ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Penempatan</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.penempatan ? myparam.penempatan : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.penempatan ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Jabatan</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.jabatan ? myparam.jabatan : '-'}</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jabatan ?? '-'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
