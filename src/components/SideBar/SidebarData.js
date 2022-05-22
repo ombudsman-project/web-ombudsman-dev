@@ -108,7 +108,7 @@ export const SidebarData = [
             },
             {
                 title: "Bentuk & Jalur Komp",
-                path: "/messages/message2",
+                path: "/master/bentuk_jalur_kompetensi",
                 icon: <Dot />,
             },
             {
