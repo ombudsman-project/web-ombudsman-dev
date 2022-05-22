@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import { Button, Card, Col, Container, Form, Pagination, Row } from 'react-bootstrap';
 import _ from 'lodash';
-import Skeleton from 'react-loading-skeleton'
-import { useTranslation } from 'react-i18next';
 import moment from 'moment';
 import axios from 'axios';
 import Swal from 'sweetalert2'
@@ -18,10 +13,6 @@ import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import ReactPaginate from 'react-paginate';
-
-const iconPerson = new L.Icon({
-
-});
 
 const JenisKepegawaian = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };

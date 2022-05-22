@@ -1,4 +1,4 @@
-$mainBgColor: #f1f5fb;
+$mainBgColor: #f1f5fb; //#474747;
 $mainHeaderColor: #0daaaa;
 $shadowMainBg: #c5c5c5;
 $shadowHeader: #b0bccc;
@@ -318,7 +318,7 @@ h2 {
 }
 
 .card-main-content {
-  background: #fff;
+  background: $mainCardBg;
   margin-inline: 10px;
   border-radius: 20px;
   display: flex;
@@ -330,6 +330,22 @@ h2 {
   border: none;
   margin-bottom: 10px;
 
+  .drop-files-upload {
+    border: #D1D5DB dashed 1px;
+    border-radius: 6px;
+    background-color: #F9FAFB40;
+  }
+
+  .input-radio-custom {
+    border: #D1D5DB solid 1px;
+    width: fit-content;
+    padding: 8px 12px 8px 18px;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    color: #2C2D3040;
+  }
+  
   .information-dashboard {
     
     .title-side {

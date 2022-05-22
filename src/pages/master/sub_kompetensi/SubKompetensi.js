@@ -23,13 +23,13 @@ const iconPerson = new L.Icon({
 
 });
 
-const Kompetensi = () => {
+const SubKompetensi = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [listKompetensi, setListKompetensi] = useState([]);
+    const [listSubKompetensi, setListSubKompetensi] = useState([]);
 
     useEffect(() => {
         viewData();
@@ -37,9 +37,9 @@ const Kompetensi = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getKompetensi(param).then(x => {
+        await new ServiceApi().getSubKompetensi(param).then(x => {
             setDataCount(x.data.total_data);
-            setListKompetensi(x.data.data);
+            setListSubKompetensi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -48,8 +48,8 @@ const Kompetensi = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getKompetensi(param).then(x => {
-            setListKompetensi(x.data.data);
+        new ServiceApi().getSubKompetensi(param).then(x => {
+            setListSubKompetensi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -58,17 +58,17 @@ const Kompetensi = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getKompetensi(param).then(x => {
-            setListKompetensi(x.data.data);
+        await new ServiceApi().getSubKompetensi(param).then(x => {
+            setListSubKompetensi(x.data.data);
         }).catch((err) => {
         })
     }
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getKompetensi(param).then(x => {
+        await new ServiceApi().getSubKompetensi(param).then(x => {
             setDataCount(x.data.total_data);
-            setListKompetensi(x.data.data);
+            setListSubKompetensi(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -81,14 +81,14 @@ const Kompetensi = () => {
 
         Swal.fire({
             title: 'Perhatian!',
-            html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
+            html: '<i>Anda yakin ingin menghapus <b>' + x.sub_kompetensi + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteKompetensi(data)
+                new ServiceApi().deleteSubKompetensi(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -113,10 +113,10 @@ const Kompetensi = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Kompetensi</h3>
+                    <h3 className="content-title">Sub Kompetensi</h3>
                 </div>
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/kompetensi/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/master/sub_kompetensi/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -159,29 +159,29 @@ const Kompetensi = () => {
                                         <th className="table-title" scope="col" style={{ width: 50 }}>
                                             #
                                         </th>
-                                        <th className="table-title" scope="col">Nama Kompetensi</th>
-                                        <th className="table-title text-center" scope="col">Jumlah Sub Kompetensi</th>
+                                        <th className="table-title" scope="col">Nama Sub Kompetensi</th>
+                                        <th className="table-title text-center" scope="col">Induk Kompetensi</th>
                                         <th className="table-title text-center" scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        !_.isEmpty(listKompetensi) ?
-                                            listKompetensi.map((x, key) => {
+                                        !_.isEmpty(listSubKompetensi) ?
+                                            listSubKompetensi.map((x, key) => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.name}</td>
-                                                        <td className="text-center">{x.jumlah_sub_kompetensi}</td>
+                                                        <td>{x.sub_kompetensi}</td>
+                                                        <td className="text-center">{x.kompetensi}</td>
                                                         <td className="action-column">
-                                                            <Link to={{ pathname: `/master/kompetensi/detail`, state: { x } }}>
+                                                            <Link to={{ pathname: `/master/sub_kompetensi/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <AiIcons.AiOutlineEye />&nbsp;View
                                                                     </div>
                                                                 </button>
                                                             </Link>
-                                                            <Link to={{ pathname: `/master/kompetensi/edit`, state: { x } }}>
+                                                            <Link to={{ pathname: `/master/sub_kompetensi/edit`, state: { x } }}>
                                                                 <button type="button" className="btn btn-info button-edit">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <FiIcons.FiEdit />&nbsp;Edit
@@ -206,9 +206,9 @@ const Kompetensi = () => {
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {
-                                    !_.isEmpty(listKompetensi) ?
+                                    !_.isEmpty(listSubKompetensi) ?
                                         <>
-                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listKompetensi.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listKompetensi.length)} dari {dataCount} data
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listSubKompetensi.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listSubKompetensi.length)} dari {dataCount} data
                                         </>
                                         :
                                         <>
@@ -245,4 +245,4 @@ const Kompetensi = () => {
     );
 };
 
-export default Kompetensi;
+export default SubKompetensi;

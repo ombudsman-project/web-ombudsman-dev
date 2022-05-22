@@ -69,7 +69,7 @@ export const data = {
   labels,
   datasets: [
     {
-      label: '',
+      label: 'Jumlah Kegiatan',
       data: labels.map(() => randomNumber(1, 30)),
       borderColor: 'rgba(255, 143, 42, 1)',
       fill: true,

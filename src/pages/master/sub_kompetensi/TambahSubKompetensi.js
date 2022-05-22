@@ -17,27 +17,52 @@ import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 
-const TambahKompetensi = () => {
+const TambahSubKompetensi = () => {
     const history = useHistory();
     const location = useLocation();
     const myparam = location.state;
+    const [listKompetensi, setListKompetensi] = useState([]);
+    const [kompetensiID, setKompetensiID] = useState('');
+
+    useEffect(() => {
+        listData();
+    }, [])
+
+    const listData = async () => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'all')
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map = x.data.kompetensi.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListKompetensi(data_map)
+        }).catch((err) => {
+        })
+    }
+
+    const selectedKompetensi = (e) => {
+        setKompetensiID(e.value)
+    }
 
     const submitData = async (e) => {
         e.preventDefault();
 
         const data = {
-            'kompetensi': e.target.elements.kompetensi.value
+            'kompetensi': kompetensiID,
+            'sub_kompetensi': e.target.elements.sub_kompetensi.value,
         }
 
-        new ServiceApi().addKompetensi(data)
+        new ServiceApi().addSubKompetensi(data)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
-                    html: '<i>' + response.data.data.kompetensi + ' berhasil ditambahkan</i>',
+                    html: '<i>' + response.data.data.sub_kompetensi + ' berhasil ditambahkan</i>',
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    history.push('/master/kompetensi');
+                    history.push('/master/sub_kompetensi');
                 })
             }).catch(err => {
                 const err_data = err.response.data;
@@ -45,7 +70,7 @@ const TambahKompetensi = () => {
 
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.kompetensi ? err.response.data.data.kompetensi : '') + '</i>',
+                    html: '<i>' + (err.response.data.data.kompetensi ? err.response.data.data.kompetensi + '<br/>' : '') + (err.response.data.data.sub_kompetensi ? err.response.data.data.sub_kompetensi : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -56,21 +81,34 @@ const TambahKompetensi = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <Link className="content-link" to={{ pathname: `/master/kompetensi` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Kompetensi</h3></Link>
+                    <Link className="content-link" to={{ pathname: `/master/sub_kompetensi` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Tambah Sub Kompetensi</h3></Link>
                 </div>
             </div>
 
             <Form onSubmit={submitData}>
                 <Card className="card-main-content">
                     <Card.Body>
-                        <h4 className="card-main-content-title">Detail Kompetensi</h4>
-                        <p className="card-main-content-subtitle">Masukkan detail kompetensi</p>
+                        <h4 className="card-main-content-title">Detail Sub Kompetensi</h4>
+                        <p className="card-main-content-subtitle">Masukkan detail sub kompetensi</p>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="3">
-                                Nama Kompetensi
+                                Kategori Kompetensi
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="kompetensi" placeholder="Masukkan nama kompetensi" autoComplete="off" required />
+                                <Select
+                                    name="kompetensi_id"
+                                    options={listKompetensi}
+                                    onChange={(e) => selectedKompetensi(e)}
+                                    required
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Nama Sub Kompetensi
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="text" name="sub_kompetensi" placeholder="Masukkan nama sub kategori" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -87,4 +125,4 @@ const TambahKompetensi = () => {
     );
 };
 
-export default TambahKompetensi;
+export default TambahSubKompetensi;
