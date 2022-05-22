@@ -42,7 +42,7 @@ export const SidebarData = [
     },
     {
         title: "Pencatatan",
-        path: "#",
+        path: "/pencatatan",
         icon: <img src={require('../../icons/icon-pencatatan.svg').default} alt='mySvgImage' />,
     },
     {

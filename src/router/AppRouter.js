@@ -17,6 +17,11 @@ import DetailKompetensiPegawaiView from "../pages/analisa_kompetensi/DetailKompe
 import DaftarKegiatanView from "../pages/kegiatan/DaftarKegiatan"
 import DetailKegiatanView from "../pages/kegiatan/DetailKegiatan"
 import TambahPelatihanView from "../pages/kegiatan/TambahPelatihan"
+import EditPelatihanView from "../pages/kegiatan/EditPelatihan"
+
+//Pencatatan
+import PencatatanView from "../pages/pencatatan/Pencatatan"
+import DetailPencatatanView from "../pages/pencatatan/DetailPencatatan"
 
 //MASTER DATA
 //PEGAWAI
@@ -166,7 +171,12 @@ const AppRouter = () => {
                   {/* KEGIATAN */}
                   <Route component={DaftarKegiatanView} path="/kegiatan/daftar_kegiatan" exact />
                   <Route component={DetailKegiatanView} path="/kegiatan/daftar_kegiatan/detail" />
+                  <Route component={EditPelatihanView} path="/kegiatan/daftar_kegiatan/edit" />
                   <Route component={TambahPelatihanView} path="/kegiatan/tambah_pelatihan" exact/>
+
+                  {/* PENCATATAN */}
+                  <Route component={PencatatanView} path="/pencatatan" exact />
+                  <Route component={DetailPencatatanView} path="/pencatatan/detail" exact />
 
                   {/* MASTER DATA */}
                   {/* PEGAWAI */}

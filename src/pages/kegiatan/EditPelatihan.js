@@ -4,11 +4,11 @@ import { faArrowLeft, faClock, faPlus, faInbox } from '@fortawesome/free-solid-s
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
-import moment from 'moment';
+import * as moment from 'moment';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
@@ -36,12 +36,14 @@ const options = [
     { value: 'vanilla', label: 'Vanilla' },
 ]
 
-const TambahPelatihan = () => {
+const EditPelatihan = () => {
     const history = useHistory();
+    const location = useLocation();
     const [listKepegawaian, setListKepegawaian] = useState([]);
     const [checkedMetode, setCheckedMetode] = useState(1);
     const [checkedDokumen, setCheckedDokumen] = useState(1);
     const [dataFiles, setFiles] = useState([]);
+    const myparam = location.state;
 
     const onDrop = useCallback(acceptedFiles => {
         setFiles(acceptedFiles)
@@ -91,11 +93,13 @@ const TambahPelatihan = () => {
         console.log(e)
     }
 
+    if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
+
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Tambah Pelatihan</h3>
+                    <h3 className="content-title">Update Pelatihan</h3>
                 </div>
             </div>
 
@@ -109,7 +113,7 @@ const TambahPelatihan = () => {
                                 Nama Pelatihan
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="nama_pelatihan" placeholder="Masukkan Nama Pelatihan" autoComplete="off" required />
+                                <Form.Control type="text" defaultValue={myparam.nama_kegiatan} name="nama_pelatihan" placeholder="Masukkan Nama Pelatihan" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -166,7 +170,7 @@ const TambahPelatihan = () => {
                                 Institusi Penyelenggara
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="institusi_penyelenggara" onChange={(e) => selectedUser(e)} placeholder="Pilih Institusi Penyelenggara" />
+                                <Select options={options} defaultValue={myparam.penyelenggara} name="institusi_penyelenggara" onChange={(e) => selectedUser(e)} placeholder="Pilih Institusi Penyelenggara" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -174,7 +178,7 @@ const TambahPelatihan = () => {
                                 Tanggal Mulai
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" name="tanggal_mulai" required />
+                                <Form.Control type="date" defaultValue={moment(new Date(myparam.tanggal)).format('yyyy-MM-DD')} name="tanggal_mulai" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -182,7 +186,7 @@ const TambahPelatihan = () => {
                                 Tanggal Selesai
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" name="tanggal_mulai" required />
+                                <Form.Control type="date" defaultValue={moment(new Date(myparam.tanggal_selesai)).format('yyyy-MM-DD')} name="tanggal_selesai" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -328,7 +332,7 @@ const TambahPelatihan = () => {
                 <div className="button-submit d-flex flex-row justify-content-between align-items-center">
                     <div></div>
                     <div>
-                        <Button className="content-button-submit" variant="primary" type="submit">Simpan</Button>
+                        <Button className="content-button-submit" variant="primary" type="submit">Update</Button>
                     </div>
                 </div>
             </Form>
@@ -336,4 +340,4 @@ const TambahPelatihan = () => {
     );
 };
 
-export default TambahPelatihan;
+export default EditPelatihan;

@@ -159,8 +159,8 @@ const DaftarKegiatan = () => {
         })
     }
 
-    const actionButton = (e) => {
-        history.push('/kegiatan/daftar_kegiatan/detail', e);
+    const actionButton = (route, e) => {
+        history.push(route, e);
         //window.location.href = "/analisa_kompetensi/kompetensi_pegawai/detail"
     }
 
@@ -192,7 +192,7 @@ const DaftarKegiatan = () => {
                         </Dropdown.Menu>
                     </Dropdown>
                     <div style={{ width: 25 }}></div>
-                    <Link className="content-link" to={{ pathname: `#` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
+                    <Link className="content-link" to={{ pathname: `/kegiatan/tambah_pelatihan` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
                 </div>
             </div>
 
@@ -261,7 +261,10 @@ const DaftarKegiatan = () => {
                                                                 drop='left'
                                                                 className='dropdown-action'
                                                             >
-                                                                <Dropdown.Item eventKey="1" onClick={() => actionButton(x)}>Lihat Detail</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="1" onClick={() => actionButton('/kegiatan/daftar_kegiatan/detail', x)}>Lihat Detail</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="2" onClick={() => actionButton('/kegiatan/daftar_kegiatan/edit', x)}>Edit Kegiatan</Dropdown.Item>
+                                                                <Dropdown.Divider/>
+                                                                <Dropdown.Item eventKey="3" onClick={() => actionButton(x)}>Hapus Kegiatan</Dropdown.Item>
                                                             </DropdownButton>
                                                         </td>
                                                     </tr>
