@@ -24,6 +24,12 @@ import DetailPegawaiView from "../pages/master/pegawai/DetailPegawai"
 import TambahPegawaiView from "../pages/master/pegawai/TambahPegawai"
 import EditPegawaiView from "../pages/master/pegawai/EditPegawai"
 
+//KOMPETENSI
+import KompetensiView from "../pages/master/kompetensi/Kompetensi"
+import DetailKompetensiView from "../pages/master/kompetensi/DetailKompetensi"
+import TambahKompetensiView from "../pages/master/kompetensi/TambahKompetensi"
+import EditKompetensiView from "../pages/master/kompetensi/EditKompetensi"
+
 //PENYELENGGARA
 import PenyelenggaraView from "../pages/master/penyelenggara/Penyelenggara"
 import DetailPenyelenggaraView from "../pages/master/penyelenggara/DetailPenyelenggara"
@@ -74,8 +80,6 @@ import EditPenempatanView from "../pages/master/penempatan/EditPenempatan";
 
 //MANAJEMEN USER
 import  ManajemenUserView from "../pages/master/manajemen_user/ManajemenUser";
-
-import KompetensiView from "../pages/master/Kompetensi"
 
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -161,6 +165,12 @@ const AppRouter = () => {
                   <Route component={DetailPegawaiView} path="/master/pegawai/detail" />
                   <Route component={TambahPegawaiView} path="/master/pegawai/tambah" />
                   <Route component={EditPegawaiView} path="/master/pegawai/edit" />
+                  
+                  {/* KOMPETENSI */}
+                  <Route component={KompetensiView} path="/master/kompetensi" exact />
+                  <Route component={DetailKompetensiView} path="/master/kompetensi/detail" />
+                  <Route component={TambahKompetensiView} path="/master/kompetensi/tambah" />
+                  <Route component={EditKompetensiView} path="/master/kompetensi/edit" />
 
                   {/* PENYELENGGARA */}
                   <Route component={PenyelenggaraView} path="/master/penyelenggara" exact />
@@ -212,8 +222,6 @@ const AppRouter = () => {
 
                   {/* MANAJEMEN USER */}
                   <Route component={ManajemenUserView} path="/master/manajemen_user" exact />
-
-                  <Route component={KompetensiView} path="/master/kompetensi" exact />
 
                   {/* <Route component={() => <Redirect to="/" />} /> */}
                 </PresenceContext.Provider>

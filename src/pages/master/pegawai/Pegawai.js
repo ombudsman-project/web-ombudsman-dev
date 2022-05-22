@@ -177,24 +177,24 @@ const Pegawai = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.nama_pegawai ? x.nama_pegawai : '-'}</td>
-                                                        <td className="text-center">{x.jenis_kepegawaian ? x.jenis_kepegawaian : '-'}</td>
-                                                        <td className="text-center">{x.golongan ? x.golongan : '-'}</td>
-                                                        <td className="text-center">{x.pangkat ? x.pangkat : '-'}</td>
-                                                        <td className="text-center">{x.jabatan ? x.jabatan : '-'}</td>
-                                                        <td className="text-center">{x.klasifikasi_jabatan ? x.klasifikasi_jabatan : '-'}</td>
-                                                        <td className="text-center">{x.kategori_jabatan ? x.kategori_jabatan : '-'}</td>
-                                                        <td className="text-center">{x.unit_kerja ? x.unit_kerja : '-'}</td>
-                                                        <td className="text-center">{x.penempatan ? x.penempatan : '-'}</td>
+                                                        <td>{x.nama_pegawai ?? '-'}</td>
+                                                        <td className="text-center">{x.jenis_kepegawaian ?? '-'}</td>
+                                                        <td className="text-center">{x.golongan ?? '-'}</td>
+                                                        <td className="text-center">{x.pangkat ?? '-'}</td>
+                                                        <td className="text-center">{x.jabatan ?? '-'}</td>
+                                                        <td className="text-center">{x.klasifikasi_jabatan ?? '-'}</td>
+                                                        <td className="text-center">{x.kategori_jabatan ?? '-'}</td>
+                                                        <td className="text-center">{x.unit_kerja ?? '-'}</td>
+                                                        <td className="text-center">{x.penempatan ?? '-'}</td>
                                                         <td className="action-column">
-                                                            <Link to={{ pathname: `/master/pegawai/detail`, state: { id: x.id, nama_pegawai: x.nama_pegawai, jenis_kepegawaian: x.jenis_kepegawaian, golongan: x.golongan, pangkat: x.pangkat, jabatan: x.jabatan, klasifikasi_jabatan: x.klasifikasi_jabatan, kategori_jabatan: x.kategori_jabatan, unit_kerja: x.unit_kerja, penempatan: x.penempatan } }}>
+                                                            <Link to={{ pathname: `/master/pegawai/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <AiIcons.AiOutlineEye />&nbsp;View
                                                                     </div>
                                                                 </button>
                                                             </Link>
-                                                            <Link to={{ pathname: `/master/pegawai/edit`, state: { id: x.id, nama_pegawai: x.nama_pegawai, jenis_kepegawaian: x.jenis_kepegawaian, golongan: x.golongan, pangkat: x.pangkat, jabatan: x.jabatan, klasifikasi_jabatan: x.klasifikasi_jabatan, kategori_jabatan: x.kategori_jabatan, unit_kerja: x.unit_kerja, penempatan: x.penempatan } }}>
+                                                            <Link to={{ pathname: `/master/pegawai/edit`, state: { x } }}>
                                                                 <button type="button" className="btn btn-info button-edit">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <FiIcons.FiEdit />&nbsp;Edit
