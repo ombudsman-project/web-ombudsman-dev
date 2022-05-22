@@ -13,11 +13,12 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
 const TambahKepegawaian = () => {
+    const history = useHistory();
     const [listKepegawaian, setListKepegawaian] = useState([]);
 
     const submitData = async (e) => {
@@ -35,7 +36,8 @@ const TambahKepegawaian = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/jenis_kepegawaian'
+                    history.push('/master/jenis_kepegawaian');
+                    //window.location = '/master/jenis_kepegawaian'
                 })
             }).catch(err => {
                 Swal.fire({

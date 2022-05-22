@@ -13,11 +13,12 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, Redirect, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 
 const TambahKompetensi = () => {
+    const history = useHistory();
     const location = useLocation();
     const myparam = location.state;
 
@@ -38,7 +39,8 @@ const TambahKompetensi = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/kompetensi'
+                    history.push('/master/kompetensi');
+                    //window.location = '/master/kompetensi'
                 })
             }).catch(err => {
                 const err_data = err.response.data;
