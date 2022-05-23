@@ -5,7 +5,7 @@ import _ from "lodash";
 import LoginView from '../pages/Login';
 
 import DashboardView from "../pages/Dashboard";
-import RekapitulasiView from "../pages/Rekapitulasi";
+import RekapJPView from "../pages/RekapJP";
 import RiwayatAktivitasView from "../pages/RiwayatAktivitas";
 
 //ANALISA KOMPETENSI
@@ -165,7 +165,7 @@ const AppRouter = () => {
                     exact
                   /> */}
                   <Route component={DashboardView} path="/dashboard" />
-                  <Route component={RekapitulasiView} path="/rekapitulasi" exact />
+                  <Route component={RekapJPView} path="/rekapitulasi" exact />
                   <Route component={RiwayatAktivitasView} path="/riwayat_aktivitas" exact />
 
                   {/* ANALISA KOMPETENSI */}

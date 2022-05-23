@@ -8,11 +8,11 @@ export const SidebarData = [
         path: "/dashboard",
         icon: <img src={require('../../icons/icon-dashboard.svg').default} alt='mySvgImage' />,
     },
-    // {
-    //     title: "Rekapitulasi",
-    //     path: "/rekapitulasi",
-    //     icon: <img src={require('../../icons/icon-rekapitulasi.svg').default} alt='mySvgImage' />,
-    // },
+    {
+        title: "Rekap JP",
+        path: "/rekapitulasi",
+        icon: <img src={require('../../icons/icon-clock.svg').default} alt='mySvgImage' />,
+    },
     {
         title: "Kegiatan",
         path: "#",
