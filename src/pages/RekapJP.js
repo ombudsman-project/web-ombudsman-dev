@@ -289,13 +289,12 @@ function MyVerticallyCenteredModal(props) {
     <Modal
       {...props}
       size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
       centered
       className="modal-filter"
     >
       <Form>
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Title>
             Pilih Data yang Ingin Ditampilkan
           </Modal.Title>
         </Modal.Header>

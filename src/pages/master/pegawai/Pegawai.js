@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Button, Card, Col, Container, Form, Pagination, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Modal, Pagination, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,7 @@ import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import * as IoIcons from 'react-icons/io';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import ReactPaginate from 'react-paginate';
 
@@ -24,20 +24,26 @@ const iconPerson = new L.Icon({
 });
 
 const Pegawai = () => {
+    const history = useHistory();
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
     const [listPegawai, setListPegawai] = useState([]);
+    const [modalShow, setModalShow] = useState(false);
+    const [jenisKelamin, setJenisKelamin] = useState([]);
+    const [listKepegawaian, setListKepegawaian] = useState([]);
+    const [kepegawaian, setKepegawaian] = useState([]);
 
     useEffect(() => {
         viewData();
+        listData();
     }, [])
 
     const viewData = async () => {
         // const data = `page=${currentPage}&length=${perPage}&search=`;
-        const data = { 'page': currentPage, 'length': perPage, 'search': '' }
+        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
         await new ServiceApi().getPegawai(data).then(x => {
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
@@ -49,7 +55,7 @@ const Pegawai = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         // const data = `page=${currentPage}&length=${e.target.value}&search=`;
-        const data = { 'page': currentPage, 'length': e.target.value, 'search': '' }
+        const data = { 'page': currentPage, 'length': e.target.value, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
         new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
@@ -60,7 +66,7 @@ const Pegawai = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         // const data = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        const data = { 'page': selectedPage, 'length': perPage, 'search': '' }
+        const data = { 'page': selectedPage + 1, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
         await new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
         }).catch((err) => {
@@ -69,8 +75,53 @@ const Pegawai = () => {
 
     const searchData = async (e) => {
         // const data = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value }
+        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value, 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
         await new ServiceApi().getPegawai(data).then(x => {
+            setDataCount(x.data.total_data);
+            setListPegawai(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
+
+    const listData = async () => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'all')
+        await new ServiceApi().getSelect(formData).then(x => {
+            setListKepegawaian(x.data.jenis_kepegawaian)
+        }).catch((err) => {
+        })
+    }
+
+    const listJK = [
+        { id: 'L', name: 'Laki - laki' },
+        { id: 'P', name: 'Perempuan' },
+    ]
+
+    const changeJK = event => {
+        const { checked, value } = event.currentTarget;
+
+        setJenisKelamin(
+            prev => checked
+                ? [...prev, value]
+                : prev.filter(val => val !== value)
+        );
+    };
+
+    const changeKepegawaian = event => {
+        const { checked, value } = event.currentTarget;
+
+        setKepegawaian(
+            prev => checked
+                ? [...prev, value]
+                : prev.filter(val => val !== value)
+        );
+    };
+
+    const filterData = async (e) => {
+        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
+        await new ServiceApi().getPegawai(data).then(x => {
+            setModalShow(false);
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -116,7 +167,7 @@ const Pegawai = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Jabatan</h3>
+                    <h3 className="content-title">Pegawai</h3>
                 </div>
                 <div>
                     <Link className="content-link" to={{ pathname: `/master/pegawai/tambah` }}><Button className="content-button d-flex flex-row align-items-center"><AiIcons.AiOutlinePlus style={style} />&nbsp; Tambah Data</Button></Link>
@@ -140,7 +191,7 @@ const Pegawai = () => {
                             <div>&nbsp; data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                            <button type="button" className="btn btn-link filter-table">
+                            <button type="button" className="btn btn-link filter-table" onClick={() => setModalShow(true)}>
                                 <div className="d-flex justify-content-center align-items-center">
                                     <FiIcons.FiFilter />&nbsp;Filter
                                 </div>
@@ -260,6 +311,72 @@ const Pegawai = () => {
                     </div>
                 </Card.Body>
             </Card>
+
+            <Modal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                className="modal-filter"
+            >
+                <Form>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Pilih Data yang Ingin Ditampilkan
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="12">
+                                <p className="mb-2">Jenis Kelamin</p>
+                            </Form.Label>
+                            {listJK.map(item => {
+                                return (
+                                    <Col sm="3">
+                                        <div className='input-checkbox-custom'>
+                                            <Form.Check
+                                                inline
+                                                id={item.id}
+                                                value={item.id}
+                                                type="checkbox"
+                                                label={item.name}
+                                                checked={jenisKelamin.some(val => val == item.id)}
+                                                onChange={changeJK}
+                                            />
+                                        </div>
+                                    </Col>
+                                )
+                            })}
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="12">
+                                <p className="mb-2">Jenis Kepegawaian</p>
+                            </Form.Label>
+                            {listKepegawaian.map(item => {
+                                return (
+                                    <Col sm="3">
+                                        <div className='input-checkbox-custom'>
+                                            <Form.Check
+                                                inline
+                                                id={item.id}
+                                                value={item.id}
+                                                type="checkbox"
+                                                label={item.name}
+                                                checked={kepegawaian.some(val => val == item.id)}
+                                                onChange={changeKepegawaian}
+                                            />
+                                        </div>
+                                    </Col>
+                                )
+                            })}
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button className="button-submit" onClick={() => filterData()} type="button">Simpan</Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
         </div>
     );
 };

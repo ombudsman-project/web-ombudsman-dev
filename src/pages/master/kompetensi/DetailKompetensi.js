@@ -148,7 +148,6 @@ const DetailKompetensi = () => {
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Nama Sub Kompetensi</th>
-                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

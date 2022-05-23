@@ -114,16 +114,60 @@ header {
 }
 
 .modal-filter {
-  border-radius: 24px;
-
   .modal-header {
-    border-bottom: 0px !important;
+    border-bottom: none !important;
+  }
+
+  .modal-title {
+    font-weight: 600;
   }
 
   .close {
-    border-radius: 50%;
     width: 30px;
-    border-color: #747474;
+    border-radius: 50%;
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #000;
+    opacity: 0.5;
+    background-color: #fff;
+  }
+
+  .modal-content {
+    padding: 20px 30px 20px 30px;
+    border-radius: 20px;
+    border: none;
+  }
+
+  .form-check-label {
+    margin-left: 10px;
+    color: $textColorSubtitle;
+    font-weight: 500;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .button-submit {
+    border-radius: 6px;
+    padding: 8px 30px 8px 30px;
+    margin-right: 10px;
+    background-color: $mainNavColor;
+    border-color: $mainNavColor;
+  }
+
+  .button-submit:hover {
+    background-color: $mainNavColor;
+    border-color: $mainNavColor;
+  }
+
+  .button-submit:focus {
+    background-color: $mainNavColor;
+    border-color: $mainNavColor;
   }
 }
 
@@ -277,14 +321,14 @@ h2 {
 
   .my-dropdown {
     padding: 10px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     color: rgba(97, 98, 100, 1);
     border: 0px;
   }
 
   .my-dropdown:focus {
     padding: 10px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     color: rgba(97, 98, 100, 1);
     border: 0px;
   }
@@ -345,23 +389,22 @@ h2 {
   margin-bottom: 10px;
 
   .drop-files-upload {
-    border: #D1D5DB dashed 1px;
+    border: #d1d5db dashed 1px;
     border-radius: 6px;
-    background-color: #F9FAFB40;
+    background-color: #f9fafb40;
   }
 
   .input-radio-custom {
-    border: #D1D5DB solid 1px;
+    border: #d1d5db solid 1px;
     width: fit-content;
     padding: 8px 12px 8px 18px;
     border-radius: 6px;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     cursor: pointer;
-    color: #2C2D3040;
+    color: #2c2d3040;
   }
-  
+
   .information-dashboard {
-    
     .title-side {
       color: rgba(44, 45, 48, 1);
       font-size: 32px;
@@ -470,16 +513,16 @@ h2 {
     table th {
       white-space: nowrap;
     }
-    
+
     table td {
       // table-layout: fixed;
       // word-wrap:normal
       white-space: nowrap;
-      text-overflow:ellipsis
+      text-overflow: ellipsis;
     }
 
     .dropdown-toggle::after {
-      display: none !important; 
+      display: none !important;
     }
 
     .dropdown-action {
@@ -487,7 +530,7 @@ h2 {
         border-radius: 50% !important;
         background-color: #fff;
         //border-color: #C3C5CC;
-        border: #C3C5CC solid 2px;
+        border: #c3c5cc solid 2px;
       }
     }
 
@@ -550,24 +593,24 @@ h2 {
     .badge.success {
       font-weight: 500 !important;
       padding: 5px 10px 5px 10px !important;
-      background-color: #04990A33 !important;
-      color: #04990A !important;
+      background-color: #04990a33 !important;
+      color: #04990a !important;
       border-radius: 11px;
     }
 
     .badge.warning {
       font-weight: 500 !important;
       padding: 5px 10px 5px 10px !important;
-      background-color: #FF8F2A33 !important;
-      color: #FF8F2A !important;
+      background-color: #ff8f2a33 !important;
+      color: #ff8f2a !important;
       border-radius: 11px;
     }
 
     .badge.danger {
       font-weight: 500 !important;
       padding: 5px 10px 5px 10px !important;
-      background-color: #FF3C541A !important;
-      color: #FF3C54 !important;
+      background-color: #ff3c541a !important;
+      color: #ff3c54 !important;
       border-radius: 11px;
     }
   }
@@ -612,24 +655,24 @@ h2 {
     border: none;
     border-radius: 4px;
     margin-left: 10px !important;
-    -webkit-touch-callout: none; 
-    -webkit-user-select: none; 
-     -khtml-user-select: none; 
-       -moz-user-select: none; 
-        -ms-user-select: none; 
-            user-select: none; 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 
   .pagination > .active > a {
     color: white;
     background-color: #3699ff !important;
     border: solid 1px #3699ff !important;
-    -webkit-touch-callout: none; 
-    -webkit-user-select: none; 
-     -khtml-user-select: none; 
-       -moz-user-select: none; 
-        -ms-user-select: none; 
-            user-select: none; 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 
   .pagination > .disabled > a {
@@ -639,12 +682,12 @@ h2 {
     padding: 7px 15px 7px 15px;
     border: none;
     border-radius: 4px;
-    -webkit-touch-callout: none; 
-    -webkit-user-select: none; 
-     -khtml-user-select: none; 
-       -moz-user-select: none; 
-        -ms-user-select: none; 
-            user-select: none; 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 
   // .page-link{
@@ -900,8 +943,8 @@ h2 {
 }
 
 .form-check-input:checked {
-  border-color: $mainNavColor;
-  background-color: $mainNavColor;
+  border-color: #4f46e5;
+  background-color: #4f46e5;
 }
 
 .login-form button {
