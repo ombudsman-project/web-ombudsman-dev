@@ -23,6 +23,10 @@ class ServiceApi {
         return apiClient.get(`/data/aktivitas-user?${param}`);
     }
 
+    getKegiatan(data) {
+        return apiClient.post(`/kegiatan/getData`, data)
+    }
+
     // MASTER
     getPegawai(data) {
         return apiClient.post(`/master/pegawai/getData`, data)
