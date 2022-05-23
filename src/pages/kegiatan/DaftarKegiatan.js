@@ -37,8 +37,8 @@ const DaftarKegiatan = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [listPegawai, setListPegawai] = useState([]);
-    const [listKegiatan, setListKegiatan] = useState([
+    const [listKegiatan, setListKegiatan] = useState([]);
+    const [listTempKegiatan, setListTempKegiatan] = useState([
         {
             id: "1",
             nama_kegiatan: "Pelatihan Sistem Manajemen Mutu Terpadu",
@@ -88,10 +88,10 @@ const DaftarKegiatan = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getPegawai(param).then(x => {
-            //setDataCount(x.data.total_data);
-            //setListPegawai(x.data.data);
-            //setPageCount(Math.ceil(x.data.total_data / perPage));
+        await new ServiceApi().getKegiatan(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListKegiatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
     }
@@ -100,7 +100,7 @@ const DaftarKegiatan = () => {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
         new ServiceApi().getPegawai(param).then(x => {
-            setListPegawai(x.data.data);
+            setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -110,7 +110,7 @@ const DaftarKegiatan = () => {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
         await new ServiceApi().getPegawai(param).then(x => {
-            setListPegawai(x.data.data);
+            setListKegiatan(x.data.data);
         }).catch((err) => {
         })
     }
@@ -119,7 +119,7 @@ const DaftarKegiatan = () => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
         await new ServiceApi().getPegawai(param).then(x => {
             setDataCount(x.data.total_data);
-            setListPegawai(x.data.data);
+            setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -249,9 +249,9 @@ const DaftarKegiatan = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.nama_kegiatan ? x.nama_kegiatan : '-'}</td>
-                                                        <td className="">{x.penyelenggara ? x.penyelenggara : '-'}</td>
-                                                        <td className="text-center">{x.tanggal ? x.tanggal : '-'}</td>
+                                                        <td>{x.nama_pelatihan ? x.nama_pelatihan : '-'}</td>
+                                                        <td className="">{x.nama_penyelenggara ? x.nama_penyelenggara : '-'}</td>
+                                                        <td className="text-center">{x.tgl_mulai ? x.tgl_mulai : '-'}</td>
                                                         <td className="text-center"><StatusPelaksanaan status={x.pelaksanaan_status} /></td>
                                                         <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
                                                         <td className="action-column">
@@ -279,9 +279,9 @@ const DaftarKegiatan = () => {
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {
-                                    !_.isEmpty(listPegawai) ?
+                                    !_.isEmpty(listKegiatan) ?
                                         <>
-                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listPegawai.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listPegawai.length)} dari {dataCount} data
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listKegiatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listKegiatan.length)} dari {dataCount} data
                                         </>
                                         :
                                         <>

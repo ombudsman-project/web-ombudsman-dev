@@ -27,6 +27,10 @@ class ServiceApi {
         return apiClient.post(`/kegiatan/getData`, data)
     }
 
+    addKegiatan(data) {
+        return apiClient.post(`/kegiatan/pelatihan/create`, data)
+    }
+
     // MASTER
     getPegawai(data) {
         return apiClient.post(`/master/pegawai/getData`, data)
