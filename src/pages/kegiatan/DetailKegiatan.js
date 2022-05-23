@@ -89,10 +89,10 @@ const DetailKegiatan = () => {
                         <Col lg={6} md={6} sm={12}>
                             <Row>
                                 <Col lg="6" md="6"><p>Nama Pelatihan</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.nama_kegiatan ? myparam.nama_kegiatan : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.nama_pelatihan ? myparam.nama_pelatihan : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Institusi Penyelenggara</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.penyelenggara ? myparam.penyelenggara : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.nama_penyelenggara ? myparam.nama_penyelenggara : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Jenis Kompetensi</p></Col>
                                 <Col className="text-secondary" lg="6" md="6"><p>{myparam.jenis_kepegawaian ? myparam.jenis_kepegawaian : '-'}</p></Col>

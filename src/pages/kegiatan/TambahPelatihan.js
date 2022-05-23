@@ -4,7 +4,7 @@ import { faArrowLeft, faClock, faPlus, faInbox } from '@fortawesome/free-solid-s
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
-import moment from 'moment';
+import * as moment from 'moment';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
@@ -13,32 +13,21 @@ import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
 
-const options = [
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
+const listJenisDokumen = [
+    { value: 'pdf', label: 'PDF' },
+    { value: 'doc', label: 'DOC' },
+    { value: 'docx', label: 'DOCX' },
+    { value: 'jpg', label: 'JPG' },
+    { value: 'jpeg', label: 'JPEG' },
+    { value: 'png', label: 'PNG' },
 ]
 
 const TambahPelatihan = () => {
     const history = useHistory();
-    const [listKepegawaian, setListKepegawaian] = useState([]);
+    const [listPenyelenggara, setListPenyelenggara] = useState([]);
+    const [listKompetensi, setListKompetensi] = useState([]);
+    const [listSubKompetensi, setListSubKompetensi] = useState([]);
+    const [listJalurPelatihan, setListJalurPelatihan] = useState([]);
     const [checkedMetode, setCheckedMetode] = useState(1);
     const [checkedDokumen, setCheckedDokumen] = useState(1);
     const [dataFiles, setFiles] = useState([]);
@@ -51,8 +40,6 @@ const TambahPelatihan = () => {
         onDrop,
         accept: {
             'application/pdf': ['.pdf'],
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
-            'application/vnd.ms-powerpoint': ['.ppt'],
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
             'application/msword': ['.doc'],
             'image/png': ['.png'],
@@ -64,32 +51,75 @@ const TambahPelatihan = () => {
         e.preventDefault();
 
         const data = {
-            'jenis_kepegawaian': e.target.elements.jenis_kepegawaian.value
+            'nama_pelatihan': e.target.elements.nama_pelatihan.value,
+            'metode_pelatihan': checkedMetode,
+            'jalur_pelatihan': e.target.elements.jalur_pelatihan.value,
+            'penyelenggara': e.target.elements.institusi_penyelenggara.value,
+            'tgl_mulai': moment(e.target.elements.tanggal_mulai.value).format('yyyy-MM-DD'),
+            'tgl_selesai': moment(e.target.elements.tanggal_selesai.value).format('yyyy-MM-DD'),
+            'jml_jp': e.target.elements.jam_pelajaran.value,
+            'kompetensi': e.target.elements.jenis_kompetensi.value,
+            'sub_kompetensi': e.target.elements.jenis_sub_kompetensi.value,
+            'ketersediaan_dokumen': checkedDokumen
         }
 
-        // new ServiceApi().addKepegawaian(data)
-        //     .then(response => {
-        //         Swal.fire({
-        //             title: 'Sukses!',
-        //             html: '<i>' + response.data.data.jenis_kepegawaian + ' berhasil ditambahkan</i>',
-        //             icon: 'success',
-        //             confirmButtonColor: '#0058a8',
-        //         }).then(function () {
-        //             history.push('/kegiatan/daftar_kegiatan');
-        //         })
-        //     }).catch(err => {
-        //         Swal.fire({
-        //             title: 'Gagal!',
-        //             html: '<i>' + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + '</i>',
-        //             icon: 'error',
-        //             confirmButtonColor: '#0058a8',
-        //         })
-        //     });
+        new ServiceApi().addKegiatan(data)
+            .then(response => {
+                Swal.fire({
+                    title: 'Sukses!',
+                    html: '<i>' + response.data.data.nama_pelatihan + ' berhasil ditambahkan</i>',
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
+                }).then(function () {
+                    history.push('/kegiatan/daftar_kegiatan');
+                })
+            }).catch(err => {
+                Swal.fire({
+                    title: 'Gagal!',
+                    html: '<i>' + (err.response.data.data.nama_pelatihan ? err.response.data.data.nama_pelatihan : '') + '</i>',
+                    icon: 'error',
+                    confirmButtonColor: '#0058a8',
+                })
+            });
     }
 
     const selectedUser = (e) => {
         console.log(e)
     }
+
+    useEffect(() => {
+        async function fetchGetSelect() {
+            let formData = new FormData();
+            formData.append('parameter[]', 'all');
+            await new ServiceApi().getSelect(formData).then(x => {
+                const data_map = x.data.kompetensi.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                const data_map_sub = x.data.sub_kompetensi.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                const data_map_penyelenggara = x.data.penyelenggara.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                const data_map_jalur_pel = x.data.bentuk_jalur_kompetensi.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                setListKompetensi(data_map)
+                setListSubKompetensi(data_map_sub)
+                setListPenyelenggara(data_map_penyelenggara)
+                setListJalurPelatihan(data_map_jalur_pel)
+            });
+        }
+        fetchGetSelect();
+    }, []);
 
     return (
         <div className='main-animation'>
@@ -137,15 +167,15 @@ const TambahPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedMetode(2)}
+                                            onClick={() => setCheckedMetode(0)}
                                         >
                                             <Form.Check
                                                 inline
                                                 label="Non Klasikal"
-                                                checked={checkedMetode == 2}
+                                                checked={checkedMetode == 0}
                                                 name="klasikal_2"
                                                 type="radio"
-                                                onChange={() => setCheckedMetode(2)}
+                                                onChange={() => setCheckedMetode(0)}
                                                 id={`inline-klasikal_2`}
                                             />
                                         </div>
@@ -158,7 +188,7 @@ const TambahPelatihan = () => {
                                 Jalur Pelatihan
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jalur_pelatihan" onChange={(e) => selectedUser(e)} placeholder="Pilih Jalur Pelatihan" />
+                                <Select options={listJalurPelatihan} name="jalur_pelatihan" placeholder="Pilih Jalur Pelatihan" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -166,7 +196,7 @@ const TambahPelatihan = () => {
                                 Institusi Penyelenggara
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="institusi_penyelenggara" onChange={(e) => selectedUser(e)} placeholder="Pilih Institusi Penyelenggara" />
+                                <Select options={listPenyelenggara} name="institusi_penyelenggara" placeholder="Pilih Institusi Penyelenggara" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -182,7 +212,7 @@ const TambahPelatihan = () => {
                                 Tanggal Selesai
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" name="tanggal_mulai" required />
+                                <Form.Control type="date" name="tanggal_selesai" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -190,7 +220,7 @@ const TambahPelatihan = () => {
                                 Jumlah Jam Pelajaran
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="jam_pelajaran" placeholder="Masukkan Jumlah Jam Pelajaran" autoComplete="off" required />
+                                <Form.Control type="number" min={0} name="jam_pelajaran" placeholder="Masukkan Jumlah Jam Pelajaran" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -206,7 +236,7 @@ const TambahPelatihan = () => {
                                 Jenis Kompetensi
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jenis_kompetensi" onChange={(e) => selectedUser(e)} placeholder="Pilih Jenis Kompetensi" />
+                                <Select options={listKompetensi} name="jenis_kompetensi" placeholder="Pilih Jenis Kompetensi" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -214,7 +244,7 @@ const TambahPelatihan = () => {
                                 Jenis Sub Kompetensi
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jenis_sub_kompetensi" onChange={(e) => selectedUser(e)} placeholder="Pilih Jenis Sub Kompetensi" />
+                                <Select options={listSubKompetensi} name="jenis_sub_kompetensi" placeholder="Pilih Jenis Sub Kompetensi" />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -249,15 +279,15 @@ const TambahPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedDokumen(2)}
+                                            onClick={() => setCheckedDokumen(0)}
                                         >
                                             <Form.Check
                                                 inline
                                                 label="Tidak Tersedia"
-                                                checked={checkedDokumen == 2}
+                                                checked={checkedDokumen == 0}
                                                 name="tersedia_2"
                                                 type="radio"
-                                                onChange={() => setCheckedDokumen(2)}
+                                                onChange={() => setCheckedDokumen(0)}
                                                 id={`inline-tersedia_2`}
                                             />
                                         </div>
@@ -270,7 +300,7 @@ const TambahPelatihan = () => {
                                 Jenis Dokumen Pendukung
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jenis_dokumen_pendukung" onChange={(e) => selectedUser(e)} placeholder="Pilih Jenis Dokumen Pendukung" />
+                                <Select options={listJenisDokumen} name="jenis_dokumen_pendukung" placeholder="Pilih Jenis Dokumen Pendukung" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -299,7 +329,7 @@ const TambahPelatihan = () => {
                                                     <div className='d-flex flex-column justify-content-center align-items-center' style={{ paddingTop: 40, paddingBottom: 40 }}>
                                                         <FontAwesomeIcon icon={faInbox} size="2x" />
                                                         <p>Klik atau taruh untuk memilih file</p>
-                                                        <p style={{ fontSize: 13 }}><i>PDF, DOC, DOCX, PPT, JPG, JPEG, PNG</i></p>
+                                                        <p style={{ fontSize: 13 }}><i>PDF, DOC, DOCX, JPG, JPEG, PNG</i></p>
                                                     </div>
                                             }
                                         </div>

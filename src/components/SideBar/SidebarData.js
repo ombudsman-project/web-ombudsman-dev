@@ -67,7 +67,7 @@ export const SidebarData = [
             },
             {
                 title: "Update Nilai Ujikom",
-                path: "/reports/reports3",
+                path: "/analisa_kompetensi/nilai_ujikom",
                 icon: <Dot />,
             },
         ],

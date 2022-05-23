@@ -12,6 +12,8 @@ import RiwayatAktivitasView from "../pages/RiwayatAktivitas";
 import KompetensiDashboardView from "../pages/analisa_kompetensi/Dashboard"
 import KompetensiPegawaiView from "../pages/analisa_kompetensi/KompetensiPegawai"
 import DetailKompetensiPegawaiView from "../pages/analisa_kompetensi/DetailKompetensiPegawai"
+import NilaiUjikomView from "../pages/analisa_kompetensi/NilaiUjikom"
+import UpdateNilaiUjikomView from "../pages/analisa_kompetensi/UpdateNilaiUjikom"
 
 //KEGIATAN
 import DaftarKegiatanView from "../pages/kegiatan/DaftarKegiatan"
@@ -171,7 +173,9 @@ const AppRouter = () => {
                   {/* ANALISA KOMPETENSI */}
                   <Route component={KompetensiDashboardView} path="/analisa_kompetensi/kompetensi_dashboard" exact />
                   <Route component={KompetensiPegawaiView} path="/analisa_kompetensi/kompetensi_pegawai" exact />
+                  <Route component={NilaiUjikomView} path="/analisa_kompetensi/nilai_ujikom" exact />
                   <Route component={DetailKompetensiPegawaiView} path="/analisa_kompetensi/kompetensi_pegawai/detail" />
+                  <Route component={UpdateNilaiUjikomView} path="/analisa_kompetensi/nilai_ujikom/update" />
 
                   {/* KEGIATAN */}
                   <Route component={DaftarKegiatanView} path="/kegiatan/daftar_kegiatan" exact />
