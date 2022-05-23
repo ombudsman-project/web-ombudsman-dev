@@ -8,16 +8,67 @@ import { Badge, Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
 import { useTranslation } from 'react-i18next';
-import moment from 'moment';
+import * as moment from 'moment';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';;
+import { Link, useLocation } from 'react-router-dom';import ReactPaginate from 'react-paginate';
+import ServiceApi from '../../../api/MyApi';
+;
 
 const DetailPenyelenggara = () => {
     const location = useLocation();
     const myparam = location.state;
+    const [perPage, setPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageCount, setPageCount] = useState(0);
+    const [dataCount, setDataCount] = useState(0);
+    const [listKegiatan, setListKegiatan] = useState([]);
+
+    useEffect(() => {
+        viewData();
+        // console.log(myparam.id)
+    }, [])
+
+    const viewData = async () => {
+        const param = `page=${currentPage}&length=${perPage}&search=&penyelenggara=${myparam.id}`;
+        await new ServiceApi().getKegiatan(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListKegiatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
+
+    function handlePerPage(e) {
+        setPerPage(e.target.value)
+        const param = `page=${currentPage}&length=${e.target.value}&search=&penyelenggara=${myparam.id}`;
+        new ServiceApi().getKegiatan(param).then(x => {
+            setListKegiatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / e.target.value));
+        }).catch((err) => {
+        })
+    }
+
+    async function handlePageClick({ selected: selectedPage }) {
+        setCurrentPage(selectedPage + 1);
+        const param = `page=${selectedPage + 1}&length=${perPage}&search=&penyelenggara=${myparam.id}`;
+        await new ServiceApi().getKegiatan(param).then(x => {
+            setListKegiatan(x.data.data);
+        }).catch((err) => {
+        })
+    }
+
+    const searchData = async (e) => {
+        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}&penyelenggara=${myparam.id}`;
+        await new ServiceApi().getKegiatan(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListKegiatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
 
     return (
         <div className='main-animation'>
@@ -33,7 +84,7 @@ const DetailPenyelenggara = () => {
                         <div className="d-flex flex-row justify-content-between">
                             <div>
                                 <h4 className="card-main-content-title">Detail Penyelenggara</h4>
-                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail penyelenggara kegiatan</p>
+                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail penyelenggara kegiatan.</p>
                             </div>
                             <div>
                                 <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
@@ -53,7 +104,7 @@ const DetailPenyelenggara = () => {
                         <div className="d-flex flex-row justify-content-between">
                             <div>
                                 <h4 className="card-main-content-title">Daftar Kegiatan</h4>
-                                <p className="card-main-content-subtitle">Deskripsi lengkap dari penyelenggara yang telah dipilih</p>
+                                <p className="card-main-content-subtitle">Deskripsi lengkap dari penyelenggara yang telah dipilih.</p>
                             </div>
                         </div>
                         <div id="content-table" className="content-table">
@@ -61,7 +112,7 @@ const DetailPenyelenggara = () => {
                                 <table className="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th className="table-title" scope="col" style={{ width: 46 }}>
+                                            <th className="table-title" scope="col" style={{ width: 50 }}>
                                                 #
                                             </th>
                                             <th className="table-title" scope="col">Nama Kegiatan</th>
@@ -72,27 +123,32 @@ const DetailPenyelenggara = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Pelatihan Sistem Manajemen Mutu Terpadu</td>
-                                            <td>Arsip Nasional Republik Indonesia</td>
-                                            <td className="text-center">01 Sep 2021</td>
-                                            <td className="text-center">
-                                                {/* <Badge className="success" bg="success">Tervalidasi</Badge> */}
-                                                {/* <Badge className="warning" bg="warning">Terlaksana - Belum Validasi</Badge> */}
-                                                <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
-                                            </td>
-                                            <td className="text-center">23 Peserta</td>
-                                        </tr>
+                                        {
+                                            !_.isEmpty(listKegiatan) ?
+                                                listKegiatan.map((x, key) => {
+                                                    return (
+                                                        <tr key={x.id}>
+                                                            <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                            <td>{x.nama_pelatihan}</td>
+                                                            <td>{x.nama_penyelenggara}</td>
+                                                            <td className="text-center">{moment(new Date(x.tgl_mulai)).format('DD MMM yyyy')}</td>
+                                                            <td className="text-center"></td>
+                                                            <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
+                                                        </tr>
+                                                    )
+                                                }) :
+                                                <>
+                                                </>
+                                        }
                                     </tbody>
                                 </table>
                             </div>
-                            {/* <div className="footer-table d-flex justify-content-between align-items-center">
+                            <div className="footer-table d-flex justify-content-between align-items-center">
                                 <div>
                                     {
-                                        !_.isEmpty(listPenyelenggara) ?
+                                        !_.isEmpty(listKegiatan) ?
                                             <>
-                                                Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listPenyelenggara.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listPenyelenggara.length)} dari {dataCount} data
+                                                Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listKegiatan.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listKegiatan.length)} dari {dataCount} data
                                             </>
                                             :
                                             <>
@@ -120,7 +176,7 @@ const DetailPenyelenggara = () => {
                                         renderOnZeroPageCount={null}
                                     />
                                 </div>
-                            </div> */}
+                            </div>
                         </div>
                     </Card.Body>
                 </Card>
