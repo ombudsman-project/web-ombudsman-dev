@@ -373,7 +373,7 @@ const Pegawai = () => {
                         </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={() => filterData()} type="button">Simpan</Button>
+                        <Button className="button-submit" onClick={() => filterData()} type="button">Simpan</Button>
                     </Modal.Footer>
                 </Form>
             </Modal>

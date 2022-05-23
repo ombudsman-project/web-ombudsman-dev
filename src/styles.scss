@@ -146,10 +146,28 @@ header {
     font-weight: 500;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .button-submit {
+    border-radius: 6px;
+    padding: 8px 30px 8px 30px;
+    margin-right: 10px;
+    background-color: $mainNavColor;
+    border-color: $mainNavColor;
+  }
+
+  .button-submit:hover {
+    background-color: $mainNavColor;
+    border-color: $mainNavColor;
+  }
+
+  .button-submit:focus {
+    background-color: $mainNavColor;
+    border-color: $mainNavColor;
   }
 }
 
@@ -925,8 +943,8 @@ h2 {
 }
 
 .form-check-input:checked {
-  border-color: #4F46E5;
-  background-color:#4F46E5;
+  border-color: #4f46e5;
+  background-color: #4f46e5;
 }
 
 .login-form button {
