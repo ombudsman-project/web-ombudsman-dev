@@ -17,10 +17,59 @@ import { Link, useLocation } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import ReactPaginate from 'react-paginate';
+import ServiceApi from '../../../api/MyApi';
 
 const DetailKompetensi = () => {
     const location = useLocation();
     const myparam = location.state;
+    const [perPage, setPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageCount, setPageCount] = useState(0);
+    const [dataCount, setDataCount] = useState(0);
+    const [listSubKompetensi, setListSubKompetensi] = useState([]);
+
+    useEffect(() => {
+        viewData();
+    }, [])
+
+    const viewData = async () => {
+        const param = `page=${currentPage}&length=${perPage}&search=&kompetensi=${myparam.x.id}`;
+        await new ServiceApi().getSubKompetensi(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListSubKompetensi(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
+
+    function handlePerPage(e) {
+        setPerPage(e.target.value)
+        const param = `page=${currentPage}&length=${e.target.value}&search=&kompetensi=${myparam.x.id}`;
+        new ServiceApi().getSubKompetensi(param).then(x => {
+            setListSubKompetensi(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / e.target.value));
+        }).catch((err) => {
+        })
+    }
+
+    async function handlePageClick({ selected: selectedPage }) {
+        setCurrentPage(selectedPage + 1);
+        const param = `page=${selectedPage + 1}&length=${perPage}&search=&kompetensi=${myparam.x.id}`;
+        await new ServiceApi().getSubKompetensi(param).then(x => {
+            setListSubKompetensi(x.data.data);
+        }).catch((err) => {
+        })
+    }
+
+    const searchData = async (e) => {
+        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}&kompetensi=${myparam.x.id}`;
+        await new ServiceApi().getSubKompetensi(param).then(x => {
+            setDataCount(x.data.total_data);
+            setListSubKompetensi(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+        }).catch((err) => {
+        })
+    }
 
     return (
         <div className='main-animation'>
@@ -65,7 +114,7 @@ const DetailKompetensi = () => {
                         <div id="size-table" className="size-table">
                             <div>Lihat &nbsp;</div>
                             <div>
-                                <Form.Control className="select-row-table" name="per_page" as="select">
+                                <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
                                     <option value="10"></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
@@ -99,42 +148,45 @@ const DetailKompetensi = () => {
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Nama Sub Kompetensi</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Intergritas</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Kerja Sama</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Komunikasi</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Komunikasi</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Pelayanan Publik</td>
-                                    </tr>
+                                    {
+                                        !_.isEmpty(listSubKompetensi) ?
+                                            listSubKompetensi.map((x, key) => {
+                                                return (
+                                                    <tr key={x.id}>
+                                                        <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                        <td>{x.sub_kompetensi}</td>
+                                                    </tr>
+                                                )
+                                            }) :
+                                            <>
+                                            </>
+                                    }
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div className="footer-table d-flex justify-content-between align-items-center mt-4">
+                    <div className="footer-table d-flex justify-content-between align-items-center">
                         <div>
-                            Menampilkan data 0 - 0 dari 0 data
+                            {
+                                !_.isEmpty(listSubKompetensi) ?
+                                    <>
+                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listSubKompetensi.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listSubKompetensi.length)} dari {dataCount} data
+                                    </>
+                                    :
+                                    <>
+                                        Menampilkan data 0 - 0 dari 0 data
+                                    </>
+                            }
                         </div>
                         <div>
                             <ReactPaginate
                                 pageRangeDisplayed={5}
-                                pageCount={null}
-                                onPageChange={null}
+                                pageCount={pageCount}
+                                onPageChange={handlePageClick}
                                 previousLabel="Sebelumnya"
                                 nextLabel="Selanjutnya"
                                 pageClassName="page-item"

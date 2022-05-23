@@ -57,34 +57,36 @@ const DetailPenyelenggara = () => {
                             </div>
                         </div>
                         <div id="content-table" className="content-table">
-                            <table className="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th className="table-title" scope="col" style={{ width: 46 }}>
-                                            #
-                                        </th>
-                                        <th className="table-title" scope="col">Nama Kegiatan</th>
-                                        <th className="table-title" scope="col">Penyelenggara</th>
-                                        <th className="table-title text-center" scope="col">Tanggal</th>
-                                        <th className="table-title text-center" scope="col">Pelaksanaan</th>
-                                        <th className="table-title text-center" scope="col">Peserta</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Pelatihan Sistem Manajemen Mutu Terpadu</td>
-                                        <td>Arsip Nasional Republik Indonesia</td>
-                                        <td className="text-center">01 Sep 2021</td>
-                                        <td className="text-center">
-                                            {/* <Badge className="success" bg="success">Tervalidasi</Badge> */}
-                                            {/* <Badge className="warning" bg="warning">Terlaksana - Belum Validasi</Badge> */}
-                                            <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
-                                        </td>
-                                        <td className="text-center">23 Peserta</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div className="scroll-me">
+                                <table className="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th className="table-title" scope="col" style={{ width: 46 }}>
+                                                #
+                                            </th>
+                                            <th className="table-title" scope="col">Nama Kegiatan</th>
+                                            <th className="table-title" scope="col">Penyelenggara</th>
+                                            <th className="table-title text-center" scope="col">Tanggal</th>
+                                            <th className="table-title text-center" scope="col">Pelaksanaan</th>
+                                            <th className="table-title text-center" scope="col">Peserta</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Pelatihan Sistem Manajemen Mutu Terpadu</td>
+                                            <td>Arsip Nasional Republik Indonesia</td>
+                                            <td className="text-center">01 Sep 2021</td>
+                                            <td className="text-center">
+                                                {/* <Badge className="success" bg="success">Tervalidasi</Badge> */}
+                                                {/* <Badge className="warning" bg="warning">Terlaksana - Belum Validasi</Badge> */}
+                                                <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
+                                            </td>
+                                            <td className="text-center">23 Peserta</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             {/* <div className="footer-table d-flex justify-content-between align-items-center">
                                 <div>
                                     {
