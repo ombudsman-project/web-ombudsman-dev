@@ -93,9 +93,9 @@ const DetailKompetensi = () => {
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Kompetensi</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.x.name}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.name ?? '-'}</p></Col>
                             <Col lg="3"><p>Jumlah Sub Kompetensi</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.x.jumlah_sub_kompetensi}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.jumlah_sub_kompetensi ?? '-'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
@@ -144,7 +144,7 @@ const DetailKompetensi = () => {
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th className="table-title" scope="col" style={{ width: 50 }}>
+                                        <th className="table-title" scope="col" width="50">
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Nama Sub Kompetensi</th>
@@ -157,7 +157,7 @@ const DetailKompetensi = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.sub_kompetensi}</td>
+                                                        <td>{x.sub_kompetensi ?? '-'}</td>
                                                     </tr>
                                                 )
                                             }) :

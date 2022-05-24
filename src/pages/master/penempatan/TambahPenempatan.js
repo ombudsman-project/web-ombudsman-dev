@@ -13,11 +13,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
 const TambahPenempatan = () => {
+    const history = useHistory();
+
     const submitData = async (e) => {
         e.preventDefault();
 
@@ -33,7 +35,7 @@ const TambahPenempatan = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/penempatan'
+                    history.push('/master/penempatan')
                 })
             }).catch(err => {
                 Swal.fire({
@@ -57,7 +59,7 @@ const TambahPenempatan = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Lokasi Penempatan</h4>
-                        <p className="card-main-content-subtitle">Masukkan lokasi penempatan</p>
+                        <p className="card-main-content-subtitle">Masukkan lokasi penempatan.</p>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="3">
                                 Lokasi Penempatan

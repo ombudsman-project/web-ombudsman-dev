@@ -158,7 +158,7 @@ const Penempatan = () => {
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                                        <th className="table-title" scope="col" width="50">
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Lokasi Penempatan</th>

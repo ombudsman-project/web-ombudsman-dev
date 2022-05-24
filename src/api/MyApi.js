@@ -267,6 +267,14 @@ class ServiceApi {
     getManajemenUser(param) {
         return apiClient.get(`/master/user/getData?${param}`)
     }
+
+    addManajemenUser(data) {
+        return apiClient.post(`/master/user/create`, data)
+    }
+
+    deleteManajemenUser(data) {
+        return apiClient.post(`/master/user/delete`, data)
+    }
 }
 export default ServiceApi;
 

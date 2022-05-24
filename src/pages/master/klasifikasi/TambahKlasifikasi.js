@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -46,6 +46,7 @@ const options = [
 ]
 
 const TambahKlasifikasi = () => {
+    const history = useHistory();
     const [listKategori, setListKategori] = useState([]);
     const [addKategori, setAddKategori] = useState('');
 
@@ -76,7 +77,7 @@ const TambahKlasifikasi = () => {
         e.preventDefault();
 
         const data = {
-            'kategori_id': addKategori,
+            'kategori': addKategori,
             'klasifikasi': e.target.elements.klasifikasi.value
         }
 
@@ -88,7 +89,7 @@ const TambahKlasifikasi = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/klasifikasi_jabatan'
+                    history.push('/master/klasifikasi_jabatan')
                 })
             }).catch(err => {
                 const err_data = err.response.data;
@@ -115,18 +116,18 @@ const TambahKlasifikasi = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Klasifikasi Jabatan</h4>
-                        <p className="card-main-content-subtitle">Masukkan detail klasifikasi jabatan</p>
+                        <p className="card-main-content-subtitle">Masukkan detail klasifikasi jabatan.</p>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm="2" className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
                                 Kategori Jabatan
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Select name="kategori_id" options={listKategori} placeholder="Pilih Kategori Jabatan" onChange={(e) => selectedKategori(e)} required />
                             </Col>
-                            <Form.Label column sm="2">
+                            <Form.Label column sm="3">
                                 Nama Klasifikasi Jabatan
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" name="klasifikasi" placeholder="Masukkan nama klasifikasi jabatan" autoComplete="off" required />
                             </Col>
                         </Form.Group>

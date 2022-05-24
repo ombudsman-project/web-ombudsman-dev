@@ -159,12 +159,12 @@ const UnitKerja = () => {
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                                        <th className="table-title" scope="col" width="50">
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Unit Kerja</th>
                                         <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
-                                        <th className="table-title text-center" scope="col">Action</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

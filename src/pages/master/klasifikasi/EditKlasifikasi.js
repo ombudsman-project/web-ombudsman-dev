@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -22,6 +22,7 @@ const iconPerson = new L.Icon({
 });
 
 const EditKlasifikasi = () => {
+    const history = useHistory();
     const [listKategori, setListKategori] = useState([]);
     const [kategoriID, setKategoriID] = useState('');
     const [addKategori, setAddKategori] = useState('');
@@ -66,7 +67,7 @@ const EditKlasifikasi = () => {
 
         const data = {
             'key': myparam.id,
-            'kategori_id': kategoriID,
+            'kategori': kategoriID,
             'klasifikasi': e.target.elements.klasifikasi.value
         }
 
@@ -78,7 +79,7 @@ const EditKlasifikasi = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/klasifikasi_jabatan'
+                    history.push('/master/klasifikasi_jabatan')
                 })
             }).catch(err => {
                 const err_data = err.response.data;
@@ -86,7 +87,7 @@ const EditKlasifikasi = () => {
 
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.kategori_id ? 'kategori jabatan kosong' + '<br/>' : '') + (err.response.data.data.klasifikasi ? err.response.data.data.klasifikasi : '') + '</i>',
+                    html: '<i>' + (err.response.data.data.kategori ? 'kategori jabatan kosong' + '<br/>' : '') + (err.response.data.data.klasifikasi ? err.response.data.data.klasifikasi : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -105,12 +106,12 @@ const EditKlasifikasi = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Klasifikasi Jabatan</h4>
-                        <p className="card-main-content-subtitle">Ubah detail klasifikasi jabatan</p>
+                        <p className="card-main-content-subtitle">Ubah detail klasifikasi jabatan.</p>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm="2" className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
                                 Kategori Jabatan
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Select
                                     value={listKategori.filter((option) => option.value == kategoriID)}
                                     name="kategori_id"
@@ -119,10 +120,10 @@ const EditKlasifikasi = () => {
                                     required
                                 />
                             </Col>
-                            <Form.Label column sm="2">
+                            <Form.Label column sm="3">
                                 Nama Klasifikasi Jabatan
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" value={input} name="klasifikasi" placeholder="Masukkan nama klasifikasi jabatan" onChange={(e) => setInput(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>

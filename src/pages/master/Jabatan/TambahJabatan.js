@@ -13,11 +13,12 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
 const TambahJabatan = () => {
+    const history = useHistory();
     const [listKlasifikasi, setListKlasifikasi] = useState([]);
     const [addKategori, setAddKategori] = useState('');
 
@@ -48,7 +49,7 @@ const TambahJabatan = () => {
         e.preventDefault();
 
         const data = {
-            'klasifikasi_id': addKategori,
+            'klasifikasi': addKategori,
             'jabatan': e.target.elements.jabatan.value
         }
 
@@ -60,12 +61,12 @@ const TambahJabatan = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/jabatan'
+                    history.push('/master/jabatan')
                 })
             }).catch(err => {
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.klasifikasi_id ? 'klasifikasi jabatan kosong' + '<br/>' : '') + (err.response.data.data.jabatan ? err.response.data.data.jabatan : '') + '</i>',
+                    html: '<i>' + (err.response.data.data.klasifikasi ? 'klasifikasi jabatan kosong' + '<br/>' : '') + (err.response.data.data.jabatan ? err.response.data.data.jabatan : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -84,7 +85,7 @@ const TambahJabatan = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Jabatan</h4>
-                        <p className="card-main-content-subtitle">Masukkan detail jabatan</p>
+                        <p className="card-main-content-subtitle">Masukkan detail jabatan.</p>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="3" className="mb-3">
                                 Kategori Klasifikasi Jabatan

@@ -44,9 +44,9 @@ const DetailBentukKompetensi = () => {
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Sub Bentuk & Jalur</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.x.jalur_kompetensi}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.jalur_kompetensi ?? '-'}</p></Col>
                             <Col lg="3"><p>Bentuk & Jalur Sub Kompetensi</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.x.bentuk_kompetensi == '1' ? 'Klasikal' : 'Non Klasikal'}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.bentuk_kompetensi ? myparam.x.bentuk_kompetensi == '1' ? 'Klasikal' : 'Non Klasikal' : '-'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
