@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faMapMarkerAlt, faCalendar, faUserAlt, faClock } from '@fortawesome/free-solid-svg-icons'
-import { Card, Col, Container, Dropdown, Row, Form } from 'react-bootstrap';
+import { Card, Col, Container, Dropdown, Row, Form, Modal, Button } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
@@ -27,7 +27,7 @@ import { Line } from 'react-chartjs-2';
 import ServiceApi from '../api/MyApi';
 import LogoUser from "../img/user.png";
 import LogoCalendar from "../img/calendar.png";
-import useLocalStorage from '../hooks/useLocalStorage';
+import Logo from "../img/logo.png";
 
 ChartJS.register(
   RadialLinearScale,
@@ -88,6 +88,7 @@ const DashboardView = () => {
   const [listPenempatan, setListPenempatan] = useState([]);
   const [dataJenisKepegawaian, setJenisKepegawaian] = useState('ASN');
   const [dataPenempatan, setPenempatan] = useState('Pusat');
+  const [modalShow, setModalShow] = useState(null);
 
   const [filterDate, setFilterDate] = useState({
     startDate: moment(new Date()).format('DD/MM/YYYY'),
@@ -116,6 +117,17 @@ const DashboardView = () => {
     fetchGetSelect();
   }, []);
 
+  useEffect(() => {
+    const v = localStorage.getItem("welcome_modal");
+    setTimeout(() => {
+      setModalShow(v)
+    }, 1000);
+  }, []);
+
+  const handleModal = (e) => {
+    localStorage.setItem("welcome_modal", "0")
+    setModalShow(e);
+  }
 
   const setDateRange = (data) => {
     setState([data.selection]);
@@ -355,8 +367,41 @@ const DashboardView = () => {
           </Row>
         </Col>
       </Row>
+
+
+      <MyVerticallyCenteredModal
+        show={modalShow == "1"}
+        onHide={() => handleModal("0")}
+      />
     </div>
   );
 };
+
+function MyVerticallyCenteredModal(props) {
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      centered
+      className="modal-filter"
+    >
+      <Modal.Body className='d-flex flex-column justify-content-center align-items-center'>
+        <div>
+          <img src={Logo} className="img-fluid" width={120} style={{ marginTop: 50, marginBottom: 50 }} />
+        </div>
+        <div className='text-center'>
+          <h4><b>Aplikasi Pengembangan Kompetensi<br />Ombudsman Republik Indonesia</b></h4>
+        </div>
+        <br/>
+        <div className='text-center'>
+          <p>
+            Aplikasi ini sebagai Sistem Informasi untuk Pengelolaan Data<br />Pengembangan Kompetensi Pegawai di Lingkungan<br />Ombudsman Republik Indonesia
+          </p>
+        </div>
+        <Button onClick={props.onHide} style={{ marginTop: 40, marginBottom: 50, backgroundColor: 'rgba(0, 88, 168, 1)', color: 'white' }}>Mengerti</Button>
+      </Modal.Body>
+    </Modal>
+  );
+}
 
 export default DashboardView;
