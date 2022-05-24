@@ -18,12 +18,15 @@ import * as IoIcons from 'react-icons/io';
 import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import ReactPaginate from 'react-paginate';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 const iconPerson = new L.Icon({
 
 });
 
 const Pegawai = () => {
+    const animatedComponents = makeAnimated();
     const history = useHistory();
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const [perPage, setPerPage] = useState(10);
@@ -37,6 +40,15 @@ const Pegawai = () => {
     const [kepegawaian, setKepegawaian] = useState([]);
     const [listGolongan, setListGolongan] = useState([]);
     const [golongan, setGolongan] = useState([]);
+    const [listJabatan, setListJabatan] = useState([]);
+    const [jabatan, setJabatan] = useState([]);
+    const [listUnit, setListUnit] = useState([]);
+    const [unit, setUnit] = useState([]);
+    const [selectJabatan, setSelectJabatan] = useState('');
+    const [selectUnit, setSelectUnit] = useState('');
+    const [penempatan, setPenempatan] = useState([]);
+    const [listPenempatan, setListPenempatan] = useState([]);
+    const [selectPenempatan, setSelectPenempatan] = useState('');
 
     useEffect(() => {
         viewData();
@@ -44,7 +56,7 @@ const Pegawai = () => {
     }, [])
 
     const viewData = async () => {
-        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
+        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
@@ -55,7 +67,7 @@ const Pegawai = () => {
 
     function handlePerPage(e) {
         setPerPage(e.target.value)
-        const data = { 'page': currentPage, 'length': e.target.value, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
+        const data = { 'page': currentPage, 'length': e.target.value, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
         new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
@@ -65,7 +77,7 @@ const Pegawai = () => {
 
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        const data = { 'page': selectedPage + 1, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
+        const data = { 'page': selectedPage + 1, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
         }).catch((err) => {
@@ -73,7 +85,7 @@ const Pegawai = () => {
     }
 
     const searchData = async (e) => {
-        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value, 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
+        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value, 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
@@ -88,7 +100,24 @@ const Pegawai = () => {
         await new ServiceApi().getSelect(formData).then(x => {
             setListKepegawaian(x.data.jenis_kepegawaian);
             setListGolongan(x.data.golongan_pangkat);
-            console.log(x.data.golongan_pangkat)
+            var data_jabatan = x.data.jabatan.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListJabatan(data_jabatan);
+            var data_unit = x.data.unit_kerja.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListUnit(data_unit)
+            var data_penempatan = x.data.penempatan.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListPenempatan(data_penempatan)
         }).catch((err) => {
         })
     }
@@ -129,8 +158,38 @@ const Pegawai = () => {
         );
     };
 
+    const selectedJabatan = (e) => {
+        var data_map = e.map((row, id) => {
+            return (
+                row.value
+            )
+        })
+        setJabatan(data_map)
+        setSelectJabatan(e)
+    }
+
+    const selectedUnit = (e) => {
+        var data_map = e.map((row, id) => {
+            return (
+                row.value
+            )
+        })
+        setUnit(data_map)
+        setSelectUnit(e);
+    }
+
+    const selectedPenempatan = (e) => {
+        var data_map = e.map((row, id) => {
+            return (
+                row.value
+            )
+        })
+        setPenempatan(data_map)
+        setSelectPenempatan(e);
+    }
+
     const filterData = async (e) => {
-        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
+        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setModalShow(false);
             setDataCount(x.data.total_data);
@@ -173,16 +232,6 @@ const Pegawai = () => {
             }
         })
     }
-
-    // const handleSubmitFilter = (e) => {
-    //     e.preventDefault();
-    //     console.log(e.target.elements.name);
-    //     listGolongan.map((gol, key) => {
-    //         if(e.target[gol.id].name.substring(0, 8) === 'golongan'){
-    //             console.log(e.target[gol.id].name + ' | ' + e.target[gol.id].checked);
-    //         }
-    //     })
-    // }
 
     return (
         <div className='main-animation'>
@@ -415,6 +464,51 @@ const Pegawai = () => {
                                     </Col>
                                 )
                             })}
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="12">
+                                <p className="mb-2">Jabatan</p>
+                            </Form.Label>
+                            <Col sm="12">
+                                <Select
+                                    defaultValue={selectJabatan}
+                                    placeholder="Pilih Jabatan"
+                                    options={listJabatan}
+                                    onChange={(e) => selectedJabatan(e)}
+                                    isMulti
+                                    components={animatedComponents}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="12">
+                                <p className="mb-2">Unit Kerja</p>
+                            </Form.Label>
+                            <Col sm="12">
+                                <Select
+                                    defaultValue={selectUnit}
+                                    placeholder="Pilih Unit Kerja"
+                                    options={listUnit}
+                                    onChange={(e) => selectedUnit(e)}
+                                    isMulti
+                                    components={animatedComponents}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="12">
+                                <p className="mb-2">Penempatan</p>
+                            </Form.Label>
+                            <Col sm="12">
+                                <Select
+                                    defaultValue={selectPenempatan}
+                                    placeholder="Pilih Penempatan"
+                                    options={listPenempatan}
+                                    onChange={(e) => selectedPenempatan(e)}
+                                    isMulti
+                                    components={animatedComponents}
+                                />
+                            </Col>
                         </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
