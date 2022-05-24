@@ -38,7 +38,7 @@ const options = [
 const Pencatatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16 };
     const history = useHistory();
-    const [listPegawai, setListPegawai] = useState([]);
+    const [listKegiatan, setListKegiatan] = useState([]);
     const [perPage, setPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
@@ -54,15 +54,14 @@ const Pencatatan = () => {
 
     useEffect(() => {
         async function fetchGetSelect() {
-            let formData = new FormData();
-            formData.append('parameter[]', 'all');
-            await new ServiceApi().getSelect(formData).then(x => {
-                const data_map = x.data.pegawai.map((row, i) => {
+            const param = `page=${currentPage}&length=${perPage}&search=`;
+            await new ServiceApi().getKegiatan(param).then(x => {
+                const data_map = x.data.data.map((row, i) => {
                     return (
-                        { value: row.id, label: row.name }
+                        { value: row.id, label: row.nama_pelatihan }
                     )
                 })
-                setListPegawai(data_map)
+                setListKegiatan(data_map)
             });
         }
         fetchGetSelect();
@@ -70,9 +69,9 @@ const Pencatatan = () => {
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getListUnit(param).then(x => {
+        await new ServiceApi().getKegiatan(param).then(x => {
             setDataCount(x.data.total_data);
-            setListUnit(x.data.data);
+            setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -82,7 +81,7 @@ const Pencatatan = () => {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
         new ServiceApi().getListUnit(param).then(x => {
-            setListUnit(x.data.data);
+            setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -92,7 +91,7 @@ const Pencatatan = () => {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=${search}`;
         await new ServiceApi().getListUnit(param).then(x => {
-            setListUnit(x.data.data);
+            setListKegiatan(x.data.data);
         }).catch((err) => {
         })
     }
@@ -102,7 +101,7 @@ const Pencatatan = () => {
         const param = `page=1&length=${perPage}&search=${e.target.value}`;
         await new ServiceApi().getListUnit(param).then(x => {
             setDataCount(x.data.total_data);
-            setListUnit(x.data.data);
+            setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -120,7 +119,7 @@ const Pencatatan = () => {
                 <Card.Body>
                     <h4><b>Kegiatan</b></h4>
                     <p className="card-main-content-subtitle">Untuk dapat mencatat keikutsertaan, silahkan pilih kegiatan terlebih dahulu.</p>
-                    <Select options={options} onChange={(e) => funcSelectedKegiatan(e)} placeholder="Pilih Kegiatan" />
+                    <Select options={listKegiatan} onChange={(e) => funcSelectedKegiatan(e)} placeholder="Pilih Kegiatan" />
                 </Card.Body>
             </Card>
 
