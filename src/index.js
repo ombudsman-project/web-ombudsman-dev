@@ -15,7 +15,7 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import './i18n';
+//import './i18n';
 import { Spinner } from 'react-bootstrap';
 
 const Loader = () => (
