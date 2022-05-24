@@ -35,6 +35,8 @@ const Pegawai = () => {
     const [jenisKelamin, setJenisKelamin] = useState([]);
     const [listKepegawaian, setListKepegawaian] = useState([]);
     const [kepegawaian, setKepegawaian] = useState([]);
+    const [listGolongan, setListGolongan] = useState([]);
+    const [golongan, setGolongan] = useState([]);
 
     useEffect(() => {
         viewData();
@@ -42,8 +44,7 @@ const Pegawai = () => {
     }, [])
 
     const viewData = async () => {
-        // const data = `page=${currentPage}&length=${perPage}&search=`;
-        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
+        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
@@ -54,8 +55,7 @@ const Pegawai = () => {
 
     function handlePerPage(e) {
         setPerPage(e.target.value)
-        // const data = `page=${currentPage}&length=${e.target.value}&search=`;
-        const data = { 'page': currentPage, 'length': e.target.value, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
+        const data = { 'page': currentPage, 'length': e.target.value, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
         new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
@@ -65,8 +65,7 @@ const Pegawai = () => {
 
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        // const data = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        const data = { 'page': selectedPage + 1, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
+        const data = { 'page': selectedPage + 1, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setListPegawai(x.data.data);
         }).catch((err) => {
@@ -74,8 +73,7 @@ const Pegawai = () => {
     }
 
     const searchData = async (e) => {
-        // const data = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value, 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
+        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value, 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setDataCount(x.data.total_data);
             setListPegawai(x.data.data);
@@ -88,7 +86,9 @@ const Pegawai = () => {
         let formData = new FormData();
         formData.append('parameter[]', 'all')
         await new ServiceApi().getSelect(formData).then(x => {
-            setListKepegawaian(x.data.jenis_kepegawaian)
+            setListKepegawaian(x.data.jenis_kepegawaian);
+            setListGolongan(x.data.golongan_pangkat);
+            console.log(x.data.golongan_pangkat)
         }).catch((err) => {
         })
     }
@@ -118,8 +118,19 @@ const Pegawai = () => {
         );
     };
 
+    const changeGolongan = event => {
+        const { checked, value } = event.currentTarget;
+        var substr = value.substring(9, 10);
+
+        setGolongan(
+            prev => checked
+                ? [...prev, value]
+                : prev.filter(val => val !== value)
+        );
+    };
+
     const filterData = async (e) => {
-        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian } }
+        const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan } }
         await new ServiceApi().getPegawai(data).then(x => {
             setModalShow(false);
             setDataCount(x.data.total_data);
@@ -136,14 +147,14 @@ const Pegawai = () => {
 
         Swal.fire({
             title: 'Perhatian!',
-            html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
+            html: '<i>Anda yakin ingin menghapus <b>' + x.nama_pegawai + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteJabatan(data)
+                new ServiceApi().deletePegawai(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -162,6 +173,16 @@ const Pegawai = () => {
             }
         })
     }
+
+    // const handleSubmitFilter = (e) => {
+    //     e.preventDefault();
+    //     console.log(e.target.elements.name);
+    //     listGolongan.map((gol, key) => {
+    //         if(e.target[gol.id].name.substring(0, 8) === 'golongan'){
+    //             console.log(e.target[gol.id].name + ' | ' + e.target[gol.id].checked);
+    //         }
+    //     })
+    // }
 
     return (
         <div className='main-animation'>
@@ -359,7 +380,8 @@ const Pegawai = () => {
                                         <div className='input-checkbox-custom'>
                                             <Form.Check
                                                 inline
-                                                id={item.id}
+                                                id={item.name}
+                                                name={item.id}
                                                 value={item.id}
                                                 type="checkbox"
                                                 label={item.name}
@@ -371,9 +393,33 @@ const Pegawai = () => {
                                 )
                             })}
                         </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="12">
+                                <p className="mb-2">Golongan Pangkat</p>
+                            </Form.Label>
+                            {listGolongan.map(item => {
+                                return (
+                                    <Col sm="3">
+                                        <div className='input-checkbox-custom'>
+                                            <Form.Check
+                                                inline
+                                                id={item.golongan}
+                                                name={item.id}
+                                                value={item.id}
+                                                type="checkbox"
+                                                label={item.golongan}
+                                                checked={golongan.some(val => val == item.id)}
+                                                onChange={changeGolongan}
+                                            />
+                                        </div>
+                                    </Col>
+                                )
+                            })}
+                        </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button className="button-submit" onClick={() => filterData()} type="button">Simpan</Button>
+                        {/* <Button className="button-submit" type="submit">Simpan</Button> */}
                     </Modal.Footer>
                 </Form>
             </Modal>
