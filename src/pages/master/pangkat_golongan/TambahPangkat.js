@@ -13,11 +13,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
 const TambahPangkat = () => {
+    const history = useHistory();
+    
     const submitData = async (e) => {
         e.preventDefault();
 
@@ -34,7 +36,7 @@ const TambahPangkat = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/pangkat_golongan'
+                    history.push('/master/pangkat_golongan')
                 })
             }).catch(err => {
                 Swal.fire({

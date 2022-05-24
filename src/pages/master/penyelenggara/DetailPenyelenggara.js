@@ -92,7 +92,7 @@ const DetailPenyelenggara = () => {
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Penyelenggara</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.nama_penyelenggara}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.nama_penyelenggara ?? '-'}</p></Col>
                             <Col lg="3"><p>Jumlah Kegiatan</p></Col>
                             <Col className="text-secondary" lg="9"><p>0</p></Col>
                         </Row>
@@ -112,7 +112,7 @@ const DetailPenyelenggara = () => {
                                 <table className="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th className="table-title" scope="col" style={{ width: 50 }}>
+                                            <th className="table-title" scope="col" width="50">
                                                 #
                                             </th>
                                             <th className="table-title" scope="col">Nama Kegiatan</th>
@@ -129,9 +129,9 @@ const DetailPenyelenggara = () => {
                                                     return (
                                                         <tr key={x.id}>
                                                             <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                            <td>{x.nama_pelatihan}</td>
-                                                            <td>{x.nama_penyelenggara}</td>
-                                                            <td className="text-center">{moment(new Date(x.tgl_mulai)).format('DD MMM yyyy')}</td>
+                                                            <td>{x.nama_pelatihan ?? '-'}</td>
+                                                            <td>{x.nama_penyelenggara ?? '-'}</td>
+                                                            <td className="text-center">{x.tgl_mulai ? moment(new Date(x.tgl_mulai)).format('DD MMM yyyy') : '-'}</td>
                                                             <td className="text-center"></td>
                                                             <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
                                                         </tr>

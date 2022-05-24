@@ -38,7 +38,7 @@ const DetailUnitKerja = () => {
                         <div className="d-flex flex-row justify-content-between">
                             <div>
                                 <h4 className="card-main-content-title">Detail Unit Kerja</h4>
-                                <p className="card-main-content-subtitle">Deskripsi lengkap dari unit kerja pegawai</p>
+                                <p className="card-main-content-subtitle">Deskripsi lengkap dari unit kerja pegawai.</p>
                             </div>
                             <div>
                                 <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>

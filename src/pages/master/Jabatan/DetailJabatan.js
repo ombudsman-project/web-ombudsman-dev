@@ -33,7 +33,7 @@ const DetailJabatan = () => {
                         <div className="d-flex flex-row justify-content-between">
                             <div>
                                 <h4 className="card-main-content-title">Detail Jabatan</h4>
-                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jabatan</p>
+                                <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jabatan.</p>
                             </div>
                             <div>
                                 <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>

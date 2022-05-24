@@ -157,7 +157,7 @@ const Kompetensi = () => {
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th className="table-title" scope="col" style={{ width: 50 }}>
+                                        <th className="table-title" scope="col" width="50">
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Nama Kompetensi</th>
@@ -172,8 +172,8 @@ const Kompetensi = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.name}</td>
-                                                        <td className="text-center">{x.jumlah_sub_kompetensi}</td>
+                                                        <td>{x.name ?? '-'}</td>
+                                                        <td className="text-center">{x.jumlah_sub_kompetensi ?? '-'}</td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/kompetensi/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">

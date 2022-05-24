@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 
 const iconPerson = new L.Icon({
@@ -21,6 +21,7 @@ const iconPerson = new L.Icon({
 });
 
 const TambahUnitKerja = () => {
+    const history = useHistory();
     const [listUnit, setListUnit] = useState([]);
 
     const submitData = async (e) => {
@@ -38,7 +39,7 @@ const TambahUnitKerja = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/unit_kerja'
+                    history.push('/master/unit_kerja')
                 })
             }).catch(err => {
                 const err_data = err.response.data;
@@ -65,12 +66,12 @@ const TambahUnitKerja = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Unit Kerja</h4>
-                        <p className="card-main-content-subtitle">Masukkan nama unit kerja</p>
+                        <p className="card-main-content-subtitle">Masukkan nama unit kerja.</p>
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
-                            <Form.Label column sm="2">
+                            <Form.Label column sm="3">
                                 Unit Kerja
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" name="unit_kerja" placeholder="Masukkan nama unit kerja" autoComplete="off" required />
                             </Col>
                         </Form.Group>

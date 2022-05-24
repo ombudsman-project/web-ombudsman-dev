@@ -100,6 +100,7 @@ import EditPenempatanView from "../pages/master/penempatan/EditPenempatan";
 
 //MANAJEMEN USER
 import  ManajemenUserView from "../pages/master/manajemen_user/ManajemenUser";
+import  TambahManajemenUserView from "../pages/master/manajemen_user/TambahManajemenUser";
 
 import useLocalStorage from "../hooks/useLocalStorage";
 
@@ -262,6 +263,7 @@ const AppRouter = () => {
 
                   {/* MANAJEMEN USER */}
                   <Route component={ManajemenUserView} path="/master/manajemen_user" exact />
+                  <Route component={TambahManajemenUserView} path="/master/manajemen_user/tambah" exact />
 
                   {/* <Route component={() => <Redirect to="/" />} /> */}
                 </PresenceContext.Provider>
