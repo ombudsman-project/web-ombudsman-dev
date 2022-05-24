@@ -39,11 +39,22 @@ const options = [
 const EditPelatihan = () => {
     const history = useHistory();
     const location = useLocation();
-    const [listKepegawaian, setListKepegawaian] = useState([]);
-    const [checkedMetode, setCheckedMetode] = useState(1);
-    const [checkedDokumen, setCheckedDokumen] = useState(1);
-    const [dataFiles, setFiles] = useState([]);
     const myparam = location.state;
+    const [detailPelatihan, setDetailPelatihan] = useState({});
+    const [listJalurPelatihan, setListJalurPelatihan] = useState([]);
+    const [listPenyelenggara, setListPenyelenggara] = useState([]);
+    const [listKompetensi, setListKompetensi] = useState([]);
+    const [listSubKompetensi, setListSubKompetensi] = useState([]);
+    const [checkedMetode, setCheckedMetode] = useState(null);
+    const [checkedDokumen, setCheckedDokumen] = useState(null);
+    const [jalurID, setJalurPelatihanID] = useState('');
+    const [penyelenggaraID, setPenyelenggaraID] = useState('');
+    const [statusKegiatanID, setStatusKegiatanID] = useState('');
+    const [statusAdministrasiID, setStatusAdministrasiID] = useState('');
+    const [kompetensiID, setKompetensiID] = useState('');
+    const [subKompetensiID, setSubKompetensiID] = useState('');
+    const [jenisDokumen, setJenisDokumen] = useState('');
+    const [dataFiles, setFiles] = useState([]);
 
     const onDrop = useCallback(acceptedFiles => {
         setFiles(acceptedFiles)
@@ -51,10 +62,9 @@ const EditPelatihan = () => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
+        maxFiles: 1,
         accept: {
             'application/pdf': ['.pdf'],
-            'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
-            'application/vnd.ms-powerpoint': ['.ppt'],
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
             'application/msword': ['.doc'],
             'image/png': ['.png'],
@@ -65,33 +75,152 @@ const EditPelatihan = () => {
     const submitData = async (e) => {
         e.preventDefault();
 
-        const data = {
-            'jenis_kepegawaian': e.target.elements.jenis_kepegawaian.value
+        let formData = new FormData();
+        formData.append('key', myparam.id);
+        formData.append('nama_pelatihan', e.target.nama_pelatihan.value);
+        formData.append('metode_pelatihan', checkedMetode ? checkedMetode : 2);
+        formData.append('jalur_pelatihan', jalurID);
+        formData.append('penyelenggara', e.target.penyelenggara.value);
+        formData.append('tgl_mulai', e.target.tgl_mulai.value);
+        formData.append('tgl_selesai', e.target.tgl_selesai.value);
+        formData.append('jml_jp', e.target.jml_jp.value);
+        formData.append('kompetensi', e.target.kompetensi.value);
+        formData.append('sub_kompetensi', e.target.sub_kompetensi.value);
+        formData.append('ketersediaan_dokumen', checkedDokumen ? 1 : 0);
+        formData.append('status_kegiatan', e.target.status_kegiatan.value);
+        formData.append('status_administrasi', e.target.status_administrasi.value);
+        formData.append('file', dataFiles);
+        var messageError = [];
+        const getValidationMessage = (myObject) => {
+            for (let [k, v] of Object.entries(myObject)) {
+                messageError.push({
+                    message: myObject[k][0]
+                })
+            }
         }
 
-        // new ServiceApi().addKepegawaian(data)
-        //     .then(response => {
-        //         Swal.fire({
-        //             title: 'Sukses!',
-        //             html: '<i>' + response.data.data.jenis_kepegawaian + ' berhasil ditambahkan</i>',
-        //             icon: 'success',
-        //             confirmButtonColor: '#0058a8',
-        //         }).then(function () {
-        //             history.push('/kegiatan/daftar_kegiatan');
-        //         })
-        //     }).catch(err => {
-        //         Swal.fire({
-        //             title: 'Gagal!',
-        //             html: '<i>' + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + '</i>',
-        //             icon: 'error',
-        //             confirmButtonColor: '#0058a8',
-        //         })
-        //     });
+        new ServiceApi().updatePelatihan(formData)
+            .then(response => {
+                Swal.fire({
+                    title: 'Sukses!',
+                    html: '<i>' + response.data.data.nama_pelatihan + ' berhasil diubah</i>',
+                    icon: 'success',
+                    confirmButtonColor: '#0058a8',
+                }).then(function () {
+                    history.push('/kegiatan/daftar_kegiatan');
+                })
+            }).catch(err => {
+                getValidationMessage(err.response.data.data)
+                var mess = messageError.map(mes => {
+                    return mes.message + '<br/>'
+                })
+                Swal.fire({
+                    title: 'Gagal!',
+                    html: '<i>' + (err.response.data.data ? mess : '') + '</i>',
+                    icon: 'error',
+                    confirmButtonColor: '#0058a8',
+                })
+            });
     }
 
-    const selectedUser = (e) => {
-        console.log(e)
+    useEffect(() => {
+        async function getData() {
+            await new ServiceApi().getDetailPelatihan(myparam.id).then(x => {
+                setJalurPelatihanID(x.data.data.jalur_kompetensi_id)
+                setPenyelenggaraID(x.data.data.penyelenggara_id)
+                setSubKompetensiID(x.data.data.sub_kompetensi_id)
+                setKompetensiID(x.data.data.kompetensi_id)
+                setStatusKegiatanID(x.data.data.status_kegiatan)
+                setStatusAdministrasiID(x.data.data.status_administrasi)
+                setJenisDokumen(x.data.data.jenis_dokumen)
+                setDetailPelatihan(x.data.data);
+            }).catch((err) => {
+            })
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        async function fetchGetSelect() {
+            let formData = new FormData();
+            formData.append('parameter[]', 'all');
+            await new ServiceApi().getSelect(formData).then(x => {
+                const data_map = x.data.kompetensi.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                const data_map_sub = x.data.sub_kompetensi.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                const data_map_jalur = x.data.bentuk_jalur_kompetensi.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                const data_map_penyelenggara = x.data.penyelenggara.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                });
+                setListKompetensi(data_map)
+                setListSubKompetensi(data_map_sub)
+                setListJalurPelatihan(data_map_jalur)
+                setListPenyelenggara(data_map_penyelenggara)
+            });
+        }
+        fetchGetSelect();
+    }, []);
+    
+    const selectedJalur = (e) => {
+        setJalurPelatihanID(e.value)
     }
+
+    const selectedPenyelenggara = (e) => {
+        setPenyelenggaraID(e.value)
+    }
+
+    const selectedKegiatan = (e) => {
+        setStatusKegiatanID(e.value)
+    }
+
+    const selectedAdministrasi = (e) => {
+        setStatusAdministrasiID(e.value)
+    }
+
+    const selectedKompetensi = (e) => {
+        setKompetensiID(e.value)
+    }
+
+    const selectedSubKompetensi = (e) => {
+        setSubKompetensiID(e.value)
+    }
+
+    const selectedJenisFile = (e) => {
+        setJenisDokumen(e.value)
+    }
+
+    const listStatusKegiatan = [
+        { value: 0, label: 'Belum Terlaksana' },
+        { value: 1, label: 'Terlaksana' },
+        { value: 2, label: 'Tidak Terlaksana' },
+    ]
+
+    const listStatusAdministrasi = [
+        { value: 0, label: 'Belum Lengkap' },
+        { value: 1, label: 'Lengkap' },
+    ]
+
+    const listJenisDokumen = [
+        { value: 'pdf', label: 'PDF' },
+        { value: 'doc', label: 'DOC' },
+        { value: 'docx', label: 'DOCX' },
+        { value: 'jpg', label: 'JPG' },
+        { value: 'jpeg', label: 'JPEG' },
+        { value: 'png', label: 'PNG' },
+    ]
 
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
 
@@ -113,7 +242,7 @@ const EditPelatihan = () => {
                                 Nama Pelatihan
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" defaultValue={myparam.nama_kegiatan} name="nama_pelatihan" placeholder="Masukkan Nama Pelatihan" autoComplete="off" required />
+                                <Form.Control type="text" defaultValue={detailPelatihan.nama_pelatihan} name="nama_pelatihan" placeholder="Masukkan Nama Pelatihan" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -129,9 +258,9 @@ const EditPelatihan = () => {
                                         >
                                             <Form.Check
                                                 inline
-                                                checked={checkedMetode == 1}
+                                                checked={checkedMetode ? checkedMetode == 1 : detailPelatihan.metode_pelatihan == 1}
                                                 label="Klasikal"
-                                                name="klasikal_1"
+                                                name="metode_pelatihan"
                                                 type="radio"
                                                 onChange={() => setCheckedMetode(1)}
                                                 id={`inline-klasikal_1`}
@@ -146,8 +275,8 @@ const EditPelatihan = () => {
                                             <Form.Check
                                                 inline
                                                 label="Non Klasikal"
-                                                checked={checkedMetode == 2}
-                                                name="klasikal_2"
+                                                checked={checkedMetode ? checkedMetode == 2 : detailPelatihan.metode_pelatihan == 2}
+                                                name="metode_pelatihan"
                                                 type="radio"
                                                 onChange={() => setCheckedMetode(2)}
                                                 id={`inline-klasikal_2`}
@@ -162,7 +291,13 @@ const EditPelatihan = () => {
                                 Jalur Pelatihan
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jalur_pelatihan" onChange={(e) => selectedUser(e)} placeholder="Pilih Jalur Pelatihan" />
+                                <Select
+                                    options={listJalurPelatihan}
+                                    value={listJalurPelatihan.filter((option) => option.value == jalurID)}
+                                    name="jalur_pelatihan"
+                                    onChange={(e) => selectedJalur(e)}
+                                    placeholder="Pilih Jalur Pelatihan"
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -170,7 +305,13 @@ const EditPelatihan = () => {
                                 Institusi Penyelenggara
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} defaultValue={myparam.penyelenggara} name="institusi_penyelenggara" onChange={(e) => selectedUser(e)} placeholder="Pilih Institusi Penyelenggara" />
+                                <Select
+                                    options={listPenyelenggara}
+                                    value={listPenyelenggara.filter((option) => option.value == penyelenggaraID)}
+                                    name="penyelenggara"
+                                    onChange={(e) => selectedPenyelenggara(e)}
+                                    placeholder="Pilih Institusi Penyelenggara"
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -178,7 +319,7 @@ const EditPelatihan = () => {
                                 Tanggal Mulai
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" defaultValue={moment(new Date(myparam.tanggal)).format('yyyy-MM-DD')} name="tanggal_mulai" required />
+                                {detailPelatihan.tgl_mulai ? <Form.Control type="date" defaultValue={moment(new Date(detailPelatihan.tgl_mulai)).format('yyyy-MM-DD')} name="tgl_mulai" required /> : <Form.Control type="date" name="tanggal_mulai" required />}
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -186,7 +327,7 @@ const EditPelatihan = () => {
                                 Tanggal Selesai
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" defaultValue={moment(new Date(myparam.tanggal_selesai)).format('yyyy-MM-DD')} name="tanggal_selesai" required />
+                                {detailPelatihan.tgl_mulai ? <Form.Control type="date" defaultValue={moment(new Date(detailPelatihan.tgl_selesai)).format('yyyy-MM-DD')} name="tgl_selesai" required /> : <Form.Control type="date" name="tgl_selesai" required />}
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -194,7 +335,35 @@ const EditPelatihan = () => {
                                 Jumlah Jam Pelajaran
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="jam_pelajaran" placeholder="Masukkan Jumlah Jam Pelajaran" autoComplete="off" required />
+                                <Form.Control type="text" defaultValue={detailPelatihan.jml_jp} name="jml_jp" placeholder="Masukkan Jumlah Jam Pelajaran" autoComplete="off" required />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
+                                Status Kegiatan
+                            </Form.Label>
+                            <Col sm="9">
+                                <Select
+                                    options={listStatusKegiatan}
+                                    value={listStatusKegiatan.filter((option) => option.value == statusKegiatanID)}
+                                    name="status_kegiatan"
+                                    onChange={(e) => selectedKegiatan(e)}
+                                    placeholder="Pilih Institusi Penyelenggara"
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
+                                Status Administrasi
+                            </Form.Label>
+                            <Col sm="9">
+                                <Select
+                                    options={listStatusAdministrasi}
+                                    value={listStatusAdministrasi.filter((option) => option.value == statusAdministrasiID)}
+                                    name="status_administrasi"
+                                    onChange={(e) => selectedAdministrasi(e)}
+                                    placeholder="Pilih Institusi Penyelenggara"
+                                />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -210,7 +379,13 @@ const EditPelatihan = () => {
                                 Jenis Kompetensi
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jenis_kompetensi" onChange={(e) => selectedUser(e)} placeholder="Pilih Jenis Kompetensi" />
+                                <Select
+                                    options={listKompetensi}
+                                    name="kompetensi"
+                                    onChange={(e) => selectedKompetensi(e)}
+                                    value={listKompetensi.filter((option) => option.value == kompetensiID)}
+                                    placeholder="Pilih Jenis Kompetensi"
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -218,7 +393,13 @@ const EditPelatihan = () => {
                                 Jenis Sub Kompetensi
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jenis_sub_kompetensi" onChange={(e) => selectedUser(e)} placeholder="Pilih Jenis Sub Kompetensi" />
+                                <Select
+                                    options={listSubKompetensi}
+                                    name="sub_kompetensi"
+                                    onChange={(e) => selectedSubKompetensi(e)}
+                                    value={listSubKompetensi.filter((option) => option.value == subKompetensiID)}
+                                    placeholder="Pilih Jenis Sub Kompetensi"
+                                />
                             </Col>
                         </Form.Group>
                     </Card.Body>
@@ -237,15 +418,15 @@ const EditPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedDokumen(1)}
+                                            onClick={() => setCheckedDokumen(true)}
                                         >
                                             <Form.Check
                                                 inline
-                                                checked={checkedDokumen == 1}
+                                                checked={checkedDokumen}
                                                 label="Tersedia"
-                                                name="tersedia_1"
+                                                name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckedDokumen(1)}
+                                                onChange={() => setCheckedDokumen(true)}
                                                 id={`inline-tersedia_1`}
                                             />
                                         </div>
@@ -253,15 +434,15 @@ const EditPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedDokumen(2)}
+                                            onClick={() => setCheckedDokumen(false)}
                                         >
                                             <Form.Check
                                                 inline
                                                 label="Tidak Tersedia"
-                                                checked={checkedDokumen == 2}
-                                                name="tersedia_2"
+                                                checked={!checkedDokumen}
+                                                name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckedDokumen(2)}
+                                                onChange={() => setCheckedDokumen(false)}
                                                 id={`inline-tersedia_2`}
                                             />
                                         </div>
@@ -274,7 +455,13 @@ const EditPelatihan = () => {
                                 Jenis Dokumen Pendukung
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={options} name="jenis_dokumen_pendukung" onChange={(e) => selectedUser(e)} placeholder="Pilih Jenis Dokumen Pendukung" />
+                                <Select
+                                    options={listJenisDokumen}
+                                    name="jenis_dokumen"
+                                    value={listJenisDokumen.filter((option) => option.value == jenisDokumen)}
+                                    onChange={(e) => selectedJenisFile(e)}
+                                    placeholder="Pilih Jenis Dokumen Pendukung"
+                                />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -282,7 +469,7 @@ const EditPelatihan = () => {
                                 Nomor Surat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" required />
+                                <Form.Control type="text" defaultValue={detailPelatihan.nomor_surat} name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -303,7 +490,8 @@ const EditPelatihan = () => {
                                                     <div className='d-flex flex-column justify-content-center align-items-center' style={{ paddingTop: 40, paddingBottom: 40 }}>
                                                         <FontAwesomeIcon icon={faInbox} size="2x" />
                                                         <p>Klik atau taruh untuk memilih file</p>
-                                                        <p style={{ fontSize: 13 }}><i>PDF, DOC, DOCX, PPT, JPG, JPEG, PNG</i></p>
+                                                        <p style={{ fontSize: 13 }}><i>PDF, DOC, DOCX, JPG, JPEG, PNG</i></p>
+                                                        <p style={{ fontSize: 13 }}><i>Maksimal 1 File</i></p>
                                                     </div>
                                             }
                                         </div>
@@ -324,6 +512,9 @@ const EditPelatihan = () => {
                                             </Button>
                                         </>
                                 }
+                                <br />
+                                    {detailPelatihan.file_original}
+                                <br />
                             </Col>
                         </Form.Group>
                     </Card.Body>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
-import { Badge, Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
 import _ from 'lodash';
-import Skeleton from 'react-loading-skeleton'
+import Select from 'react-select';
 import moment from 'moment';
 import Swal from 'sweetalert2'
 import * as FiIcons from 'react-icons/fi';
@@ -20,17 +20,33 @@ const DetailKegiatan = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [listUnit, setListUnit] = useState([]);
+    const [listPegawai, setListPegawai] = useState([]);
+    const [listKehadiranPegawai, setListKehadiranPegawai] = useState([]);
     const [search, setSearch] = useState('');
+    const [modalShow, setModalShow] = useState(false);
     const myparam = location.state;
 
-    if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
+    useEffect(() => {
+        async function fetchGetSelect() {
+            let formData = new FormData();
+            formData.append('parameter[]', 'all');
+            await new ServiceApi().getSelect(formData).then(x => {
+                const data_map = x.data.pegawai.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                })
+                setListPegawai(data_map)
+            });
+        }
+        fetchGetSelect();
+    }, []);
 
     const viewData = async () => {
         const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getListUnit(param).then(x => {
+        await new ServiceApi().getPesertaKegiatan(param).then(x => {
             setDataCount(x.data.total_data);
-            setListUnit(x.data.data);
+            setListKehadiranPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
@@ -40,7 +56,7 @@ const DetailKegiatan = () => {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
         new ServiceApi().getListUnit(param).then(x => {
-            setListUnit(x.data.data);
+            setListKehadiranPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
         })
@@ -50,7 +66,7 @@ const DetailKegiatan = () => {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=${search}`;
         await new ServiceApi().getListUnit(param).then(x => {
-            setListUnit(x.data.data);
+            setListKehadiranPegawai(x.data.data);
         }).catch((err) => {
         })
     }
@@ -60,12 +76,18 @@ const DetailKegiatan = () => {
         const param = `page=1&length=${perPage}&search=${e.target.value}`;
         await new ServiceApi().getListUnit(param).then(x => {
             setDataCount(x.data.total_data);
-            setListUnit(x.data.data);
+            setListKehadiranPegawai(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
         }).catch((err) => {
         })
     }
+    
+    const selectedUser = (e) => {
+        listKehadiranPegawai.push(e)
+        setModalShow(false)
+    }
 
+    if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -95,44 +117,44 @@ const DetailKegiatan = () => {
                                 <Col className="text-secondary" lg="6" md="6"><p>{myparam.nama_penyelenggara ? myparam.nama_penyelenggara : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Jenis Kompetensi</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jenis_kepegawaian ? myparam.jenis_kepegawaian : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.kompetensi ? myparam.kompetensi : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Sub Kompetensi</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.kategori_jabatan ? myparam.kategori_jabatan : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.sub_kompetensi ? myparam.sub_kompetensi : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Metode Pelatihan</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.pangkat ? myparam.pangkat : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.metode_pelatihan ? myparam.metode_pelatihan == 0 ? 'Klasikal' : 'Non Klasikal' : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Jalur Pelatihan</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.unit_kerja ? myparam.unit_kerja : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jalur_pelatihan ? myparam.jalur_pelatihan : '-'}</p></Col>
                             </Row>
                         </Col>
                         <Col lg={6} md={6} sm={12}>
                             <Row>
                                 <Col lg="6" md="6"><p>Status Kegiatan</p></Col>
-                                <Col className='content-table' lg="6" md="6"><StatusPelaksanaan status={myparam.pelaksanaan_status} /></Col>
+                                <Col className='content-table' lg="6" md="6"><StatusPelaksanaan status={myparam.status_kegiatan} status_administrasi={myparam.status_administrasi} /></Col>
 
                                 <Col lg="6" md="6"><p>Jumlah JP</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.penempatan ? myparam.penempatan : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jml_jp ? myparam.jml_jp : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Tanggal</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jabatan ? myparam.jabatan : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.tgl_mulai ? myparam.tgl_mulai : '-'} - {myparam.tgl_selesai ? myparam.tgl_selesai : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Jenis Dokumen Pendukung</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jabatan ? myparam.jabatan : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jenis_dokumen ? myparam.jenis_dokumen : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Nomor Surat</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jabatan ? myparam.jabatan : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.nomor_surat ? myparam.nomor_surat : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>File Surat</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jabatan ? myparam.jabatan : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.file_original ? myparam.file_original : '-'}</p></Col>
                             </Row>
                         </Col>
                     </Row>
                 </Card.Body>
             </Card>
             {
-                myparam.pelaksanaan_status == 1 ?
+                myparam.status_kegiatan == 1 && listKehadiranPegawai.length > 0 ?
                     <Card className="card-main-content">
                         <Card.Body>
                             <div className="d-flex flex-row justify-content-between">
@@ -141,7 +163,7 @@ const DetailKegiatan = () => {
                                     <p className="card-main-content-subtitle">Tambahkan kehadiran peserta dengan memilih dan mengunggah file pendukung.</p>
                                 </div>
                                 <div>
-                                    <Link className="content-link" to={{ pathname: `#` }}><Button className="content-button d-flex flex-row align-items-center"><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button></Link>
+                                    <Button className="content-button d-flex flex-row align-items-center" onClick={() => setModalShow(true)}><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
                                 </div>
                             </div>
                             <div id="content-table" className="content-table">
@@ -160,12 +182,12 @@ const DetailKegiatan = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                            !_.isEmpty(listUnit) ?
-                                                listUnit.map((x, key) => {
+                                            !_.isEmpty(listKehadiranPegawai) ?
+                                                listKehadiranPegawai.map((x, key) => {
                                                     return (
-                                                        <tr key={x.id}>
+                                                        <tr key={key}>
                                                             <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                            <td>{x.name}</td>
+                                                            <td>{x.label}</td>
                                                             <td>0</td>
                                                         </tr>
                                                     )
@@ -179,9 +201,9 @@ const DetailKegiatan = () => {
                                 <div className="footer-table d-flex justify-content-between align-items-center">
                                     <div>
                                         {
-                                            !_.isEmpty(listUnit) ?
+                                            !_.isEmpty(listKehadiranPegawai) ?
                                                 <>
-                                                    Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listUnit.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listUnit.length)} dari {dataCount} data
+                                                    Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listKehadiranPegawai.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listKehadiranPegawai.length)} dari {dataCount} data
                                                 </>
                                                 :
                                                 <>
@@ -213,7 +235,7 @@ const DetailKegiatan = () => {
                             </div>
                         </Card.Body>
                     </Card>
-                    : myparam.pelaksanaan_status == 2 ?
+                    : myparam.status_kegiatan == 1 ?
                         <Card className="card-main-content">
                             <Card.Body>
                                 <div className="d-flex flex-row justify-content-between">
@@ -222,7 +244,7 @@ const DetailKegiatan = () => {
                                         <p className="card-main-content-subtitle">Tambahkan kehadiran peserta dengan memilih dan mengunggah file pendukung.</p>
                                     </div>
                                     <div>
-                                        <Link className="content-link" to={{ pathname: `#` }}><Button className="content-button d-flex flex-row align-items-center"><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button></Link>
+                                        <Button className="content-button d-flex flex-row align-items-center" onClick={() => setModalShow(true)}><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
                                     </div>
                                 </div>
                                 <div className='d-flex flex-column justify-content-center align-items-center' style={{ minHeight: 400 }}>
@@ -242,22 +264,39 @@ const DetailKegiatan = () => {
                         <>
                         </>
             }
+            <Modal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                className="modal-filter"
+            >
+                <Form>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Pilih Nama Pegawai
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Select options={listPegawai} onChange={(e) => selectedUser(e)} placeholder="Pilih Pegawai" />
+                    </Modal.Body>
+                </Form>
+            </Modal>
         </div>
     );
 };
 
-function StatusPelaksanaan({ status }) {
+function StatusPelaksanaan({ status, status_administrasi }) {
     return (
-        status == 0 ?
+        status == 0 && status_administrasi == 0 ?
             <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
-            : status == 1 ?
-                <><Badge className="success" bg="success">Terlaksana</Badge></>
-                : status == 2 ?
-                    <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className="warning" bg="warning">Belum Lengkap</Badge></>
-                    : status == 3 ?
-                        <Badge className="danger" bg="danger"><div style={{ color: '#A6192D' }}>Tidak Terlaksana</div></Badge>
-                        :
-                        <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
+            : status == 1 && status_administrasi == 0 ?
+                <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
+                : status == 1 && status_administrasi == 1 ?
+                    <><Badge className="success" bg="success">Terlaksana</Badge></>
+                    :
+                    <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
     )
 }
 

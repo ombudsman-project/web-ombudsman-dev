@@ -38,40 +38,6 @@ const DaftarKegiatan = () => {
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
     const [listKegiatan, setListKegiatan] = useState([]);
-    const [listTempKegiatan, setListTempKegiatan] = useState([
-        {
-            id: "1",
-            nama_kegiatan: "Pelatihan Sistem Manajemen Mutu Terpadu",
-            penyelenggara: "Ombudsman RI",
-            tanggal: "9 Juli 2021",
-            pelaksanaan_status: 0,
-            peserta: 0
-        },
-        {
-            id: "2",
-            nama_kegiatan: "Diklat Teknis Pengelolaan Arsip Dinamis",
-            penyelenggara: "Lembaga Ketahanan Nasional RI (Lemhanas RI)",
-            tanggal: "9 Juli 2021",
-            pelaksanaan_status: 1,
-            peserta: 27
-        },
-        {
-            id: "3",
-            nama_kegiatan: "Sosialisasi Aplikasi E-Kinerja Biro SDMU",
-            penyelenggara: "Ombudsman RI dan Office of Commonwealth Ombudsman Australia (OCO)",
-            tanggal: "9 Juli 2021",
-            pelaksanaan_status: 2,
-            peserta: 50
-        },
-        {
-            id: "4",
-            nama_kegiatan: "Pelatihan Sistem Manajemen Mutu Terpadu",
-            penyelenggara: "PT. Bhakti Strategic Consulting",
-            tanggal: "9 Juli 2021",
-            pelaksanaan_status: 3,
-            peserta: 150
-        }
-    ]);
 
     useEffect(() => {
         viewData();
@@ -99,7 +65,7 @@ const DaftarKegiatan = () => {
     function handlePerPage(e) {
         setPerPage(e.target.value)
         const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getPegawai(param).then(x => {
+        new ServiceApi().getKegiatan(param).then(x => {
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
@@ -109,7 +75,7 @@ const DaftarKegiatan = () => {
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
         const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getPegawai(param).then(x => {
+        await new ServiceApi().getKegiatan(param).then(x => {
             setListKegiatan(x.data.data);
         }).catch((err) => {
         })
@@ -117,7 +83,7 @@ const DaftarKegiatan = () => {
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getPegawai(param).then(x => {
+        await new ServiceApi().getKegiatan(param).then(x => {
             setDataCount(x.data.total_data);
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -161,7 +127,6 @@ const DaftarKegiatan = () => {
 
     const actionButton = (route, e) => {
         history.push(route, e);
-        //window.location.href = "/analisa_kompetensi/kompetensi_pegawai/detail"
     }
 
     return (
@@ -252,7 +217,7 @@ const DaftarKegiatan = () => {
                                                         <td>{x.nama_pelatihan ? x.nama_pelatihan : '-'}</td>
                                                         <td className="">{x.nama_penyelenggara ? x.nama_penyelenggara : '-'}</td>
                                                         <td className="text-center">{x.tgl_mulai ? x.tgl_mulai : '-'}</td>
-                                                        <td className="text-center"><StatusPelaksanaan status={x.pelaksanaan_status} /></td>
+                                                        <td className="text-center"><StatusPelaksanaan status={x.status_kegiatan} status_administrasi={x.status_administrasi}/></td>
                                                         <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
                                                         <td className="action-column">
                                                             <DropdownButton
@@ -320,16 +285,14 @@ const DaftarKegiatan = () => {
 
 
 
-function StatusPelaksanaan ({ status }) {
+function StatusPelaksanaan ({ status, status_administrasi }) {
     return (
-        status == 0 ?
+        status == 0 && status_administrasi == 0 ?
             <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
-        : status == 1 ?
+        : status == 1 && status_administrasi == 0 ?
+            <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
+        : status == 1 && status_administrasi == 1 ?
             <><Badge className="success" bg="success">Terlaksana</Badge></>
-        : status == 2 ?
-            <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className="warning" bg="warning">Belum Lengkap</Badge></>
-        : status == 3 ?
-            <Badge className="danger" bg="danger"><div style={{ color: '#A6192D' }}>Tidak Terlaksana</div></Badge>
         :
             <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
     )

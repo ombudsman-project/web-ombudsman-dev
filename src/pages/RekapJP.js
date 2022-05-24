@@ -27,15 +27,12 @@ import * as FiIcons from "react-icons/fi";
 import * as FaIcons from "react-icons/fa";
 import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 import ServiceApi from "../api/MyApi";
 
 const Rekapitulasi = () => {
-  const style = {
-    color: "white",
-    fontWeight: 600,
-    fontSize: 16,
-    strokeWidth: 50,
-  };
+  const animatedComponents = makeAnimated();
   const [modalShow, setModalShow] = useState(false);
   const [perPage, setPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,11 +47,19 @@ const Rekapitulasi = () => {
       key: "selection",
     },
   ]);
-
   const [filterDate, setFilterDate] = useState({
     startDate: moment(new Date()).format("DD/MM/YYYY"),
     endDate: moment(addDays(new Date(), 30)).format("DD/MM/YYYY"),
   });
+  const [listKepegawaian, setListKepegawaian] = useState([]);
+  const [kepegawaian, setKepegawaian] = useState([]);
+  const [listJabatan, setListJabatan] = useState([]);
+  const [jabatan, setJabatan] = useState([]);
+  const [selectJabatan, setSelectJabatan] = useState('');
+  const [penempatan, setPenempatan] = useState([]);
+  const [listPenempatan, setListPenempatan] = useState([]);
+  const [selectPenempatan, setSelectPenempatan] = useState('');
+  const [rekapJP, setRekapJP] = useState([]);
 
   const setDateRange = (data) => {
     setState([data.selection]);
@@ -63,6 +68,30 @@ const Rekapitulasi = () => {
       endDate: moment(data.selection.endDate).format("DD/MM/YYYY"),
     });
   };
+
+  useEffect(() => {
+    async function listData() {
+      let formData = new FormData();
+      formData.append('parameter[]', 'all')
+      await new ServiceApi().getSelect(formData).then(x => {
+        setListKepegawaian(x.data.jenis_kepegawaian);
+        var data_jabatan = x.data.jabatan.map((row, i) => {
+          return (
+            { value: row.id, label: row.name }
+          )
+        })
+        setListJabatan(data_jabatan);
+        var data_penempatan = x.data.penempatan.map((row, i) => {
+          return (
+            { value: row.id, label: row.name }
+          )
+        })
+        setListPenempatan(data_penempatan)
+      }).catch((err) => {
+      })
+    }
+    listData();
+  }, []);
 
   const viewData = async () => {
     const param = `page=${currentPage}&length=${perPage}&search=`;
@@ -73,7 +102,7 @@ const Rekapitulasi = () => {
         setListUnit(x.data.data);
         setPageCount(Math.ceil(x.data.total_data / perPage));
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   function handlePerPage(e) {
@@ -85,7 +114,7 @@ const Rekapitulasi = () => {
         setListUnit(x.data.data);
         setPageCount(Math.ceil(x.data.total_data / e.target.value));
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   async function handlePageClick({ selected: selectedPage }) {
@@ -96,7 +125,7 @@ const Rekapitulasi = () => {
       .then((x) => {
         setListUnit(x.data.data);
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
 
   const searchData = async (e) => {
@@ -109,8 +138,67 @@ const Rekapitulasi = () => {
         setListUnit(x.data.data);
         setPageCount(Math.ceil(x.data.total_data / perPage));
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
+
+  const changeKepegawaian = event => {
+    const { checked, value } = event.currentTarget;
+
+    setKepegawaian(
+      prev => checked
+        ? [...prev, value]
+        : prev.filter(val => val !== value)
+    );
+  };
+
+  const selectedJabatan = (e) => {
+    var data_map = e.map((row, id) => {
+      return (
+        row.value
+      )
+    })
+    setJabatan(data_map)
+    setSelectJabatan(e)
+  }
+
+  const selectedPenempatan = (e) => {
+    var data_map = e.map((row, id) => {
+      return (
+        row.value
+      )
+    })
+    setPenempatan(data_map)
+    setSelectPenempatan(e);
+  }
+
+  const changeRekapJP = event => {
+      const { checked, value } = event.currentTarget;
+
+      setRekapJP(
+          prev => checked
+              ? [...prev, value]
+              : prev.filter(val => val !== value)
+      );
+  };
+
+  const filterData = async (e) => {
+    console.log(e)
+    setModalShow(false);
+    // const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
+    // await new ServiceApi().getPegawai(data).then(x => {
+    //   setModalShow(false);
+    //   setDataCount(x.data.total_data);
+    //   setListPegawai(x.data.data);
+    //   setPageCount(Math.ceil(x.data.total_data / perPage));
+    // }).catch((err) => {
+    // })
+  }
+
+  const listRekapJP = [
+    { id: '1', name: 'Memenuhi JP' },
+    { id: '2', name: 'Memenuhi Sebagian JP' },
+    { id: '3', name: 'Tidak Memenuhi JP' },
+  ]
 
   return (
     <div className="main-animation">
@@ -244,7 +332,7 @@ const Rekapitulasi = () => {
                     {listUnit.length == perPage
                       ? currentPage * perPage
                       : currentPage * perPage -
-                        (perPage - listUnit.length)}{" "}
+                      (perPage - listUnit.length)}{" "}
                     dari {dataCount} data
                   </>
                 ) : (
@@ -276,38 +364,104 @@ const Rekapitulasi = () => {
         </Card.Body>
       </Card>
 
-      <MyVerticallyCenteredModal
+      <Modal
         show={modalShow}
         onHide={() => setModalShow(false)}
-      />
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="modal-filter"
+      >
+        <Form>
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Pilih Data yang Ingin Ditampilkan
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="12">
+                <p className="mb-2">Jenis Kepegawaian</p>
+              </Form.Label>
+              {listKepegawaian.map((item, key) => {
+                return (
+                  <Col sm="3" key={key}>
+                    <div className='input-checkbox-custom'>
+                      <Form.Check
+                        inline
+                        id={item.name}
+                        name={item.id}
+                        value={item.id}
+                        type="checkbox"
+                        label={item.name}
+                        checked={kepegawaian.some(val => val == item.id)}
+                        onChange={changeKepegawaian}
+                      />
+                    </div>
+                  </Col>
+                )
+              })}
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="12">
+                <p className="mb-2">Jabatan</p>
+              </Form.Label>
+              <Col sm="12">
+                <Select
+                  defaultValue={selectJabatan}
+                  placeholder="Pilih Jabatan"
+                  options={listJabatan}
+                  onChange={(e) => selectedJabatan(e)}
+                  isMulti
+                  components={animatedComponents}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="12">
+                <p className="mb-2">Penempatan</p>
+              </Form.Label>
+              <Col sm="12">
+                <Select
+                  defaultValue={selectPenempatan}
+                  placeholder="Pilih Penempatan"
+                  options={listPenempatan}
+                  onChange={(e) => selectedPenempatan(e)}
+                  isMulti
+                  components={animatedComponents}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3">
+              <Form.Label column sm="12">
+                <p className="mb-2">Rekap JP</p>
+              </Form.Label>
+              {listRekapJP.map((item, key) => {
+                return (
+                  <Col sm="6" key={key}>
+                    <div className='input-checkbox-custom'>
+                      <Form.Check
+                        inline
+                        id={item.id}
+                        value={item.id}
+                        type="checkbox"
+                        label={item.name}
+                        checked={rekapJP.some(val => val == item.id)}
+                        onChange={changeRekapJP}
+                      />
+                    </div>
+                  </Col>
+                )
+              })}
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button className="button-submit" onClick={() => filterData()} type="button">Simpan</Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </div>
   );
 };
-
-function MyVerticallyCenteredModal(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      centered
-      className="modal-filter"
-    >
-      <Form>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            Pilih Data yang Ingin Ditampilkan
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <h6>Jenis Kepegawaian</h6>
-          <Row></Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Form>
-    </Modal>
-  );
-}
 
 export default Rekapitulasi;
