@@ -20,8 +20,7 @@ const Login = () => {
 
     const sampleLogin = async (e) => {
         e.preventDefault();
-        // const token = {"access_token":"Tes"};
-        // setRemember({ remember: rmb, token});
+        localStorage.setItem("welcome_modal", "1")
         axios({
             method: 'post',
             url: process.env.REACT_APP_BASE_API + '/login',

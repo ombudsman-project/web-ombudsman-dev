@@ -36,7 +36,7 @@ const Rekapitulasi = () => {
     fontSize: 16,
     strokeWidth: 50,
   };
-  const [modalShow, setModalShow] = useState(true);
+  const [modalShow, setModalShow] = useState(false);
   const [perPage, setPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
