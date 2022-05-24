@@ -85,31 +85,31 @@ const EditPenyelenggara = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Penyelenggara</h4>
-                        <p className="card-main-content-subtitle">Masukkan detail penyelenggara kegiatan</p>
+                        <p className="card-main-content-subtitle">Masukkan detail penyelenggara kegiatan.</p>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="2" className="mb-3">
                                 Nama Penyelenggara
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={penyelenggara} name="nama_penyelenggara" placeholder="Masukkan nama penyelenggara" onChange={(e) => setPenyelenggara(e.target.value)} autoComplete="off"  />
+                                <Form.Control type="text" value={penyelenggara} name="nama_penyelenggara" placeholder="Masukkan nama penyelenggara" onChange={(e) => setPenyelenggara(e.target.value)} autoComplete="off" required />
                             </Col>
                             <Form.Label column sm="2" className="mb-3">
                                 Alamat
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={alamat} name="alamat" placeholder="Masukkan alamat penyelenggara" onChange={(e) => setAlamat(e.target.value)} autoComplete="off"  />
+                                <Form.Control type="text" value={alamat} name="alamat" placeholder="Masukkan alamat penyelenggara" onChange={(e) => setAlamat(e.target.value)} autoComplete="off" required />
                             </Col>
                             <Form.Label column sm="2" className="mb-3">
                                 Email
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="email" value={email} name="email" placeholder="Masukkan email penyelenggara" onChange={(e) => setEmail(e.target.value)} autoComplete="off"  />
+                                <Form.Control type="email" value={email} name="email" placeholder="Masukkan email penyelenggara" onChange={(e) => setEmail(e.target.value)} autoComplete="off" required />
                             </Col>
                             <Form.Label column sm="2" className="mb-3">
                                 No. Telp
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={telp} name="telp" placeholder="Masukkan no. telp penyelenggara" onChange={(e) => setTelp(e.target.value)} autoComplete="off"  />
+                                <Form.Control type="text" value={telp} name="telp" placeholder="Masukkan no. telp penyelenggara" onChange={(e) => setTelp(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>
                     </Card.Body>

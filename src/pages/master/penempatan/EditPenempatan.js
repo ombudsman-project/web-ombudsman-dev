@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -22,6 +22,7 @@ const iconPerson = new L.Icon({
 });
 
 const EditPenempatan = () => {
+    const history = useHistory();
     const location = useLocation();
     const myparam = location.state;
     const [input, setInput] = useState('');
@@ -46,7 +47,7 @@ const EditPenempatan = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/penempatan'
+                    history.push('/master/penempatan');
                 })
             }).catch(err => {
                 Swal.fire({
@@ -70,12 +71,12 @@ const EditPenempatan = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Lokasi Penempatan</h4>
-                        <p className="card-main-content-subtitle">Ubah lokasi penempatan</p>
+                        <p className="card-main-content-subtitle">Ubah lokasi penempatan.</p>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm="2">
+                            <Form.Label column sm="3">
                                 Lokasi Penempatan
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" value={input} name="penempatan" placeholder="Masukkan lokasi penempatan" onChange={(e) => setInput(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>

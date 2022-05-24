@@ -128,6 +128,7 @@ const Penyelenggara = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                    <option value="10" selected></option>
                                     <option value="5">5</option>
                                     <option value="10">10</option>
                                     <option value="50">50</option>

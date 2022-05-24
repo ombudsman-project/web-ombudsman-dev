@@ -148,12 +148,12 @@ const JenisKepegawaian = () => {
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                                        <th className="table-title" scope="col" width="50">
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Jenis Kepegawaian</th>
                                         <th className="table-title text-center" scope="col">Jumlah Pegawai</th>
-                                        <th className="table-title text-center" scope="col">Action</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -163,8 +163,8 @@ const JenisKepegawaian = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.name}</td>
-                                                        <td className="text-center">{x.jumlah_pegawai}</td>
+                                                        <td>{x.name ?? '-'}</td>
+                                                        <td className="text-center">{x.jumlah_pegawai ?? '-'}</td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/jenis_kepegawaian/detail`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                                 <button type="button" className="btn btn-warning button-view">

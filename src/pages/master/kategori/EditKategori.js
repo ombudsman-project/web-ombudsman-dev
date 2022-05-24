@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 
 const iconPerson = new L.Icon({
@@ -21,6 +21,7 @@ const iconPerson = new L.Icon({
 });
 
 const EditKategori = () => {
+    const history = useHistory();
     const location = useLocation();
     const myparam = location.state;
     const [input, setInput] = useState('');
@@ -45,7 +46,7 @@ const EditKategori = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/kategori_jabatan'
+                    history.push('/master/kategori_jabatan')
                 })
             }).catch(err => {
                 Swal.fire({
@@ -69,7 +70,7 @@ const EditKategori = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Kategori Jabatan</h4>
-                        <p className="card-main-content-subtitle">Ubah detail kategori jabatan</p>
+                        <p className="card-main-content-subtitle">Ubah detail kategori jabatan.</p>
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                             <Form.Label column sm="2">
                                 Kategori Jabatan

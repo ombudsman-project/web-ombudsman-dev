@@ -69,7 +69,7 @@ const EditUnitKerja = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Unit Kerja</h4>
-                        <p className="card-main-content-subtitle">Ubah nama unit kerja</p>
+                        <p className="card-main-content-subtitle">Ubah nama unit kerja.</p>
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                             <Form.Label column sm="2">
                                 Unit Kerja

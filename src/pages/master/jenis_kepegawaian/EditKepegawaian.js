@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -22,6 +22,7 @@ const iconPerson = new L.Icon({
 });
 
 const EditKepegawaian = () => {
+    const history = useHistory();
     const [listKlasifikasi, setListKlasifikasi] = useState([]);
     const [klasifikasiID, setKlasifikasiID] = useState('');
     const [addKategori, setAddKategori] = useState('');
@@ -49,7 +50,7 @@ const EditKepegawaian = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/jenis_kepegawaian'
+                    history.push('/master/jenis_kepegawaian')
                 })
             }).catch(err => {
                 Swal.fire({
@@ -73,12 +74,12 @@ const EditKepegawaian = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
-                        <p className="card-main-content-subtitle">Ubah detail jenis kepegawaian</p>
+                        <p className="card-main-content-subtitle">Ubah detail jenis kepegawaian.</p>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm="2" className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
                                 Jenis Kepegawaian
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" value={input} name="jenis_kepegawaian" placeholder="Masukkan jenis kepegawaian" onChange={(e) => setInput(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>

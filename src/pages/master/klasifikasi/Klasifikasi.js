@@ -84,6 +84,7 @@ const Klasifikasi = () => {
             html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
             showCancelButton: true,
             confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
@@ -156,12 +157,12 @@ const Klasifikasi = () => {
                             <table className="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                                        <th className="table-title" scope="col" width="50">
                                             #
                                         </th>
                                         <th className="table-title" scope="col">Klasifikasi Jabatan</th>
                                         <th className="table-title text-center" scope="col">Kategori</th>
-                                        <th className="table-title text-center" scope="col">Action</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -106,10 +106,10 @@ const EditSubKompetensi = () => {
                         <h4 className="card-main-content-title">Detail Sub Kompetensi</h4>
                         <p className="card-main-content-subtitle">Ubah detail sub kompetensi.</p>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm="2" className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
                                 Kategori Kompetensi
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Select
                                     value={listKompetensi.filter((option) => option.value == kompetensiID)}
                                     name="kategori_id"
@@ -118,10 +118,10 @@ const EditSubKompetensi = () => {
                                     
                                 />
                             </Col>
-                            <Form.Label column sm="2">
+                            <Form.Label column sm="3">
                                 Nama Sub Kompetensi
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" value={input} name="sub_kompetensi" placeholder="Masukkan nama sub kompetensi" onChange={(e) => setInput(e.target.value)} autoComplete="off"  />
                             </Col>
                         </Form.Group>

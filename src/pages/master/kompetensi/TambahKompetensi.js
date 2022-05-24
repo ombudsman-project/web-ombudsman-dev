@@ -64,7 +64,7 @@ const TambahKompetensi = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Kompetensi</h4>
-                        <p className="card-main-content-subtitle">Masukkan detail kompetensi</p>
+                        <p className="card-main-content-subtitle">Masukkan detail kompetensi.</p>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="3">
                                 Nama Kompetensi

@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -22,6 +22,7 @@ const iconPerson = new L.Icon({
 });
 
 const EditPangkat = () => {
+    const history = useHistory();
     const location = useLocation();
     const myparam = location.state;
     const [pangkat, setPangkat] = useState('');
@@ -49,7 +50,7 @@ const EditPangkat = () => {
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
-                    window.location = '/master/pangkat_golongan'
+                    history.push('/master/pangkat_golongan')
                 })
             }).catch(err => {
                 Swal.fire({
@@ -73,18 +74,18 @@ const EditPangkat = () => {
                 <Card className="card-main-content">
                     <Card.Body>
                         <h4 className="card-main-content-title">Detail Pangkat & Golongan</h4>
-                        <p className="card-main-content-subtitle">Ubah detail pangkat & golongan</p>
+                        <p className="card-main-content-subtitle">Ubah detail pangkat & golongan.</p>
                         <Form.Group as={Row} className="mb-3">
-                            <Form.Label column sm="2" className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
                                 Pangkat
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" value={pangkat} name="pangkat" placeholder="Masukkan pangkat" onChange={(e) => setPangkat(e.target.value)} autoComplete="off" required />
                             </Col>
-                            <Form.Label column sm="2">
+                            <Form.Label column sm="3">
                                 Golongan
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" value={golongan} name="golongan" placeholder="Masukkan golongan" onChange={(e) => setGolongan(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>
