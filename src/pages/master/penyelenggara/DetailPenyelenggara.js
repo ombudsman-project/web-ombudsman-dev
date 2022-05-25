@@ -13,9 +13,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';import ReactPaginate from 'react-paginate';
+import { Link, Redirect, useLocation } from 'react-router-dom'; import ReactPaginate from 'react-paginate';
 import ServiceApi from '../../../api/MyApi';
-;
+import * as FaIcons from 'react-icons/fa';
 
 const DetailPenyelenggara = () => {
     const location = useLocation();
@@ -28,11 +28,10 @@ const DetailPenyelenggara = () => {
 
     useEffect(() => {
         viewData();
-        // console.log(myparam.id)
     }, [])
 
     const viewData = async () => {
-        const param = `page=${currentPage}&length=${perPage}&search=&penyelenggara=${myparam.id}`;
+        const param = `page=${currentPage}&length=${perPage}&search=&penyelenggara=${myparam.x.id}`;
         await new ServiceApi().getKegiatan(param).then(x => {
             setDataCount(x.data.total_data);
             setListKegiatan(x.data.data);
@@ -43,7 +42,7 @@ const DetailPenyelenggara = () => {
 
     function handlePerPage(e) {
         setPerPage(e.target.value)
-        const param = `page=${currentPage}&length=${e.target.value}&search=&penyelenggara=${myparam.id}`;
+        const param = `page=${currentPage}&length=${e.target.value}&search=&penyelenggara=${myparam.x.id}`;
         new ServiceApi().getKegiatan(param).then(x => {
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
@@ -53,7 +52,7 @@ const DetailPenyelenggara = () => {
 
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        const param = `page=${selectedPage + 1}&length=${perPage}&search=&penyelenggara=${myparam.id}`;
+        const param = `page=${selectedPage + 1}&length=${perPage}&search=&penyelenggara=${myparam.x.id}`;
         await new ServiceApi().getKegiatan(param).then(x => {
             setListKegiatan(x.data.data);
         }).catch((err) => {
@@ -61,7 +60,7 @@ const DetailPenyelenggara = () => {
     }
 
     const searchData = async (e) => {
-        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}&penyelenggara=${myparam.id}`;
+        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}&penyelenggara=${myparam.x.id}`;
         await new ServiceApi().getKegiatan(param).then(x => {
             setDataCount(x.data.total_data);
             setListKegiatan(x.data.data);
@@ -69,6 +68,8 @@ const DetailPenyelenggara = () => {
         }).catch((err) => {
         })
     }
+
+    if(!myparam) return <Redirect to="/master/penyelenggara" />
 
     return (
         <div className='main-animation'>
@@ -86,15 +87,12 @@ const DetailPenyelenggara = () => {
                                 <h4 className="card-main-content-title">Detail Penyelenggara</h4>
                                 <p className="card-main-content-subtitle">Deskripsi lengkap dari detail penyelenggara kegiatan.</p>
                             </div>
-                            <div>
-                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
-                            </div>
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Penyelenggara</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.nama_penyelenggara ?? '-'}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.nama_penyelenggara ?? '-'}</p></Col>
                             <Col lg="3"><p>Jumlah Kegiatan</p></Col>
-                            <Col className="text-secondary" lg="9"><p>0</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.jumlah_kegiatan ?? '0'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
@@ -105,6 +103,29 @@ const DetailPenyelenggara = () => {
                             <div>
                                 <h4 className="card-main-content-title">Daftar Kegiatan</h4>
                                 <p className="card-main-content-subtitle">Deskripsi lengkap dari penyelenggara yang telah dipilih.</p>
+                            </div>
+                        </div>
+                        <div className="head-table">
+                            <div id="size-table" className="size-table">
+                                <div>Lihat &nbsp;</div>
+                                <div>
+                                    <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
+                                        <option value="5">5</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </Form.Control>
+                                </div>
+                                <div>&nbsp; data</div>
+                            </div>
+                            <div className="d-flex flex-row align-items-center">
+                                <div id="search-table" className="search-table">
+                                    <FaIcons.FaSearch
+                                        style={{ marginLeft: "1rem", position: "absolute" }}
+                                        color="#2c2d3040"
+                                    />
+                                    <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)} />
+                                </div>
                             </div>
                         </div>
                         <div id="content-table" className="content-table">
@@ -132,7 +153,7 @@ const DetailPenyelenggara = () => {
                                                             <td>{x.nama_pelatihan ?? '-'}</td>
                                                             <td>{x.nama_penyelenggara ?? '-'}</td>
                                                             <td className="text-center">{x.tgl_mulai ? moment(new Date(x.tgl_mulai)).format('DD MMM yyyy') : '-'}</td>
-                                                            <td className="text-center"></td>
+                                                            <td className="text-center"><StatusPelaksanaan status={x.status_kegiatan} status_administrasi={x.status_administrasi} /></td>
                                                             <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
                                                         </tr>
                                                     )
@@ -184,5 +205,18 @@ const DetailPenyelenggara = () => {
         </div>
     );
 };
+
+function StatusPelaksanaan({ status, status_administrasi }) {
+    return (
+        status == 0 && status_administrasi == 0 ?
+            <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
+            : status == 1 && status_administrasi == 0 ?
+                <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
+                : status == 1 && status_administrasi == 1 ?
+                    <><Badge className="success" bg="success">Terlaksana</Badge></>
+                    :
+                    <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
+    )
+}
 
 export default DetailPenyelenggara;

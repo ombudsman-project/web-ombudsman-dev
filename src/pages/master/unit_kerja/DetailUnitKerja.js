@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 
 const iconPerson = new L.Icon({
 
@@ -23,6 +23,8 @@ const iconPerson = new L.Icon({
 const DetailUnitKerja = () => {
     const location = useLocation();
     const myparam = location.state;
+    
+    if(!myparam) return <Redirect to="/master/unit_kerja" />
 
     return (
         <div className='main-animation'>
@@ -40,16 +42,13 @@ const DetailUnitKerja = () => {
                                 <h4 className="card-main-content-title">Detail Unit Kerja</h4>
                                 <p className="card-main-content-subtitle">Deskripsi lengkap dari unit kerja pegawai.</p>
                             </div>
-                            <div>
-                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
-                            </div>
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Golongan</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.unit_kerja}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.unit_kerja ?? '-'}</p></Col>
 
                             <Col lg="3"><p>Jumlah Pegawai</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.jumlah_pegawai}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.jumlah_pegawai ?? '0'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>

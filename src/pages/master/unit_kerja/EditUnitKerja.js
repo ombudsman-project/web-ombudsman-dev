@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 
 const iconPerson = new L.Icon({
@@ -57,6 +57,8 @@ const EditUnitKerja = () => {
             });
     }
 
+    if(!myparam) return <Redirect to="/master/unit_kerja" />
+
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -71,10 +73,10 @@ const EditUnitKerja = () => {
                         <h4 className="card-main-content-title">Detail Unit Kerja</h4>
                         <p className="card-main-content-subtitle">Ubah nama unit kerja.</p>
                         <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
-                            <Form.Label column sm="2">
+                            <Form.Label column sm="3">
                                 Unit Kerja
                             </Form.Label>
-                            <Col sm="10">
+                            <Col sm="9">
                                 <Form.Control type="text" value={input} name="unit_kerja" placeholder="Masukkan nama unit kerja" onChange={(e) => setInput(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>
