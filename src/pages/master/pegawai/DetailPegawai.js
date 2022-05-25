@@ -13,16 +13,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
-
-const iconPerson = new L.Icon({
-
-});
-
+import { Link, Redirect, useLocation } from 'react-router-dom';
 
 const DetailPegawai = () => {
     const location = useLocation();
     const myparam = location.state;
+
+    if(!myparam) return <Redirect to="/master/pegawai" />
 
     return (
         <div className='main-animation'>
@@ -39,9 +36,6 @@ const DetailPegawai = () => {
                             <div>
                                 <h4 className="card-main-content-title">Detail Pegawai</h4>
                                 <p className="card-main-content-subtitle">Data lengkap dari pegawai.</p>
-                            </div>
-                            <div>
-                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
                             </div>
                         </div>
                         <Row>

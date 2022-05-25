@@ -13,13 +13,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
-
-const iconPerson = new L.Icon({
-
-});
 
 const EditPenyelenggara = () => {
     const [listKlasifikasi, setListKlasifikasi] = useState([]);
@@ -34,17 +30,17 @@ const EditPenyelenggara = () => {
     const history = useHistory();
 
     useEffect(() => {
-        setPenyelenggara(myparam.nama_penyelenggara);
-        setAlamat(myparam.alamat);
-        setEmail(myparam.email);
-        setTelp(myparam.telp);
+        setPenyelenggara(myparam.x.nama_penyelenggara);
+        setAlamat(myparam.x.alamat);
+        setEmail(myparam.x.email);
+        setTelp(myparam.x.telp);
     }, [])
 
     const updateData = async (e) => {
         e.preventDefault();
 
         const data = {
-            'key': myparam.id,
+            'key': myparam.x.id,
             'nama_penyelenggara': e.target.elements.nama_penyelenggara.value,
             'alamat': e.target.elements.alamat.value,
             'email': e.target.elements.email.value,
@@ -57,7 +53,7 @@ const EditPenyelenggara = () => {
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
-                    html: '<i>' + myparam.nama_penyelenggara + ' berhasil diupdate</i>',
+                    html: '<i>' + myparam.x.nama_penyelenggara + ' berhasil diupdate</i>',
                     icon: 'success',
                     confirmButtonColor: '#0058a8',
                 }).then(function () {
@@ -72,6 +68,8 @@ const EditPenyelenggara = () => {
                 })
             });
     }
+
+    if(!myparam) return <Redirect to="/master/penyelenggara" />
 
     return (
         <div className='main-animation'>

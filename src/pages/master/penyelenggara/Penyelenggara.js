@@ -128,9 +128,8 @@ const Penyelenggara = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
-                                    <option value="10" selected></option>
                                     <option value="5">5</option>
-                                    <option value="10">10</option>
+                                    <option value="10" selected>10</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </Form.Control>
@@ -138,11 +137,11 @@ const Penyelenggara = () => {
                             <div>&nbsp; data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                            <button type="button" className="btn btn-link filter-table">
+                            {/* <button type="button" className="btn btn-link filter-table">
                                 <div className="d-flex justify-content-center align-items-center">
                                     <FiIcons.FiFilter />&nbsp;Filter
                                 </div>
-                            </button>
+                            </button> */}
                             <div id="search-table" className="search-table">
                                 <FaIcons.FaSearch
                                     style={{ marginLeft: "1rem", position: "absolute" }}
@@ -171,16 +170,16 @@ const Penyelenggara = () => {
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                         <td>{x.nama_penyelenggara ?? '-'}</td>
-                                                        <td className="text-center">0</td>
+                                                        <td className="text-center">{x.jumlah_kegiatan ?? '0'}</td>
                                                         <td className="action-column">
-                                                            <Link to={{ pathname: `/master/penyelenggara/detail`, state: { id: x.id, nama_penyelenggara: x.nama_penyelenggara, alamat: x.alamat, email: x.email, telp: x.telp } }}>
+                                                            <Link to={{ pathname: `/master/penyelenggara/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <AiIcons.AiOutlineEye />&nbsp;View
                                                                     </div>
                                                                 </button>
                                                             </Link>
-                                                            <Link to={{ pathname: `/master/penyelenggara/edit`, state: { id: x.id, nama_penyelenggara: x.nama_penyelenggara, alamat: x.alamat, email: x.email, telp: x.telp } }}>
+                                                            <Link to={{ pathname: `/master/penyelenggara/edit`, state: { x } }}>
                                                                 <button type="button" className="btn btn-info button-edit">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <FiIcons.FiEdit />&nbsp;Edit

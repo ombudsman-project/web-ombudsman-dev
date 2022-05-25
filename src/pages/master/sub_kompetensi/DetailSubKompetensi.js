@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import ReactPaginate from 'react-paginate';
@@ -21,6 +21,8 @@ import ReactPaginate from 'react-paginate';
 const DetailSubKompetensi = () => {
     const location = useLocation();
     const myparam = location.state;
+
+    if(!myparam) return <Redirect to="/master/sub_kompetensi" />
 
     return (
         <div className='main-animation'>
@@ -38,15 +40,12 @@ const DetailSubKompetensi = () => {
                                 <h4 className="card-main-content-title">Detail Sub Kompetensi</h4>
                                 <p className="card-main-content-subtitle">Deskripsi lengkap dari sub kompetensi.</p>
                             </div>
-                            <div>
-                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
-                            </div>
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Sub Kompetensi</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.x.sub_kompetensi}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.sub_kompetensi ?? '-'}</p></Col>
                             <Col lg="3"><p>Kategori Sub Kompetensi</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.x.kompetensi}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.kompetensi ?? '-'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>

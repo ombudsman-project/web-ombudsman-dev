@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Redirect, useLocation } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
 import ReactPaginate from 'react-paginate';
@@ -71,6 +71,8 @@ const DetailKompetensi = () => {
         })
     }
 
+    if(!myparam) return <Redirect to="/master/kompetensi" />
+
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -87,15 +89,12 @@ const DetailKompetensi = () => {
                                 <h4 className="card-main-content-title">Detail Kompetensi</h4>
                                 <p className="card-main-content-subtitle">Deskripsi lengkap dari kompentesi.</p>
                             </div>
-                            <div>
-                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
-                            </div>
                         </div>
                         <Row>
                             <Col lg="3"><p>Nama Kompetensi</p></Col>
                             <Col className="text-secondary" lg="9"><p>{myparam.x.name ?? '-'}</p></Col>
                             <Col lg="3"><p>Jumlah Sub Kompetensi</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.x.jumlah_sub_kompetensi ?? '-'}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.x.jumlah_sub_kompetensi ?? '0'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
@@ -115,9 +114,8 @@ const DetailKompetensi = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
-                                    <option value="10"></option>
                                     <option value="5">5</option>
-                                    <option value="10">10</option>
+                                    <option value="10" selected>10</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </Form.Control>
