@@ -13,7 +13,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import Select from 'react-select';
 
@@ -91,6 +91,8 @@ const EditSubKompetensi = () => {
                 })
             });
     }
+
+    if(!myparam) return <Redirect to="/master/sub_kompetensi" />
 
     return (
         <div className='main-animation'>

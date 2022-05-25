@@ -119,9 +119,8 @@ const JenisKepegawaian = () => {
                             <div>Lihat &nbsp;</div>
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
-                                    <option value="10" selected></option>
                                     <option value="5">5</option>
-                                    <option value="10">10</option>
+                                    <option value="10" selected>10</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </Form.Control>
@@ -129,11 +128,6 @@ const JenisKepegawaian = () => {
                             <div>&nbsp; data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                            <button type="button" className="btn btn-link filter-table">
-                                <div className="d-flex justify-content-center align-items-center">
-                                    <FiIcons.FiFilter />&nbsp;Filter
-                                </div>
-                            </button>
                             <div id="search-table" className="search-table">
                                 <FaIcons.FaSearch
                                     style={{ marginLeft: "1rem", position: "absolute" }}
@@ -164,7 +158,7 @@ const JenisKepegawaian = () => {
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
                                                         <td>{x.name ?? '-'}</td>
-                                                        <td className="text-center">{x.jumlah_pegawai ?? '-'}</td>
+                                                        <td className="text-center">{x.jumlah_pegawai ?? '0'}</td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/jenis_kepegawaian/detail`, state: { id: x.id, jenis_kepegawaian: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>
                                                                 <button type="button" className="btn btn-warning button-view">

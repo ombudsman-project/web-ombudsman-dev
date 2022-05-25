@@ -13,11 +13,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as BsIcons from 'react-icons/bs';
-import { Link, useLocation } from 'react-router-dom';;
+import { Link, Redirect, useLocation } from 'react-router-dom';;
 
 const DetailKepegawaian = () => {
     const location = useLocation();
     const myparam = location.state;
+
+    if(!myparam) return <Redirect to="/master/jenis_kepegawaian" />
 
     return (
         <div className='main-animation'>
@@ -35,15 +37,12 @@ const DetailKepegawaian = () => {
                                 <h4 className="card-main-content-title">Detail Jenis Kepegawaian</h4>
                                 <p className="card-main-content-subtitle">Deskripsi lengkap dari detail jenis kepegawaian.</p>
                             </div>
-                            <div>
-                                <Button className="btn-detail" variant="link"><BsIcons.BsThreeDots /></Button>
-                            </div>
                         </div>
                         <Row>
                             <Col lg="3"><p>Jenis Kepegawaian</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.jenis_kepegawaian}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.jenis_kepegawaian ?? '-'}</p></Col>
                             <Col lg="3"><p>Jumlah Kepegawaian</p></Col>
-                            <Col className="text-secondary" lg="9"><p>{myparam.jumlah_pegawai}</p></Col>
+                            <Col className="text-secondary" lg="9"><p>{myparam.jumlah_pegawai ?? '-'}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
