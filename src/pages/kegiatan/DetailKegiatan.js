@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
-import { Badge, Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { faArrowLeft, faEllipsisH, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
+import { Badge, Button, Card, Col, Container, Dropdown, DropdownButton, Form, Modal, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Select from 'react-select';
 import moment from 'moment';
@@ -27,23 +27,26 @@ const DetailKegiatan = () => {
     const myparam = location.state;
 
     useEffect(() => {
-        async function fetchGetSelect() {
-            let formData = new FormData();
-            formData.append('parameter[]', 'all');
-            await new ServiceApi().getSelect(formData).then(x => {
-                const data_map = x.data.pegawai.map((row, i) => {
+        async function fetchGetPegawai() {
+            const data = { 'page': 1, 'length': 1000000000000000 }
+            await new ServiceApi().getPegawai(data).then(x => {
+                const data_map = x.data.data.map((row, i) => {
                     return (
-                        { value: row.id, label: row.name }
+                        { value: row.id, label: row.nama_pegawai }
                     )
                 })
                 setListPegawai(data_map)
             });
         }
-        fetchGetSelect();
+        fetchGetPegawai();
     }, []);
 
+    useEffect(() => {
+        viewData();
+    }, [])
+
     const viewData = async () => {
-        const param = `page=${currentPage}&length=${perPage}&search=`;
+        const param = `key=${myparam.id}&page=${currentPage}&length=${perPage}&search=`;
         await new ServiceApi().getPesertaKegiatan(param).then(x => {
             setDataCount(x.data.total_data);
             setListKehadiranPegawai(x.data.data);
@@ -52,42 +55,90 @@ const DetailKegiatan = () => {
         })
     }
 
-    function handlePerPage(e) {
-        setPerPage(e.target.value)
-        const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getListUnit(param).then(x => {
-            setListKehadiranPegawai(x.data.data);
-            setPageCount(Math.ceil(x.data.total_data / e.target.value));
-        }).catch((err) => {
-        })
-    }
-
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        const param = `page=${selectedPage + 1}&length=${perPage}&search=${search}`;
-        await new ServiceApi().getListUnit(param).then(x => {
+        const param = `key=${myparam.id}&page=${selectedPage + 1}&length=${perPage}&search=`;
+        await new ServiceApi().getPesertaKegiatan(param).then(x => {
             setListKehadiranPegawai(x.data.data);
         }).catch((err) => {
         })
     }
 
-    const searchData = async (e) => {
-        setSearch(e.target.value);
-        const param = `page=1&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getListUnit(param).then(x => {
-            setDataCount(x.data.total_data);
-            setListKehadiranPegawai(x.data.data);
-            setPageCount(Math.ceil(x.data.total_data / perPage));
-        }).catch((err) => {
+    const selectedUser = (e) => {
+        const data = {
+            'pegawai': e.value,
+            'kegiatan': myparam.id,
+            'ketersediaan_dokumen': 0
+        }
+
+        Swal.fire({
+            title: 'Perhatian!',
+            html: '<i>Anda yakin ingin menambah Peserta<br/><b>' + e.label + '</b> ?</i>',
+            showCancelButton: true,
+            confirmButtonText: 'Tambahkan',
+            cancelButtonText: 'Batalkan',
+            confirmButtonColor: '#0058a8',
+            cancelButtonColor: '#FD3D00',
+        }).then(function (response) {
+            if (response.isConfirmed) {
+                new ServiceApi().addPesertaKegiatan(data)
+                    .then(response => {
+                        Swal.fire({
+                            title: 'Sukses!',
+                            html: '<i>Berhasil menghapus data</i>',
+                            icon: 'success'
+                        })
+                        viewData();
+                        setModalShow(false)
+                    }).catch(err => {
+                        Swal.fire({
+                            title: 'Gagal!',
+                            html: '<i>' + err.response.data.message + '</i>',
+                            icon: 'error',
+                            confirmButtonColor: '#0058a8',
+                        })
+                    })
+            }
         })
     }
-    
-    const selectedUser = (e) => {
-        listKehadiranPegawai.push(e)
-        setModalShow(false)
+
+    const deletePesertaKegiatan = (x) => {
+        const data = {
+            'key': x.id,
+        }
+
+        Swal.fire({
+            title: 'Perhatian!',
+            html: '<i>Anda yakin ingin menghapus peserta<br/><b>' + x.nama_pegawai + '</b> ?</i>',
+            showCancelButton: true,
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batalkan',
+            confirmButtonColor: '#0058a8',
+            cancelButtonColor: '#FD3D00',
+        }).then(function (response) {
+            if (response.isConfirmed) {
+                new ServiceApi().deletePesertaKegiatan(data)
+                    .then(response => {
+                        Swal.fire({
+                            title: 'Sukses!',
+                            html: '<i>Berhasil menghapus data</i>',
+                            icon: 'success'
+                        })
+                        viewData();
+                    }).catch(err => {
+                        Swal.fire({
+                            title: 'Gagal!',
+                            html: '<i>' + err.response.data.message + '</i>',
+                            icon: 'error',
+                            confirmButtonColor: '#0058a8',
+                        })
+                    })
+            }
+        })
     }
 
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
+
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -167,37 +218,51 @@ const DetailKegiatan = () => {
                                 </div>
                             </div>
                             <div id="content-table" className="content-table">
-                                <table className="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th className="table-title" scope="col" style={{ width: 46 }}>
-                                                #
-                                            </th>
-                                            <th className="table-title" scope="col">Nama</th>
-                                            <th className="table-title" scope="col">Jenis Kepegawaian</th>
-                                            <th className="table-title" scope="col">Unit Kerja</th>
-                                            <th className="table-title" scope="col">Pusat/PWK</th>
-                                            <th className="table-title" scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            !_.isEmpty(listKehadiranPegawai) ?
-                                                listKehadiranPegawai.map((x, key) => {
-                                                    return (
-                                                        <tr key={key}>
-                                                            <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                            <td>{x.label}</td>
-                                                            <td>0</td>
-                                                        </tr>
-                                                    )
-                                                }) :
-                                                <tr>
-                                                    <td colSpan={7} className="text-center">-</td>
-                                                </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                                <div className="scroll-me">
+                                    <table className="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th className="table-title" scope="col" style={{ width: 46 }}>
+                                                    #
+                                                </th>
+                                                <th className="table-title" scope="col">Nama</th>
+                                                <th className="table-title" scope="col">Jenis Kepegawaian</th>
+                                                <th className="table-title" scope="col">Jabatan</th>
+                                                <th className="table-title" scope="col">Pusat/PWK</th>
+                                                <th className="table-title" scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                !_.isEmpty(listKehadiranPegawai) ?
+                                                    listKehadiranPegawai.map((x, key) => {
+                                                        return (
+                                                            <tr key={key}>
+                                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                                <td>{x.nama_pegawai}</td>
+                                                                <td>{x.jenis_kepegawaian}</td>
+                                                                <td>{x.jabatan}</td>
+                                                                <td>{x.penempatan}</td>
+                                                                <td className="action-column">
+                                                                    <DropdownButton
+                                                                        id={`dropdown-button-drop-start`}
+                                                                        title={<FontAwesomeIcon icon={faEllipsisH} color="#C3C5CC" />}
+                                                                        drop='left'
+                                                                        className='dropdown-action'
+                                                                    >
+                                                                        <Dropdown.Item eventKey="1" onClick={() => deletePesertaKegiatan(x)}>Hapus Peserta</Dropdown.Item>
+                                                                    </DropdownButton>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    }) :
+                                                    <tr>
+                                                        <td colSpan={7} className="text-center">-</td>
+                                                    </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div className="footer-table d-flex justify-content-between align-items-center">
                                     <div>
                                         {

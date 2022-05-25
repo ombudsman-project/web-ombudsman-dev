@@ -31,8 +31,20 @@ class ServiceApi {
         return apiClient.post(`/kegiatan/pelatihan/create`, data)
     }
 
+    deleteKegiatan(data) {
+        return apiClient.post(`/kegiatan/pelatihan/delete`, data)
+    }
+
     getPesertaKegiatan(data) {
         return apiClient.post(`/kegiatan/kehadiran-peserta/getData`, data)
+    }
+
+    addPesertaKegiatan(data) {
+        return apiClient.post(`/kegiatan/kehadiran-peserta/tambah`, data)
+    }
+
+    deletePesertaKegiatan(data) {
+        return apiClient.post(`/kegiatan/kehadiran-peserta/delete`, data)
     }
 
     getDetailPelatihan(param) {

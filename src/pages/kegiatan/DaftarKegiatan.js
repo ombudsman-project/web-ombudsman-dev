@@ -98,14 +98,15 @@ const DaftarKegiatan = () => {
 
         Swal.fire({
             title: 'Perhatian!',
-            html: '<i>Anda yakin ingin menghapus <b>' + x.name + '</b> ?</i>',
+            html: '<i>Anda yakin ingin menghapus kegiatan<br/><b>' + x.nama_pelatihan + '</b> ?</i>',
             showCancelButton: true,
-            confirmButtonText: 'Simpan',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batalkan',
             confirmButtonColor: '#0058a8',
             cancelButtonColor: '#FD3D00',
         }).then(function (response) {
             if (response.isConfirmed) {
-                new ServiceApi().deleteJabatan(data)
+                new ServiceApi().deleteKegiatan(data)
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
@@ -229,7 +230,7 @@ const DaftarKegiatan = () => {
                                                                 <Dropdown.Item eventKey="1" onClick={() => actionButton('/kegiatan/daftar_kegiatan/detail', x)}>Lihat Detail</Dropdown.Item>
                                                                 <Dropdown.Item eventKey="2" onClick={() => actionButton('/kegiatan/daftar_kegiatan/edit', x)}>Edit Kegiatan</Dropdown.Item>
                                                                 <Dropdown.Divider/>
-                                                                <Dropdown.Item eventKey="3" onClick={() => actionButton(x)}>Hapus Kegiatan</Dropdown.Item>
+                                                                <Dropdown.Item eventKey="3" onClick={() => deleteData(x)}>Hapus Kegiatan</Dropdown.Item>
                                                             </DropdownButton>
                                                         </td>
                                                     </tr>
@@ -288,6 +289,8 @@ const DaftarKegiatan = () => {
 function StatusPelaksanaan ({ status, status_administrasi }) {
     return (
         status == 0 && status_administrasi == 0 ?
+            <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
+        :status == 0 && status_administrasi == 1 ?
             <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
         : status == 1 && status_administrasi == 0 ?
             <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
