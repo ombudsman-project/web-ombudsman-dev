@@ -173,14 +173,14 @@ const ManajemenUser = () => {
                                                         <td>Super Admin</td>
                                                         <td><BiIcons.BiShield style={styles} />&nbsp; Akses Penuh</td>
                                                         <td className="action-column">
-                                                            <Link to="#">
+                                                            <Link to={{ pathname: `/master/manajemen_user/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <AiIcons.AiOutlineEye />&nbsp;View
                                                                     </div>
                                                                 </button>
                                                             </Link>
-                                                            <Link to="#">
+                                                            <Link to={{ pathname: `/master/manajemen_user/edit`, state: { x } }}>
                                                                 <button type="button" className="btn btn-info button-edit">
                                                                     <div className="d-flex justify-content-center align-items-center">
                                                                         <FiIcons.FiEdit />&nbsp;Edit
