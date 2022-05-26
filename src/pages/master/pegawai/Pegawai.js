@@ -40,6 +40,7 @@ const Pegawai = () => {
     const [kepegawaian, setKepegawaian] = useState([]);
     const [listGolongan, setListGolongan] = useState([]);
     const [golongan, setGolongan] = useState([]);
+    const [selectGolongan, setSelectGolongan] = useState([]);
     const [listJabatan, setListJabatan] = useState([]);
     const [jabatan, setJabatan] = useState([]);
     const [listUnit, setListUnit] = useState([]);
@@ -99,7 +100,12 @@ const Pegawai = () => {
         formData.append('parameter[]', 'all')
         await new ServiceApi().getSelect(formData).then(x => {
             setListKepegawaian(x.data.jenis_kepegawaian);
-            setListGolongan(x.data.golongan_pangkat);
+            var data_golongan = x.data.golongan_pangkat.map((row, i) => {
+                return (
+                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan +' (' + row.pangkat + ')'  }
+                )
+            })
+            setListGolongan(data_golongan);
             var data_jabatan = x.data.jabatan.map((row, i) => {
                 return (
                     { value: row.id, label: row.name }
@@ -147,16 +153,15 @@ const Pegawai = () => {
         );
     };
 
-    const changeGolongan = event => {
-        const { checked, value } = event.currentTarget;
-        var substr = value.substring(9, 10);
-
-        setGolongan(
-            prev => checked
-                ? [...prev, value]
-                : prev.filter(val => val !== value)
-        );
-    };
+    const selectedGolongan = (e) => {
+        var data_map = e.map((row, id) => {
+            return (
+                row.value
+            )
+        })
+        setGolongan(data_map)
+        setSelectGolongan(e)
+    }
 
     const selectedJabatan = (e) => {
         var data_map = e.map((row, id) => {
@@ -445,24 +450,14 @@ const Pegawai = () => {
                             <Form.Label column sm="12">
                                 <p className="mb-2">Golongan Pangkat</p>
                             </Form.Label>
-                            {listGolongan.map(item => {
-                                return (
-                                    <Col sm="3">
-                                        <div className='input-checkbox-custom'>
-                                            <Form.Check
-                                                inline
-                                                id={item.golongan}
-                                                name={item.id}
-                                                value={item.id}
-                                                type="checkbox"
-                                                label={item.golongan}
-                                                checked={golongan.some(val => val == item.id)}
-                                                onChange={changeGolongan}
-                                            />
-                                        </div>
-                                    </Col>
-                                )
-                            })}
+                            <Select
+                                defaultValue={selectGolongan}
+                                placeholder="Pilih Golongan/Pangkat"
+                                options={listGolongan}
+                                onChange={(e) => selectedGolongan(e)}
+                                isMulti
+                                components={animatedComponents}
+                            />
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="12">

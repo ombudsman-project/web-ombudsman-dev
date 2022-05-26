@@ -113,6 +113,18 @@ header {
   text-align: center;
 }
 
+.form-check {
+  // margin-left: 10px;
+  color: $textColorSubtitle;
+  font-weight: 500;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .modal-filter {
   .modal-header {
     border-bottom: none !important;

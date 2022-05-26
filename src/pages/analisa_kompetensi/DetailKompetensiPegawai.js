@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faClock, faPaperclip, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
 import { Button, Card, Col, Container, Form, Row, Pagination } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton';
@@ -87,7 +87,7 @@ export const data = {
             pointHoverBorderColor: 'rgb(54, 162, 235)',
             borderWidth: 3,
             pointRadius: 0
-          }
+        }
     ],
 };
 
@@ -102,9 +102,9 @@ export const option = {
         }
     },
     elements: {
-      line: {
-        borderWidth: 3
-      }
+        line: {
+            borderWidth: 3
+        }
     }
 };
 
@@ -194,7 +194,7 @@ const DetailKompetensiPegawai = () => {
                     <p className="card-main-content-subtitle">Data lengkap dari pegawai.</p>
                     <Row>
                         <Col>
-                            <Radar data={data} options={option}/>
+                            <Radar data={data} options={option} />
                         </Col>
                         <Col>
                             <Row>
@@ -215,7 +215,7 @@ const DetailKompetensiPegawai = () => {
                                     <Row>
                                         <Col lg="10"><p>Nilai Job Person Match (JPM)</p></Col>
                                         <Col className="text-secondary" lg="2"><p className='text-center'>138,89%</p></Col>
-                                        
+
                                         <Col lg="10"><p>Kategori Hasil Penilaian</p></Col>
                                         <Col className="text-secondary" lg="2"><Button variant='success'>Optimal</Button></Col>
                                     </Row>
@@ -225,7 +225,7 @@ const DetailKompetensiPegawai = () => {
                     </Row>
                 </Card.Body>
             </Card>
-            <br/>
+            <br />
             <Card className="card-main-content">
                 <Card.Body>
                     <h4><b>Kegiatan yang Diikuti</b></h4>
@@ -236,7 +236,7 @@ const DetailKompetensiPegawai = () => {
                             <div>
                                 <Form.Control className="select-row-table" as="select">
                                     <option>5</option>
-                                    <option>10</option>
+                                    <option selected>10</option>
                                     <option>50</option>
                                     <option>100</option>
                                 </Form.Control>
@@ -259,93 +259,32 @@ const DetailKompetensiPegawai = () => {
                         </div>
                     </div>
                     <div id="content-table" className="content-table">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th className="table-title" scope="col" style={{ width: 46 }}>
-                                        #
-                                    </th>
-                                    <th className="table-title" scope="col">Jabatan</th>
-                                    <th className="table-title" scope="col">Klasifikasi</th>
-                                    <th className="table-title" scope="col">Kategori</th>
-                                    <th className="table-title text-center" scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">1</td>
-                                    <td>Riski</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td className="action-column">
-                                        <Link to={{ pathname: `/master/jabatan/detail` }}>
-                                            <button type="button" className="btn btn-warning button-view">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <AiIcons.AiOutlineEye />&nbsp;View
-                                                </div>
-                                            </button>
-                                        </Link>
-                                        <Link to={{ pathname: `/master/jabatan/edit` }}>
-                                            <button type="button" className="btn btn-info button-edit">
-                                                <div className="d-flex justify-content-center align-items-center">
-                                                    <FiIcons.FiEdit />&nbsp;Edit
-                                                </div>
-                                            </button>
-                                        </Link>
-                                        <button type="button" className="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">2</td>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                    <td className="action-column">
-                                        <button type="button" className="btn btn-warning button-view">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-info button-edit">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiEdit />&nbsp;Edit
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">3</td>
-                                    <td colSpan="2">Larry the Bird</td>
-                                    <td>@twitter</td>
-                                    <td className="action-column">
-                                        <button type="button" className="btn btn-warning button-view">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <AiIcons.AiOutlineEye />&nbsp;View
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-info button-edit">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiEdit />&nbsp;Edit
-                                            </div>
-                                        </button>
-                                        <button type="button" className="btn btn-danger button-delete">
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <FiIcons.FiTrash2 />&nbsp;Delete
-                                            </div>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div className="scroll-me">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th className="table-title" scope="col" width="50">
+                                            #
+                                        </th>
+                                        <th className="table-title" scope="col">Nama Kegiatan</th>
+                                        <th className="table-title text-center" scope="col">Penyelenggara</th>
+                                        <th className="table-title text-center" scope="col">Tanggal</th>
+                                        <th className="table-title text-center" scope="col">Jumlah JP</th>
+                                        <th className="table-title text-center" scope="col">Dokumen Bukti</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Diskusi Penguatan Fungsi Resmon Dalam Pem...</td>
+                                        <td className="text-center">Ombudsman RI</td>
+                                        <td className="text-center">01 Agustus 2021</td>
+                                        <td className="text-center">2</td>
+                                        <td className="text-center" style={{ color: 'rgba(44, 45, 48, 0.5)', cursor: 'pointer' }}><FontAwesomeIcon icon={faPaperclip} /> Sertifikat1.pdf</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>Menampilkan data 6 - 13 dari 23 data</div>
                             <div>
@@ -365,7 +304,7 @@ const DetailKompetensiPegawai = () => {
                     </div>
                 </Card.Body>
             </Card>
-            <br/>
+            <br />
         </div>
     );
 };
