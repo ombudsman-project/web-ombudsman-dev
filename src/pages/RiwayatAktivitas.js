@@ -15,7 +15,7 @@ import ReactPaginate from 'react-paginate';
 
 
 const RiwayatAktivitas = () => {
-    const [perPage, setPerPage] = useState(5);
+    const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
@@ -116,7 +116,7 @@ const RiwayatAktivitas = () => {
                             <div>
                                 <Form.Control className="select-row-table" name="per_page" as="select" onChange={(e) => handlePerPage(e)}>
                                     <option value="5">5</option>
-                                    <option value="10">10</option>
+                                    <option value="10" selected>10</option>
                                     <option value="50">50</option>
                                     <option value="100">100</option>
                                 </Form.Control>
@@ -124,61 +124,58 @@ const RiwayatAktivitas = () => {
                             <div>&nbsp; data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                            <button type="button" className="btn btn-link filter-table">
-                                <div className="d-flex justify-content-center align-items-center">
-                                    <FiIcons.FiFilter />&nbsp;Filter
-                                </div>
-                            </button>
                             <div id="search-table" className="search-table">
                                 <FaIcons.FaSearch
                                     style={{ marginLeft: "1rem", position: "absolute" }}
                                     color="#2c2d3040"
                                 />
-                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)}/>
+                                <Form.Control type="text" placeholder="Cari" onChange={(e) => searchData(e)} />
                             </div>
                         </div>
                     </div>
                     <div id="content-table" className="content-table">
-                        <table className="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th className="table-title" scope="col" style={{ width: 46 }}>
-                                        #
-                                    </th>
-                                    <th className="table-title" scope="col">Waktu</th>
-                                    <th className="table-title" scope="col">Nama</th>
-                                    <th className="table-title" scope="col">Aktivitas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                !_.isEmpty(listUnit) ?
-                                    listUnit.map((x, key) => {
-                                        return (
-                                            <tr key={x.id}>
-                                                <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                <td>{x.waktu ? moment(x.waktu).format('D MMMM YYYY HH:mm:ss') : ''}</td>
-                                                <td>{x.nama}</td>
-                                                <td>{x.aktivitas}</td>
-                                            </tr>
-                                        )
-                                    }) :
-                                    <>
-                                    </>
-                                }
-                            </tbody>
-                        </table>
+                        <div className="scroll-me">
+                            <table className="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                                            #
+                                        </th>
+                                        <th className="table-title" scope="col">Waktu</th>
+                                        <th className="table-title" scope="col">Nama</th>
+                                        <th className="table-title" scope="col">Aktivitas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        !_.isEmpty(listUnit) ?
+                                            listUnit.map((x, key) => {
+                                                return (
+                                                    <tr key={x.id}>
+                                                        <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
+                                                        <td>{x.waktu ? moment(x.waktu).format('D MMMM YYYY HH:mm:ss') : ''}</td>
+                                                        <td>{x.nama}</td>
+                                                        <td>{x.aktivitas}</td>
+                                                    </tr>
+                                                )
+                                            }) :
+                                            <>
+                                            </>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="footer-table d-flex justify-content-between align-items-center">
                             <div>
                                 {
                                     !_.isEmpty(listUnit) ?
-                                    <>
-                                        Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listUnit.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listUnit.length)} dari {dataCount} data
-                                    </>
-                                    :
-                                    <>
-                                        Menampilkan data 0 - 0 dari 0 data
-                                    </>
+                                        <>
+                                            Menampilkan data {((currentPage * perPage) - perPage) + 1} - {listUnit.length == perPage ? (currentPage * perPage) : (currentPage * perPage) - (perPage - listUnit.length)} dari {dataCount} data
+                                        </>
+                                        :
+                                        <>
+                                            Menampilkan data 0 - 0 dari 0 data
+                                        </>
                                 }
                             </div>
                             <div>

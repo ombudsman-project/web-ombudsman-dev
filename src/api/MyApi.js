@@ -300,6 +300,10 @@ class ServiceApi {
         return apiClient.post(`/master/user/create`, data)
     }
 
+    editManajemenUser(data) {
+        return apiClient.post(`/master/user/update`, data)
+    }
+
     deleteManajemenUser(data) {
         return apiClient.post(`/master/user/delete`, data)
     }

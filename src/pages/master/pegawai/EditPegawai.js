@@ -54,7 +54,7 @@ const EditPegawai = () => {
             })
             const golongan_id = x.data.golongan_pangkat.map((row, i) => {
                 return (
-                    { value: row.id, label: row.golongan + ' (' + row.pangkat + ')' }
+                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan +' (' + row.pangkat + ')' }
                 )
             })
             const jabatan_id = x.data.jabatan.map((row, i) => {
