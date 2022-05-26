@@ -318,7 +318,7 @@ const Pencatatan = () => {
                                                             <th className="table-title" scope="col">Jenis Kepegawaian</th>
                                                             <th className="table-title" scope="col">Jabatan</th>
                                                             <th className="table-title" scope="col">Pusat/PWK</th>
-                                                            <th className="table-title" scope="col">Action</th>
+                                                            <th className="table-title" scope="col">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>

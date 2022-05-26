@@ -205,7 +205,7 @@ const DaftarKegiatan = () => {
                                         <th className="table-title text-center" scope="col">Tanggal</th>
                                         <th className="table-title text-center" scope="col">Pelaksanaan</th>
                                         <th className="table-title text-center" scope="col">Peserta</th>
-                                        <th className="table-title text-center" scope="col">Action</th>
+                                        <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

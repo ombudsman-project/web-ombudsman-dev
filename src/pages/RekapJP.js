@@ -34,7 +34,7 @@ import ServiceApi from "../api/MyApi";
 const Rekapitulasi = () => {
   const animatedComponents = makeAnimated();
   const [modalShow, setModalShow] = useState(false);
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [dataCount, setDataCount] = useState(0);
@@ -256,7 +256,7 @@ const Rekapitulasi = () => {
                   onChange={(e) => handlePerPage(e)}
                 >
                   <option value="5">5</option>
-                  <option value="10">10</option>
+                  <option value="10" selected>10</option>
                   <option value="50">50</option>
                   <option value="100">100</option>
                 </Form.Control>
