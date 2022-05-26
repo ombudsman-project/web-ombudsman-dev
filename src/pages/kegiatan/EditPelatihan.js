@@ -13,29 +13,6 @@ import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
 
-const options = [
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-]
-
 const EditPelatihan = () => {
     const history = useHistory();
     const location = useLocation();
@@ -212,14 +189,12 @@ const EditPelatihan = () => {
         { value: 0, label: 'Belum Lengkap' },
         { value: 1, label: 'Lengkap' },
     ]
-
     const listJenisDokumen = [
-        { value: 'pdf', label: 'PDF' },
-        { value: 'doc', label: 'DOC' },
-        { value: 'docx', label: 'DOCX' },
-        { value: 'jpg', label: 'JPG' },
-        { value: 'jpeg', label: 'JPEG' },
-        { value: 'png', label: 'PNG' },
+        { value: 1, label: 'Surat Tugas' },
+        { value: 2, label: 'Brosur' },
+        { value: 3, label: 'Undangan' },
+        { value: 4, label: 'Daftar Hadir' },
+        { value: 5, label: 'Daftar Hadir Peserta' }
     ]
 
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />

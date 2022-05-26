@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClock, faPlus, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faInbox, faEllipsisH } from '@fortawesome/free-solid-svg-icons'
 import { Badge, Button, Card, Col, Container, Dropdown, DropdownButton, Form, Modal, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import * as FiIcons from 'react-icons/fi';
 import * as BsIcons from 'react-icons/bs';
 import Swal from 'sweetalert2'
 import Select, { createFilter } from 'react-select';
+import { useDropzone } from 'react-dropzone';
 import ReactPaginate from 'react-paginate';
 import ServiceApi from '../../api/MyApi';
 import tambahPesertaLogo from '../../img/tambah_peserta.png';
@@ -21,13 +22,31 @@ const Pencatatan = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [listUnit, setListUnit] = useState([]);
+    const [checkedDokumen, setCheckedDokumen] = useState(null);
     const [listPegawai, setListPegawai] = useState([]);
     const [search, setSearch] = useState('');
     const [selectedKegiatan, setSelectedKegiatan] = useState(null);
     const [listKehadiranPegawai, setListKehadiranPegawai] = useState([]);
     const [modalShow, setModalShow] = useState(false);
+    const [pegawaiDaftar, setPegawaiDaftarBaru] = useState({value: null, label: ''});
+    const [dataFiles, setFiles] = useState([]);
     const myparam = {};
+
+    const onDrop = useCallback(acceptedFiles => {
+        setFiles(acceptedFiles)
+    }, [])
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        maxFiles: 1,
+        accept: {
+            'application/pdf': ['.pdf'],
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+            'application/msword': ['.doc'],
+            'image/png': ['.png'],
+            'image/jpeg': ['.jpeg', '.jpg']
+        }
+    });
 
     useEffect(() => {
         async function fetchGetSelect() {
@@ -92,42 +111,7 @@ const Pencatatan = () => {
     }
 
     const selectedUser = (e) => {
-        const data = {
-            'pegawai': e.value,
-            'kegiatan': selectedKegiatan.id,
-            'ketersediaan_dokumen': 0
-        }
-
-        Swal.fire({
-            title: 'Perhatian!',
-            html: '<i>Anda yakin ingin menambah Peserta<br/><b>' + e.label + '</b> ?</i>',
-            showCancelButton: true,
-            confirmButtonText: 'Tambahkan',
-            cancelButtonText: 'Batalkan',
-            confirmButtonColor: '#0058a8',
-            cancelButtonColor: '#FD3D00',
-        }).then(function (response) {
-            if (response.isConfirmed) {
-                new ServiceApi().addPesertaKegiatan(data)
-                    .then(response => {
-                        Swal.fire({
-                            title: 'Sukses!',
-                            html: '<i>Berhasil menambah data</i>',
-                            icon: 'success'
-                        })
-                        viewData(selectedKegiatan.id);
-                        setModalShow(false);
-                        refreshListPegawai();
-                    }).catch(err => {
-                        Swal.fire({
-                            title: 'Gagal!',
-                            html: '<i>' + err.response.data.message + '</i>',
-                            icon: 'error',
-                            confirmButtonColor: '#0058a8',
-                        })
-                    })
-            }
-        })
+        setPegawaiDaftarBaru({value: e.value, label: e.label})
     }
 
     const deletePesertaKegiatan = (x) => {
@@ -153,6 +137,48 @@ const Pencatatan = () => {
                             icon: 'success'
                         })
                         viewData(selectedKegiatan.id);
+                        refreshListPegawai();
+                    }).catch(err => {
+                        Swal.fire({
+                            title: 'Gagal!',
+                            html: '<i>' + err.response.data.message + '</i>',
+                            icon: 'error',
+                            confirmButtonColor: '#0058a8',
+                        })
+                    })
+            }
+        })
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let formData = new FormData();
+        formData.append('pegawai', pegawaiDaftar.value);
+        formData.append('kegiatan', selectedKegiatan.id);
+        formData.append('ketersediaan_dokumen', checkedDokumen);
+        formData.append('file', dataFiles);
+        formData.append('nomor_surat', e.target.nomor_surat.value);
+
+        Swal.fire({
+            title: 'Perhatian!',
+            html: '<i>Anda yakin ingin menambah Peserta<br/><b>' + pegawaiDaftar.label + '</b> ?</i>',
+            showCancelButton: true,
+            confirmButtonText: 'Tambahkan',
+            cancelButtonText: 'Batalkan',
+            confirmButtonColor: '#0058a8',
+            cancelButtonColor: '#FD3D00',
+        }).then(function (response) {
+            if (response.isConfirmed) {
+                new ServiceApi().addPesertaKegiatan(formData)
+                    .then(response => {
+                        Swal.fire({
+                            title: 'Sukses!',
+                            html: '<i>Berhasil menambah data</i>',
+                            icon: 'success'
+                        })
+                        viewData(selectedKegiatan.id);
+                        setModalShow(false);
                         refreshListPegawai();
                     }).catch(err => {
                         Swal.fire({
@@ -395,19 +421,124 @@ const Pencatatan = () => {
                 centered
                 className="modal-filter"
             >
-                <Form>
+                <Form
+                    onSubmit={handleSubmit}
+                >
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">
                             Pilih Nama Pegawai
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
+                            Nama Pegawai
+                            </Form.Label>
+                            <Col sm="9">
                         <Select
                             options={listPegawai}
                             filterOption={createFilter({ ignoreAccents: false })}
                             onChange={(e) => selectedUser(e)}
                             placeholder="Pilih Pegawai"
                         />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Ketersediaan Dokumen
+                            </Form.Label>
+                            <Col sm="9">
+                                    <Row>
+                                        <Col md="auto" lg="auto" sm="auto">
+                                            <div
+                                                className='input-radio-custom'
+                                                onClick={() => setCheckedDokumen(1)}
+                                            >
+                                                <Form.Check
+                                                    inline
+                                                    checked={checkedDokumen == 1}
+                                                    label="Tersedia"
+                                                    name="ketersediaan_dokumen"
+                                                    type="radio"
+                                                    onChange={() => setCheckedDokumen(1)}
+                                                    id={`inline-tersedia_1`}
+                                                />
+                                            </div>
+                                        </Col>
+                                        <Col>
+                                            <div
+                                                className='input-radio-custom'
+                                                onClick={() => setCheckedDokumen(0)}
+                                            >
+                                                <Form.Check
+                                                    inline
+                                                    label="Tidak Tersedia"
+                                                    checked={checkedDokumen == 0}
+                                                    name="ketersediaan_dokumen"
+                                                    type="radio"
+                                                    onChange={() => setCheckedDokumen(0)}
+                                                    id={`inline-tersedia_2`}
+                                                />
+                                            </div>
+                                        </Col>
+                                    </Row>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
+                                Nomor Surat
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3" className="mb-3">
+                                Unggah File
+                            </Form.Label>
+                            <Col sm="9">
+                                {
+                                    _.isEmpty(dataFiles) ?
+                                            <div className='drop-files-upload' {...getRootProps()}>
+                                                <input {...getInputProps()} />
+                                                {
+                                                    isDragActive ?
+                                                        <div className='d-flex flex-column justify-content-center align-items-center' style={{ paddingTop: 40, paddingBottom: 40 }}>
+                                                            <FontAwesomeIcon icon={faInbox} size="2x" />
+                                                            <p>Taruh File disini...</p>
+                                                        </div> :
+                                                        <div className='d-flex flex-column justify-content-center align-items-center' style={{ paddingTop: 40, paddingBottom: 40 }}>
+                                                            <FontAwesomeIcon icon={faInbox} size="2x" />
+                                                            <p>Klik atau taruh untuk memilih file</p>
+                                                            <p style={{ fontSize: 13 }}><i>PDF, DOC, DOCX, JPG, JPEG, PNG</i></p>
+                                                            <p style={{ fontSize: 13 }}><i>Maksimal 1 File</i></p>
+                                                        </div>
+                                                }
+                                            </div>
+                                        :
+                                        <>
+                                            {
+                                                dataFiles.map((x, key) => {
+                                                    return (
+                                                        <div key={key} className="d-flex flex-row">
+                                                            <p>{key + 1}.&nbsp;</p>
+                                                            <p>{x.name}</p>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                            <Button variant='danger' onClick={() => setFiles([])}>
+                                                Hapus File
+                                            </Button>
+                                        </>
+                                }
+                            </Col>
+                        </Form.Group>
+                            <div className="d-flex flex-row justify-content-end align-items-center">
+                                <div>
+                                    <Button className="content-button-submit" variant="primary" type="submit">Tambahkan</Button>
+                                </div>
+                            </div>
                     </Modal.Body>
                 </Form>
             </Modal>

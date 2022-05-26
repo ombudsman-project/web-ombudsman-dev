@@ -387,6 +387,22 @@ h2 {
   color: $textColorSubtitle !important;
 }
 
+.input-radio-custom {
+  border: #d1d5db solid 1px;
+  width: fit-content;
+  padding: 8px 12px 8px 18px;
+  border-radius: 6px;
+  background-color: #ffffff;
+  cursor: pointer;
+  color: #2c2d3040;
+}
+
+.drop-files-upload {
+  border: #d1d5db dashed 1px;
+  border-radius: 6px;
+  background-color: #f9fafb40;
+}
+
 .card-main-content {
   background: $mainCardBg;
   margin-inline: 10px;
