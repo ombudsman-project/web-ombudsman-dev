@@ -328,10 +328,10 @@ const Pencatatan = () => {
                                                                     return (
                                                                         <tr key={key}>
                                                                             <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                                            <td>{x.nama_pegawai}</td>
-                                                                            <td>{x.jenis_kepegawaian}</td>
-                                                                            <td>{x.jabatan}</td>
-                                                                            <td>{x.penempatan}</td>
+                                                                            <td>{x.nama_pegawai ?? '-'}</td>
+                                                                            <td>{x.jenis_kepegawaian ?? '-'}</td>
+                                                                            <td>{x.jabatan ?? '-'}</td>
+                                                                            <td>{x.penempatan ?? '-'}</td>
                                                                             <td className="action-column">
                                                                                 <DropdownButton
                                                                                     id={`dropdown-button-drop-start`}
