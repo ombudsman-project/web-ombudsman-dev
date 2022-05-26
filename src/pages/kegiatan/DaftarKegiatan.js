@@ -257,7 +257,6 @@ const DaftarKegiatan = () => {
                             </div>
                             <div>
                                 <ReactPaginate
-                                    pageRangeDisplayed={5}
                                     pageCount={pageCount}
                                     onPageChange={handlePageClick}
                                     previousLabel="Sebelumnya"
@@ -269,6 +268,8 @@ const DaftarKegiatan = () => {
                                     nextClassName="page-item"
                                     nextLinkClassName="page-link"
                                     breakLabel="..."
+                                    pageRangeDisplayed={2}
+                                    marginPagesDisplayed={1}
                                     breakClassName="page-item"
                                     breakLinkClassName="page-link"
                                     containerClassName="pagination"
@@ -295,7 +296,7 @@ function StatusPelaksanaan ({ status, status_administrasi }) {
         : status == 1 && status_administrasi == 0 ?
             <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
         : status == 1 && status_administrasi == 1 ?
-            <><Badge className="success" bg="success">Terlaksana</Badge></>
+            <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className="success" bg="success">Lengkap</Badge></>
         :
             <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
     )

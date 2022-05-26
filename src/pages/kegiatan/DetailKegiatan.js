@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faEllipsisH, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
 import { Badge, Button, Card, Col, Container, Dropdown, DropdownButton, Form, Modal, Row } from 'react-bootstrap';
 import _ from 'lodash';
-import Select from 'react-select';
+import Select, { createFilter } from 'react-select';
 import moment from 'moment';
 import Swal from 'sweetalert2'
 import * as FiIcons from 'react-icons/fi';
@@ -28,11 +28,11 @@ const DetailKegiatan = () => {
 
     useEffect(() => {
         async function fetchGetPegawai() {
-            const data = { 'page': 1, 'length': 1000000000000000 }
-            await new ServiceApi().getPegawai(data).then(x => {
-                const data_map = x.data.data.map((row, i) => {
+            const data = { 'kegiatan': myparam.id }
+            await new ServiceApi().getSelectKehadiranPegawai(data).then(x => {
+                const data_map = x.data.pegawai.map((row, i) => {
                     return (
-                        { value: row.id, label: row.nama_pegawai }
+                        { value: row.id, label: row.name }
                     )
                 })
                 setListPegawai(data_map)
@@ -85,7 +85,7 @@ const DetailKegiatan = () => {
                     .then(response => {
                         Swal.fire({
                             title: 'Sukses!',
-                            html: '<i>Berhasil menghapus data</i>',
+                            html: '<i>Berhasil menambah data</i>',
                             icon: 'success'
                         })
                         viewData();
@@ -289,6 +289,8 @@ const DetailKegiatan = () => {
                                             nextClassName="page-item"
                                             nextLinkClassName="page-link"
                                             breakLabel="..."
+                                            pageRangeDisplayed={2}
+                                            marginPagesDisplayed={1}
                                             breakClassName="page-item"
                                             breakLinkClassName="page-link"
                                             containerClassName="pagination"
@@ -344,7 +346,12 @@ const DetailKegiatan = () => {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Select options={listPegawai} onChange={(e) => selectedUser(e)} placeholder="Pilih Pegawai" />
+                        <Select
+                            options={listPegawai}
+                            filterOption={createFilter({ ignoreAccents: false })}
+                            onChange={(e) => selectedUser(e)}
+                            placeholder="Pilih Pegawai"
+                        />
                     </Modal.Body>
                 </Form>
             </Modal>
@@ -352,16 +359,18 @@ const DetailKegiatan = () => {
     );
 };
 
-function StatusPelaksanaan({ status, status_administrasi }) {
+function StatusPelaksanaan ({ status, status_administrasi }) {
     return (
         status == 0 && status_administrasi == 0 ?
             <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
-            : status == 1 && status_administrasi == 0 ?
-                <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
-                : status == 1 && status_administrasi == 1 ?
-                    <><Badge className="success" bg="success">Terlaksana</Badge></>
-                    :
-                    <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
+        :status == 0 && status_administrasi == 1 ?
+            <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
+        : status == 1 && status_administrasi == 0 ?
+            <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
+        : status == 1 && status_administrasi == 1 ?
+            <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='success' bg='success'>Lengkap</Badge></>
+        :
+            <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
     )
 }
 
