@@ -38,7 +38,7 @@ const Rekapitulasi = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [dataCount, setDataCount] = useState(0);
-  const [listUnit, setListUnit] = useState([]);
+  const [listUnit, setListRekap] = useState([]);
   const [search, setSearch] = useState("");
   const [state, setState] = useState([
     {
@@ -50,6 +50,8 @@ const Rekapitulasi = () => {
   const [filterDate, setFilterDate] = useState({
     startDate: moment(new Date()).format("DD/MM/YYYY"),
     endDate: moment(addDays(new Date(), 30)).format("DD/MM/YYYY"),
+    awalDate: moment(new Date()).format("YYYY-MM-DD"),
+    akhirDate: moment(addDays(new Date(), 30)).format("YYYY-MM-DD"),
   });
   const [listKepegawaian, setListKepegawaian] = useState([]);
   const [kepegawaian, setKepegawaian] = useState([]);
@@ -61,12 +63,24 @@ const Rekapitulasi = () => {
   const [selectPenempatan, setSelectPenempatan] = useState('');
   const [rekapJP, setRekapJP] = useState([]);
 
-  const setDateRange = (data) => {
+  const setDateRange = async (data) => {
     setState([data.selection]);
     setFilterDate({
       startDate: moment(data.selection.startDate).format("DD/MM/YYYY"),
       endDate: moment(data.selection.endDate).format("DD/MM/YYYY"),
+      awalDate: moment(data.selection.startDate).format("YYYY-MM-DD"),
+      akhirDate: moment(data.selection.endDate).format("YYYY-MM-DD"),
     });
+    
+    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: moment(data.selection.startDate).format("YYYY-MM-DD"), tgl_akhir: moment(data.selection.endDate).format("YYYY-MM-DD") }
+    await new ServiceApi()
+      .getRekapJP(dataFilter)
+      .then((x) => {
+        setDataCount(x.data.total_data);
+        setListRekap(x.data.data);
+        setPageCount(Math.ceil(x.data.total_data / perPage));
+      })
+      .catch((err) => { });
   };
 
   useEffect(() => {
@@ -91,27 +105,28 @@ const Rekapitulasi = () => {
       })
     }
     listData();
+    viewData();
   }, []);
 
   const viewData = async () => {
-    const param = `page=${currentPage}&length=${perPage}&search=`;
+    const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
     await new ServiceApi()
-      .getListUnit(param)
+      .getRekapJP(data)
       .then((x) => {
         setDataCount(x.data.total_data);
-        setListUnit(x.data.data);
+        setListRekap(x.data.data);
         setPageCount(Math.ceil(x.data.total_data / perPage));
       })
       .catch((err) => { });
   };
 
-  function handlePerPage(e) {
+  async function handlePerPage(e) {
     setPerPage(e.target.value);
-    const param = `page=${currentPage}&length=${e.target.value}&search=`;
-    new ServiceApi()
-      .getListUnit(param)
+    const dataFilter = { 'page': currentPage, 'length': e.target.value, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+    await new ServiceApi()
+      .getRekapJP(dataFilter)
       .then((x) => {
-        setListUnit(x.data.data);
+        setListRekap(x.data.data);
         setPageCount(Math.ceil(x.data.total_data / e.target.value));
       })
       .catch((err) => { });
@@ -119,23 +134,23 @@ const Rekapitulasi = () => {
 
   async function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage + 1);
-    const param = `page=${selectedPage + 1}&length=${perPage}&search=${search}`;
+    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
     await new ServiceApi()
-      .getListUnit(param)
+      .getRekapJP(dataFilter)
       .then((x) => {
-        setListUnit(x.data.data);
+        setListRekap(x.data.data);
       })
       .catch((err) => { });
   }
 
   const searchData = async (e) => {
     setSearch(e.target.value);
-    const param = `page=1&length=${perPage}&search=${e.target.value}`;
+    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': e.target.value, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
     await new ServiceApi()
-      .getListUnit(param)
+      .getRekapJP(dataFilter)
       .then((x) => {
         setDataCount(x.data.total_data);
-        setListUnit(x.data.data);
+        setListRekap(x.data.data);
         setPageCount(Math.ceil(x.data.total_data / perPage));
       })
       .catch((err) => { });
@@ -172,17 +187,16 @@ const Rekapitulasi = () => {
   }
 
   const changeRekapJP = event => {
-      const { checked, value } = event.currentTarget;
+    const { checked, value } = event.currentTarget;
 
-      setRekapJP(
-          prev => checked
-              ? [...prev, value]
-              : prev.filter(val => val !== value)
-      );
+    setRekapJP(
+      prev => checked
+        ? [...prev, value]
+        : prev.filter(val => val !== value)
+    );
   };
 
   const filterData = async (e) => {
-    console.log(e)
     setModalShow(false);
     // const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
     // await new ServiceApi().getPegawai(data).then(x => {
@@ -274,56 +288,62 @@ const Rekapitulasi = () => {
             </div>
           </div>
           <div id="content-table" className="content-table">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th className="table-title" scope="col" style={{ width: 46 }}>
-                    #
-                  </th>
-                  <th className="table-title" scope="col">
-                    Nama
-                  </th>
-                  <th className="table-title" scope="col">
-                    Jabatan
-                  </th>
-                  <th className="table-title" scope="col">
-                    Unit Kerja
-                  </th>
-                  <th className="table-title" scope="col">
-                    Pusat/PWK
-                  </th>
-                  <th className="table-title" scope="col">
-                    JP
-                  </th>
-                  <th className="table-title" scope="col">
-                    Keterangan
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {!_.isEmpty(listUnit) ? (
-                  listUnit.map((x, key) => {
-                    return (
-                      <tr key={x.id}>
-                        <td>
-                          {currentPage > 1
-                            ? (currentPage - 1) * perPage + key + 1
-                            : key + 1}
-                        </td>
-                        <td>{x.name}</td>
-                        <td>0</td>
-                      </tr>
-                    );
-                  })
-                ) : (
+            <div className="scroll-me">
+              <table className="table table-hover">
+                <thead>
                   <tr>
-                    <td colSpan={7} className="text-center">
-                      -
-                    </td>
+                    <th className="table-title" scope="col" style={{ width: 46 }}>
+                      #
+                    </th>
+                    <th className="table-title" scope="col">
+                      Nama
+                    </th>
+                    <th className="table-title" scope="col">
+                      Jenis Kepegawaian
+                    </th>
+                    <th className="table-title" scope="col">
+                      Jabatan
+                    </th>
+                    <th className="table-title text-center" scope="col">
+                      Pusat/PWK
+                    </th>
+                    <th className="table-title" scope="col">
+                      JP
+                    </th>
+                    <th className="table-title" scope="col">
+                      Keterangan
+                    </th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {!_.isEmpty(listUnit) ? (
+                    listUnit.map((x, key) => {
+                      return (
+                        <tr key={x.id}>
+                          <td>
+                            {currentPage > 1
+                              ? (currentPage - 1) * perPage + key + 1
+                              : key + 1}
+                          </td>
+                          <td>{x.nama}</td>
+                          <td>{x.jenis_kepegawaian ?? '-'}</td>
+                          <td>{x.jabatan ?? '-'}</td>
+                          <td className="text-center">{x.penempatan ?? '-'}</td>
+                          <td className="text-center">{x.jumlah_jp ?? '-'}</td>
+                          <td className="text-center">{x.keterangan ?? '-'}</td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan={7} className="text-center">
+                        -
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
             <div className="footer-table d-flex justify-content-between align-items-center">
               <div>
                 {!_.isEmpty(listUnit) ? (
@@ -385,7 +405,7 @@ const Rekapitulasi = () => {
               </Form.Label>
               {listKepegawaian.map((item, key) => {
                 return (
-                  <Col sm="3" key={key}>
+                  <Col sm="4" key={key}>
                     <div className='input-checkbox-custom'>
                       <Form.Check
                         inline

@@ -19,6 +19,18 @@ class ServiceApi {
         return apiClient.post(`/data/select-option/default`, data);
     }
 
+    getSelectKehadiranPegawai(data) {
+        return apiClient.post(`/data/select-option/kehadiran-pegawai`, data);
+    }
+
+    getDashboardData(data) {
+        return apiClient.post(`/dashboard/default`, data);
+    }
+
+    getRekapJP(data) {
+        return apiClient.post(`/dashboard/rekap-jp`, data);
+    }
+    
     getRiwayatAktivitas(param) {
         return apiClient.get(`/data/aktivitas-user?${param}`);
     }
@@ -49,6 +61,10 @@ class ServiceApi {
 
     getDetailPelatihan(param) {
         return apiClient.get(`/kegiatan/pelatihan/detail/${param}`)
+    }
+
+    getDetailPencatatan(param) {
+        return apiClient.get(`/kegiatan/pelatihan/view/${param}`)
     }
 
     updatePelatihan(data) {

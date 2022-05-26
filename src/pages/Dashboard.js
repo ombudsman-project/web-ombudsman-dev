@@ -24,6 +24,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import Select from 'react-select';
 import ServiceApi from '../api/MyApi';
 import LogoUser from "../img/user.png";
 import LogoCalendar from "../img/calendar.png";
@@ -69,7 +70,7 @@ export const data = {
   datasets: [
     {
       label: 'Jumlah Kegiatan',
-      data: labels.map(() => randomNumber(1, 30)),
+      data: labels.map(() => randomNumber(0, 0)),
       borderColor: 'rgba(255, 143, 42, 1)',
       fill: true,
       backgroundColor: 'rgba(255, 221, 40, 0.5)',
@@ -85,11 +86,36 @@ const DashboardView = () => {
     }
   ]);
   const [listJenisKepegawaian, setListJenisKepegawaian] = useState([]);
+  const [listYear, setListYear] = useState([]);
   const [listPenempatan, setListPenempatan] = useState([]);
+  const [showDropTahun, setShowDropTahun] = useState(false);
+  const [dataTahun, setDataTahun] = useState({
+    tahun: (new Date()).getFullYear(),
+    triwulan_awal: 1,
+    triwulan_akhir: 4
+  });
+  const [dataCard, setDataCard] = useState({
+    totalPegawai: 0,
+    totalKegiatan: 0,
+    pegawaiMemenuhiJP: 0,
+    pegawaiSebagianJP: 0,
+    pegawaiTidakJP: 0,
+    dataChart: {
+      labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+      datasets: [
+        {
+          label: 'Jumlah Kegiatan',
+          data: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].map(() => randomNumber(0, 0)),
+          borderColor: 'rgba(255, 143, 42, 1)',
+          fill: true,
+          backgroundColor: 'rgba(255, 221, 40, 0.5)',
+        },
+      ],
+    }
+  });
   const [dataJenisKepegawaian, setJenisKepegawaian] = useState('ASN');
   const [dataPenempatan, setPenempatan] = useState('Pusat');
   const [modalShow, setModalShow] = useState(null);
-
   const [filterDate, setFilterDate] = useState({
     startDate: moment(new Date()).format('DD/MM/YYYY'),
     endDate: moment(addDays(new Date(), 30)).format('DD/MM/YYYY'),
@@ -124,6 +150,69 @@ const DashboardView = () => {
     }, 1000);
   }, []);
 
+  useEffect(() => {
+    const currentYear = (new Date()).getFullYear();
+    const rangeYear = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+    var data_year = rangeYear(currentYear, currentYear - 15, -1).map((row, i) => {
+      return (
+        { value: row, label: row }
+      )
+    })
+    setListYear(data_year)
+  }, []);
+
+  useEffect(() => {
+    async function fetchGeData() {
+      await new ServiceApi().getDashboardData(dataTahun).then(x => {
+        setDataCard({
+          totalKegiatan: x.data.jml_kegiatan,
+          totalPegawai: x.data.jml_pegawai,
+          pegawaiMemenuhiJP: Math.ceil(x.data.jp_terpenuhi),
+          pegawaiSebagianJP: Math.ceil(x.data.jp_sebagian),
+          pegawaiTidakJP: Math.ceil(x.data.jp_tidak_terpenuhi),
+          dataChart: {
+            labels: x.data.jml_kegiatan_perbulan.map((x) => x.bulan),
+            datasets: [
+              {
+                label: 'Jumlah Kegiatan',
+                data: x.data.jml_kegiatan_perbulan.map((x) => x.jumlah),
+                borderColor: 'rgba(255, 143, 42, 1)',
+                fill: true,
+                backgroundColor: 'rgba(255, 221, 40, 0.5)',
+              },
+            ],
+          }
+        })
+      });
+    }
+    fetchGeData();
+  }, []);
+
+  const fetchGeData = async (data) => {
+    await new ServiceApi().getDashboardData(data).then(x => {
+      setDataTahun({tahun: data.tahun, triwulan_awal: data.triwulan_awal, triwulan_akhir: data.triwulan_akhir});
+      setDataCard({
+        totalKegiatan: x.data.jml_kegiatan,
+        totalPegawai: x.data.jml_pegawai,
+        pegawaiMemenuhiJP: Math.ceil(x.data.jp_terpenuhi),
+        pegawaiSebagianJP: Math.ceil(x.data.jp_sebagian),
+        pegawaiTidakJP: Math.ceil(x.data.jp_tidak_terpenuhi),
+        dataChart: {
+          labels: x.data.jml_kegiatan_perbulan.map((x) => x.bulan),
+          datasets: [
+            {
+              label: 'Jumlah Kegiatan',
+              data: x.data.jml_kegiatan_perbulan.map((x) => x.jumlah),
+              borderColor: 'rgba(255, 143, 42, 1)',
+              fill: true,
+              backgroundColor: 'rgba(255, 221, 40, 0.5)',
+            },
+          ],
+        }
+      })
+    });
+  }
+
   const handleModal = (e) => {
     localStorage.setItem("welcome_modal", "0")
     setModalShow(e);
@@ -135,6 +224,18 @@ const DashboardView = () => {
       startDate: moment(data.selection.startDate).format('DD/MM/YYYY'),
       endDate: moment(data.selection.endDate).format('DD/MM/YYYY'),
     })
+  }
+
+  const setTahun = (e) => {
+    fetchGeData({tahun: e.value, triwulan_awal: dataTahun.triwulan_awal, triwulan_akhir: dataTahun.triwulan_akhir});
+  }
+
+  const setTriwulanAwal = (e) => {
+    fetchGeData({tahun: dataTahun.tahun, triwulan_awal: e.value, triwulan_akhir: dataTahun.triwulan_akhir});
+  }
+  
+  const setTriwulanAkhir = (e) => {
+    fetchGeData({tahun: dataTahun.tahun, triwulan_awal: dataTahun.triwulan_awal, triwulan_akhir: e.value});
   }
 
   return (
@@ -149,7 +250,7 @@ const DashboardView = () => {
               <span><FontAwesomeIcon icon={faUser} /></span>&nbsp; {dataJenisKepegawaian} &nbsp;
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ marginTop: 5, width: '100%' }}>
+            <Dropdown.Menu style={{ marginTop: 5, width: '100%', minWidth: 250 }}>
               {
                 !_.isEmpty(listJenisKepegawaian) ?
                   <>
@@ -195,19 +296,37 @@ const DashboardView = () => {
             align="right"
             id="dropdown-menu-align-end"
           >
-            <Dropdown.Toggle className='my-dropdown' id="dropdown-basic">
-              <span><FontAwesomeIcon icon={faCalendar} /></span>&nbsp; {filterDate.startDate} - {filterDate.endDate} &nbsp;
+            <Dropdown.Toggle className='my-dropdown' id="dropdown-basic" >
+              <span><FontAwesomeIcon icon={faCalendar} /></span>&nbsp; Pilih Tahun/Triwulan
             </Dropdown.Toggle>
 
-            <Dropdown.Menu style={{ marginTop: 5, }}>
-              <DateRangePicker
-                onChange={(item) => setDateRange(item)}
-                moveRangeOnFirstSelection={false}
-                months={2}
-                ranges={state}
-                direction="horizontal"
-                locale={localeID}
-              />
+            <Dropdown.Menu style={{ marginTop: 5, width: 400, maxHeight: 250, minHeight: 200 }}>
+              <Row style={{ padding: 14 }}>
+                <Col lg={12}>Tahun</Col>
+                <Col lg={12}>
+                  <Select options={listYear} placeholder="Pilih Tahun" onChange={(e) => setTahun(e)}/>
+                </Col>
+                <Col style={{ marginTop: 20 }}><h6>Triwulan</h6></Col>
+                <Col lg={12} className="d-flex flex-row justify-content-between align-items-center">
+                  <Select options={[
+                    {value: 1, label: '1'},
+                    {value: 2, label: '2'},
+                    {value: 3, label: '3'},
+                    {value: 4, label: '4'}
+                  ]}
+                    placeholder="Pilih Awal"
+                    onChange={(e) => setTriwulanAwal(e)}
+                  />
+                  <div>-</div>
+                  <Select options={[
+                    {value: 1, label: '1'},
+                    {value: 2, label: '2'},
+                    {value: 3, label: '3'},
+                    {value: 4, label: '4'}
+                  ]} placeholder="Pilih Akhir"
+                  onChange={(e) => setTriwulanAkhir(e)} />
+                </Col>
+              </Row>
             </Dropdown.Menu>
           </Dropdown>
         </div>
@@ -227,7 +346,7 @@ const DashboardView = () => {
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
                       <div className='title-side'>
-                        210
+                        {dataCard.totalPegawai}
                       </div>
                       <div className='subtitle-side'>
                         Total Pegawai
@@ -248,7 +367,7 @@ const DashboardView = () => {
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
                       <div className='title-side'>
-                        35
+                        {dataCard.totalKegiatan}
                       </div>
                       <div className='subtitle-side'>
                         Total Kegiatan
@@ -263,7 +382,7 @@ const DashboardView = () => {
                 <Card.Body>
                   <h4 className="card-main-content-title">Jumlah Kegiatan</h4>
                   <p className="card-main-content-subtitle">Data pada tahun 2022</p>
-                  <Line options={options} data={data} style={{ maxHeight: 400 }} />
+                  <Line options={options} data={dataCard.dataChart ?? data} style={{ maxHeight: 400 }} />
                 </Card.Body>
               </Card>
             </Col>
@@ -277,7 +396,7 @@ const DashboardView = () => {
                   <Row>
                     <Col sm={12} md={12} lg={4} className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
-                        <CircularProgressbarWithChildren value={50} styles={buildStyles({
+                        <CircularProgressbarWithChildren value={dataCard.pegawaiMemenuhiJP} styles={buildStyles({
                           textSize: '16px',
                           pathTransitionDuration: 0.5,
                           pathColor: `rgba(4, 153, 10, 1)`,
@@ -291,7 +410,7 @@ const DashboardView = () => {
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
                       <div className='d-flex flex-column'>
                         <div className='title-side'>
-                          50%
+                        {dataCard.pegawaiMemenuhiJP}%
                         </div>
                         <div className='subtitle-side'>
                           Pegawai Memenuhi JP
@@ -308,7 +427,7 @@ const DashboardView = () => {
                   <Row>
                     <Col sm={12} md={12} lg={4} className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
-                        <CircularProgressbarWithChildren value={38} styles={buildStyles({
+                        <CircularProgressbarWithChildren value={dataCard.pegawaiSebagianJP} styles={buildStyles({
                           textSize: '16px',
                           pathTransitionDuration: 0.5,
                           pathColor: `rgba(255, 168, 0, 1)`,
@@ -322,7 +441,7 @@ const DashboardView = () => {
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
                       <div className='d-flex flex-column'>
                         <div className='title-side'>
-                          38%
+                        {dataCard.pegawaiSebagianJP}%
                         </div>
                         <div className='subtitle-side'>
                           Pegawai Memenuhi Sebagian JP
@@ -339,7 +458,7 @@ const DashboardView = () => {
                   <Row>
                     <Col sm={12} md={12} lg={4} className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
-                        <CircularProgressbarWithChildren value={12} styles={buildStyles({
+                        <CircularProgressbarWithChildren value={dataCard.pegawaiTidakJP} styles={buildStyles({
                           textSize: '16px',
                           pathTransitionDuration: 0.5,
                           pathColor: `rgba(166, 25, 45, 1)`,
@@ -353,7 +472,7 @@ const DashboardView = () => {
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
                       <div className='d-flex flex-column'>
                         <div className='title-side'>
-                          12%
+                          {dataCard.pegawaiTidakJP}%
                         </div>
                         <div className='subtitle-side'>
                           Pegawai Tidak Memenuhi JP
