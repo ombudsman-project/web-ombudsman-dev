@@ -14,12 +14,11 @@ import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
 
 const listJenisDokumen = [
-    { value: 'pdf', label: 'PDF' },
-    { value: 'doc', label: 'DOC' },
-    { value: 'docx', label: 'DOCX' },
-    { value: 'jpg', label: 'JPG' },
-    { value: 'jpeg', label: 'JPEG' },
-    { value: 'png', label: 'PNG' },
+    { value: 1, label: 'Surat Tugas' },
+    { value: 2, label: 'Brosur' },
+    { value: 3, label: 'Undangan' },
+    { value: 4, label: 'Daftar Hadir' },
+    { value: 5, label: 'Daftar Hadir Peserta' }
 ]
 
 const TambahPelatihan = () => {
@@ -52,16 +51,25 @@ const TambahPelatihan = () => {
 
         const data = {
             'nama_pelatihan': e.target.elements.nama_pelatihan.value,
-            'metode_pelatihan': checkedMetode,
-            'jalur_pelatihan': e.target.elements.jalur_pelatihan.value,
+            'metode_pelatihan': checkedMetode == 1 ? "1" : "2",
+            'jalur_pelatihan': e.target.elements.jalur_pelatihan.value == "" ? 0 : e.target.elements.jalur_pelatihan.value,
             'penyelenggara': e.target.elements.institusi_penyelenggara.value,
             'tgl_mulai': moment(e.target.elements.tanggal_mulai.value).format('yyyy-MM-DD'),
             'tgl_selesai': moment(e.target.elements.tanggal_selesai.value).format('yyyy-MM-DD'),
             'jml_jp': e.target.elements.jam_pelajaran.value,
-            'kompetensi': e.target.elements.jenis_kompetensi.value,
-            'sub_kompetensi': e.target.elements.jenis_sub_kompetensi.value,
+            'kompetensi': e.target.elements.jenis_kompetensi.value == "" ? 0 : e.target.elements.jenis_kompetensi.value,
+            'sub_kompetensi': e.target.elements.jenis_sub_kompetensi.value == "" ? 0 : e.target.elements.jenis_sub_kompetensi.value,
             'ketersediaan_dokumen': checkedDokumen
         }
+        var messageError = [];
+        const getValidationMessage = (myObject) => {
+            for (let [k, v] of Object.entries(myObject)) {
+                messageError.push({
+                    message: myObject[k][0]
+                })
+            }
+        }
+
 
         new ServiceApi().addKegiatan(data)
             .then(response => {
@@ -74,9 +82,13 @@ const TambahPelatihan = () => {
                     history.push('/kegiatan/daftar_kegiatan');
                 })
             }).catch(err => {
+                getValidationMessage(err.response.data.data)
+                var mess = messageError.map(mes => {
+                    return mes.message + '<br/>'
+                })
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.nama_pelatihan ? err.response.data.data.nama_pelatihan : '') + '</i>',
+                    html: '<i>' + (err.response.data.data ? mess : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -308,7 +320,7 @@ const TambahPelatihan = () => {
                                 Nomor Surat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" required />
+                                <Form.Control type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
