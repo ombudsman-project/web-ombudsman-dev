@@ -457,7 +457,7 @@ const Pencatatan = () => {
                                                 <Form.Check
                                                     inline
                                                     checked={checkedDokumen == 1}
-                                                    label="Tersedia"
+                                                    label="Sertifikat"
                                                     name="ketersediaan_dokumen"
                                                     type="radio"
                                                     onChange={() => setCheckedDokumen(1)}
@@ -472,7 +472,7 @@ const Pencatatan = () => {
                                             >
                                                 <Form.Check
                                                     inline
-                                                    label="Tidak Tersedia"
+                                                    label="Dokumen Lain"
                                                     checked={checkedDokumen == 0}
                                                     name="ketersediaan_dokumen"
                                                     type="radio"
