@@ -278,7 +278,7 @@ const Pencatatan = () => {
                                                 <p className="card-main-content-subtitle">Tambahkan kehadiran peserta dengan memilih dan mengunggah file pendukung.</p>
                                             </div>
                                             <div>
-                                                <Button className="content-button d-flex flex-row align-items-center"><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
+                                                <Button className="content-button d-flex flex-row align-items-center" onClick={() => setModalShow(true)}><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
                                             </div>
                                         </div>
                                         <div className='d-flex flex-column justify-content-center align-items-center' style={{ minHeight: 400 }}>
