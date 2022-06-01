@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Button, Card, Col, Container, Form, Modal, Pagination, Row } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Container, Form, Modal, Pagination, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
 import { useTranslation } from 'react-i18next';
@@ -102,7 +102,7 @@ const Pegawai = () => {
             setListKepegawaian(x.data.jenis_kepegawaian);
             var data_golongan = x.data.golongan_pangkat.map((row, i) => {
                 return (
-                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan +' (' + row.pangkat + ')'  }
+                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan + ' (' + row.pangkat + ')' }
                 )
             })
             setListGolongan(data_golongan);
@@ -143,15 +143,40 @@ const Pegawai = () => {
         );
     };
 
-    const changeKepegawaian = event => {
+    const changeKepegawaian = async (event) => {
         const { checked, value } = event.currentTarget;
 
-        setKepegawaian(
-            prev => checked
-                ? [...prev, value]
-                : prev.filter(val => val !== value)
+        console.log(event.target.value)
+
+        setKepegawaian(prev => checked
+            ? [...prev, value]
+            : prev.filter(val => val !== value)
         );
+
+        // let data = [{
+        //     'jenis_kepegawaian': prev => checked
+        //         ? [...prev, value]
+        //         : prev.filter(val => val !== value)
+        // }]
+        // if (checked) selectedKepegawaian(value);
     };
+
+    const selectedKepegawaian = async () => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'jabatan')
+        kepegawaian.map(x => {
+            formData.append('jenis_kepegawaian[]', x)
+        })
+        await new ServiceApi().getSelect(formData).then(x => {
+            var data_jabatan = x.data.jabatan.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListJabatan(data_jabatan);
+        }).catch((err) => {
+        })
+    }
 
     const selectedGolongan = (e) => {
         var data_map = e.map((row, id) => {
@@ -296,6 +321,7 @@ const Pegawai = () => {
                                         <th className="table-title text-center" scope="col">Kategori</th>
                                         <th className="table-title text-center" scope="col">Unit Kerja</th>
                                         <th className="table-title text-center" scope="col">Penempatan</th>
+                                        <th className="table-title text-center" scope="col">Status</th>
                                         <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
@@ -317,6 +343,7 @@ const Pegawai = () => {
                                                         <td className="text-center">{x.kategori_jabatan ?? '-'}</td>
                                                         <td className="text-center">{x.unit_kerja ?? '-'}</td>
                                                         <td className="text-center">{x.penempatan ?? '-'}</td>
+                                                        <td className="text-center"><Badge className="info" bg="info">Aktif</Badge></td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/pegawai/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">
