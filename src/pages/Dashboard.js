@@ -262,7 +262,9 @@ const DashboardView = () => {
     fetchGeData({
       tahun: dataTahun.tahun,
       triwulan_awal: e.value,
-      triwulan_akhir: dataTahun.triwulan_akhir
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      penempatan: dataFilter.penempatan,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
     });
   }
 
@@ -270,7 +272,9 @@ const DashboardView = () => {
     fetchGeData({
       tahun: dataTahun.tahun,
       triwulan_awal: dataTahun.triwulan_awal,
-      triwulan_akhir: e.value
+      triwulan_akhir: e.value,
+      penempatan: dataFilter.penempatan,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
     });
   }
 
