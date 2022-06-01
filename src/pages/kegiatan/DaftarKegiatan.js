@@ -16,6 +16,7 @@ import * as IoIcons from 'react-icons/io';
 import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import ReactPaginate from 'react-paginate';
+import { longText } from '../../helper/Helper';
 
 const DaftarKegiatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
@@ -215,9 +216,9 @@ const DaftarKegiatan = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.nama_pelatihan ? x.nama_pelatihan : '-'}</td>
-                                                        <td className="">{x.nama_penyelenggara ? x.nama_penyelenggara : '-'}</td>
-                                                        <td className="text-center">{x.tgl_mulai ? x.tgl_mulai : '-'}</td>
+                                                        <td>{longText(x.nama_pelatihan) ?? '-'}</td>
+                                                        <td className="">{longText(x.nama_penyelenggara) ?? '-'}</td>
+                                                        <td className="text-center">{x.tgl_mulai ?? '-'}</td>
                                                         <td className="text-center"><StatusPelaksanaan status={x.status_kegiatan} status_administrasi={x.status_administrasi}/></td>
                                                         <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
                                                         <td className="action-column">

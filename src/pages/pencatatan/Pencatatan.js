@@ -22,9 +22,9 @@ const Pencatatan = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
-    const [checkedDokumen, setCheckedDokumen] = useState(null);
+    const [checkedDokumen, setCheckedDokumen] = useState(0);
     const [listPegawai, setListPegawai] = useState([]);
-    const [search, setSearch] = useState('');
+    const [condFile, setDisFile] = useState(false);
     const [selectedKegiatan, setSelectedKegiatan] = useState(null);
     const [listKehadiranPegawai, setListKehadiranPegawai] = useState([]);
     const [modalShow, setModalShow] = useState(false);
@@ -39,6 +39,7 @@ const Pencatatan = () => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         maxFiles: 1,
+        disabled: condFile,
         accept: {
             'application/pdf': ['.pdf'],
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
@@ -190,6 +191,11 @@ const Pencatatan = () => {
                     })
             }
         })
+    }
+
+    const setCheckDokumen = (e) => {
+        setCheckedDokumen(e)
+        setDisFile(e == 0)
     }
 
     return (
@@ -452,7 +458,7 @@ const Pencatatan = () => {
                                         <Col md="auto" lg="auto" sm="auto">
                                             <div
                                                 className='input-radio-custom'
-                                                onClick={() => setCheckedDokumen(1)}
+                                                onClick={() => setCheckDokumen(1)}
                                             >
                                                 <Form.Check
                                                     inline
@@ -460,7 +466,7 @@ const Pencatatan = () => {
                                                     label="Sertifikat"
                                                     name="ketersediaan_dokumen"
                                                     type="radio"
-                                                    onChange={() => setCheckedDokumen(1)}
+                                                    onChange={() => setCheckDokumen(1)}
                                                     id={`inline-tersedia_1`}
                                                 />
                                             </div>
@@ -468,15 +474,15 @@ const Pencatatan = () => {
                                         <Col>
                                             <div
                                                 className='input-radio-custom'
-                                                onClick={() => setCheckedDokumen(0)}
+                                                onClick={() => setCheckDokumen(0)}
                                             >
                                                 <Form.Check
                                                     inline
-                                                    label="Dokumen Lain"
+                                                    label="Tidak Tersedia"
                                                     checked={checkedDokumen == 0}
                                                     name="ketersediaan_dokumen"
                                                     type="radio"
-                                                    onChange={() => setCheckedDokumen(0)}
+                                                    onChange={() => setCheckDokumen(0)}
                                                     id={`inline-tersedia_2`}
                                                 />
                                             </div>
@@ -489,7 +495,7 @@ const Pencatatan = () => {
                                 Nomor Surat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
+                                <Form.Control required={!checkedDokumen == 0} disabled={checkedDokumen == 0} type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -499,7 +505,7 @@ const Pencatatan = () => {
                             <Col sm="9">
                                 {
                                     _.isEmpty(dataFiles) ?
-                                            <div className='drop-files-upload' {...getRootProps()}>
+                                            <div className='drop-files-upload' {...getRootProps()} style={{ backgroundColor: condFile ? 'rgba(97,97,97,0.25)' : '' }}>
                                                 <input {...getInputProps()} />
                                                 {
                                                     isDragActive ?

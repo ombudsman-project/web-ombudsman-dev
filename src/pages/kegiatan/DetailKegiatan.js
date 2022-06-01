@@ -137,6 +137,15 @@ const DetailKegiatan = () => {
         })
     }
 
+    const listJenisDokumen = [
+        { value: null, label: 'Tidak Mencantumkan Dokumen' },
+        { value: 1, label: 'Surat Tugas' },
+        { value: 2, label: 'Brosur' },
+        { value: 3, label: 'Undangan' },
+        { value: 4, label: 'Daftar Hadir' },
+        { value: 5, label: 'Daftar Hadir Peserta' }
+    ]
+
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
 
     return (
@@ -192,7 +201,7 @@ const DetailKegiatan = () => {
                                 <Col className="text-secondary" lg="6" md="6"><p>{myparam.tgl_mulai ? myparam.tgl_mulai : '-'} - {myparam.tgl_selesai ? myparam.tgl_selesai : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Jenis Dokumen Pendukung</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jenis_dokumen ? myparam.jenis_dokumen : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{_.find(listJenisDokumen, {value: myparam.jenis_dokumen}).label ?? '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Nomor Surat</p></Col>
                                 <Col className="text-secondary" lg="6" md="6"><p>{myparam.nomor_surat ? myparam.nomor_surat : '-'}</p></Col>
