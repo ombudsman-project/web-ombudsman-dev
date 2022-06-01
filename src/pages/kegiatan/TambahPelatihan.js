@@ -136,6 +136,25 @@ const TambahPelatihan = () => {
         fetchGetSelect();
     }, []);
 
+    const getSelectFilter = async (e, key) => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'bentuk_jalur_kompetensi');
+        formData.append('metode_pelatihan', e);
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map_jalur_pel = x.data[key].map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            });
+            setListJalurPelatihan(data_map_jalur_pel)
+        });
+    }
+
+    const setCheckMetode = (e) => {
+        setCheckedMetode(e)
+        getSelectFilter(e, ['bentuk_jalur_kompetensi'])
+    } 
+
     const setCheckDokumen = (e) => {
         setCheckedDokumen(e)
         setDisFile(e == 0)
@@ -171,7 +190,7 @@ const TambahPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedMetode(1)}
+                                            onClick={() => setCheckMetode(1)}
                                         >
                                             <Form.Check
                                                 inline
@@ -179,7 +198,7 @@ const TambahPelatihan = () => {
                                                 label="Klasikal"
                                                 name="klasikal_1"
                                                 type="radio"
-                                                onChange={() => setCheckedMetode(1)}
+                                                onChange={() => setCheckMetode(1)}
                                                 id={`inline-klasikal_1`}
                                             />
                                         </div>
@@ -187,15 +206,15 @@ const TambahPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedMetode(0)}
+                                            onClick={() => setCheckMetode(2)}
                                         >
                                             <Form.Check
                                                 inline
                                                 label="Non Klasikal"
-                                                checked={checkedMetode == 0}
+                                                checked={checkedMetode == 2}
                                                 name="klasikal_2"
                                                 type="radio"
-                                                onChange={() => setCheckedMetode(0)}
+                                                onChange={() => setCheckMetode(2)}
                                                 id={`inline-klasikal_2`}
                                             />
                                         </div>

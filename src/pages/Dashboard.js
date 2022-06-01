@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faMapMarkerAlt, faCalendar, faUserAlt, faClock } from '@fortawesome/free-solid-svg-icons'
-import { Card, Col, Container, Dropdown, Row, Form, Modal, Button } from 'react-bootstrap';
-import _, { size } from 'lodash';
-import Skeleton from 'react-loading-skeleton';
+import { faUser, faMapMarkerAlt, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons'
+import { Card, Col, Dropdown, Row, Modal, Button } from 'react-bootstrap';
+import _ from 'lodash';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
-import Swal from 'sweetalert2'
-import { DateRangePicker } from 'react-date-range';
-import { addDays } from 'date-fns';
-import { id as localeID } from 'date-fns/esm/locale';
-import * as moment from "moment";
 import * as AiIcons from 'react-icons/ai';
-import * as FaIcons from 'react-icons/fa';
-import * as FiIcons from 'react-icons/fi';
-import * as IoIcons from 'react-icons/io';
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -23,7 +14,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Line, Bar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import Select from 'react-select';
 import ServiceApi from '../api/MyApi';
 import LogoUser from "../img/user.png";
@@ -79,13 +70,6 @@ export const data = {
   ],
 };
 const DashboardView = () => {
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 30),
-      key: 'selection'
-    }
-  ]);
   const [listJenisKepegawaian, setListJenisKepegawaian] = useState([]);
   const [listYear, setListYear] = useState([]);
   const [listPenempatan, setListPenempatan] = useState([]);
@@ -121,12 +105,9 @@ const DashboardView = () => {
   const [dataJenisKepegawaian, setJenisKepegawaian] = useState('Semua');
   const [dataPenempatan, setPenempatan] = useState('Semua');
   const [modalShow, setModalShow] = useState(null);
-  const [filterDate, setFilterDate] = useState({
-    startDate: moment(new Date()).format('DD/MM/YYYY'),
-    endDate: moment(addDays(new Date(), 30)).format('DD/MM/YYYY'),
-  })
 
   useEffect(() => {
+    let abortController = new AbortController();
     async function fetchGetSelect() {
       let formData = new FormData();
       formData.append('parameter[]', 'all');
@@ -143,6 +124,9 @@ const DashboardView = () => {
       });
     }
     fetchGetSelect();
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   useEffect(() => {
@@ -191,7 +175,6 @@ const DashboardView = () => {
                 borderWidth: 2,
                 borderRadius: 5,
                 borderSkipped: false,
-                borderColor: '#FF8F2A'
               },
             ],
           }
@@ -226,7 +209,6 @@ const DashboardView = () => {
               borderWidth: 2,
               borderRadius: 5,
               borderSkipped: false,
-              borderColor: '#FF8F2A'
             },
           ],
         }
@@ -237,14 +219,6 @@ const DashboardView = () => {
   const handleModal = (e) => {
     localStorage.setItem("welcome_modal", "0")
     setModalShow(e);
-  }
-
-  const setDateRange = (data) => {
-    setState([data.selection]);
-    setFilterDate({
-      startDate: moment(data.selection.startDate).format('DD/MM/YYYY'),
-      endDate: moment(data.selection.endDate).format('DD/MM/YYYY'),
-    })
   }
 
   const setTahun = (e) => {
@@ -403,7 +377,7 @@ const DashboardView = () => {
                   <Row>
                     <Col lg={2} className="blue-background-icon">
                       <div className='background-icon d-flex justify-content-center'>
-                        <img src={LogoUser} />
+                        <img src={LogoUser} alt="logoUser"/>
                       </div>
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
@@ -424,7 +398,7 @@ const DashboardView = () => {
                   <Row>
                     <Col lg={2} className="orange-background-icon">
                       <div className='background-icon d-flex justify-content-center'>
-                        <img src={LogoCalendar} />
+                        <img src={LogoCalendar} alt="logoCalendar"/>
                       </div>
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
@@ -577,7 +551,7 @@ function MyVerticallyCenteredModal(props) {
     >
       <Modal.Body className='d-flex flex-column justify-content-center align-items-center'>
         <div>
-          <img src={Logo} className="img-fluid" width={120} style={{ marginTop: 50, marginBottom: 50 }} />
+          <img src={Logo} className="img-fluid" alt="logoOmbudsman" width={120} style={{ marginTop: 50, marginBottom: 50 }} />
         </div>
         <div className='text-center'>
           <h4><b>Aplikasi Pengembangan Kompetensi<br />Ombudsman Republik Indonesia</b></h4>
