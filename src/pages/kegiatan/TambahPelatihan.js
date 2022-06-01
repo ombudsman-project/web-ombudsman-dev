@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faClock, faPlus, faInbox } from '@fortawesome/free-solid-svg-icons'
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { faInbox } from '@fortawesome/free-solid-svg-icons'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import _ from 'lodash';
-import Skeleton from 'react-loading-skeleton'
 import * as moment from 'moment';
 import Swal from 'sweetalert2'
-import * as AiIcons from 'react-icons/ai';
-import * as BsIcons from 'react-icons/bs';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
@@ -150,10 +147,28 @@ const TambahPelatihan = () => {
         });
     }
 
+    const getSelectFilterKom = async (e, key) => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'sub_kompetensi');
+        formData.append('kompetensi', e);
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map_jalur_pel = x.data[key].map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            });
+            setListSubKompetensi(data_map_jalur_pel)
+        });
+    }
+
     const setCheckMetode = (e) => {
         setCheckedMetode(e)
         getSelectFilter(e, ['bentuk_jalur_kompetensi'])
-    } 
+    }
+
+    const setSelectedKom = (e) => {
+        getSelectFilterKom(e.value, 'sub_kompetensi')
+    }
 
     const setCheckDokumen = (e) => {
         setCheckedDokumen(e)
@@ -275,7 +290,7 @@ const TambahPelatihan = () => {
                                 Jenis Kompetensi
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={listKompetensi} name="jenis_kompetensi" placeholder="Pilih Jenis Kompetensi" />
+                                <Select options={listKompetensi} name="jenis_kompetensi" placeholder="Pilih Jenis Kompetensi" onChange={(e) => setSelectedKom(e)} />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
