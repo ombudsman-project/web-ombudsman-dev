@@ -14,12 +14,11 @@ import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
 
 const listJenisDokumen = [
-    { value: 'pdf', label: 'PDF' },
-    { value: 'doc', label: 'DOC' },
-    { value: 'docx', label: 'DOCX' },
-    { value: 'jpg', label: 'JPG' },
-    { value: 'jpeg', label: 'JPEG' },
-    { value: 'png', label: 'PNG' },
+    { value: 1, label: 'Surat Tugas' },
+    { value: 2, label: 'Brosur' },
+    { value: 3, label: 'Undangan' },
+    { value: 4, label: 'Daftar Hadir' },
+    { value: 5, label: 'Daftar Hadir Peserta' }
 ]
 
 const TambahPelatihan = () => {
@@ -31,6 +30,7 @@ const TambahPelatihan = () => {
     const [checkedMetode, setCheckedMetode] = useState(1);
     const [checkedDokumen, setCheckedDokumen] = useState(1);
     const [dataFiles, setFiles] = useState([]);
+    const [condFile, setDisFile] = useState(false);
 
     const onDrop = useCallback(acceptedFiles => {
         setFiles(acceptedFiles)
@@ -38,6 +38,7 @@ const TambahPelatihan = () => {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
+        disabled: condFile,
         accept: {
             'application/pdf': ['.pdf'],
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
@@ -52,16 +53,26 @@ const TambahPelatihan = () => {
 
         const data = {
             'nama_pelatihan': e.target.elements.nama_pelatihan.value,
-            'metode_pelatihan': checkedMetode,
-            'jalur_pelatihan': e.target.elements.jalur_pelatihan.value,
+            'metode_pelatihan': checkedMetode == 1 ? "1" : "2",
+            'jalur_pelatihan': e.target.elements.jalur_pelatihan.value == "" ? 0 : e.target.elements.jalur_pelatihan.value,
             'penyelenggara': e.target.elements.institusi_penyelenggara.value,
             'tgl_mulai': moment(e.target.elements.tanggal_mulai.value).format('yyyy-MM-DD'),
             'tgl_selesai': moment(e.target.elements.tanggal_selesai.value).format('yyyy-MM-DD'),
             'jml_jp': e.target.elements.jam_pelajaran.value,
-            'kompetensi': e.target.elements.jenis_kompetensi.value,
-            'sub_kompetensi': e.target.elements.jenis_sub_kompetensi.value,
-            'ketersediaan_dokumen': checkedDokumen
+            'kompetensi': e.target.elements.jenis_kompetensi.value == "" ? 0 : e.target.elements.jenis_kompetensi.value,
+            'sub_kompetensi': e.target.elements.jenis_sub_kompetensi.value == "" ? 0 : e.target.elements.jenis_sub_kompetensi.value,
+            'ketersediaan_dokumen': checkedDokumen,
+            'jenis_dokumen': e.target.elements.jenis_dokumen_pendukung ? e.target.elements.jenis_dokumen_pendukung.value : 0
         }
+        var messageError = [];
+        const getValidationMessage = (myObject) => {
+            for (let [k, v] of Object.entries(myObject)) {
+                messageError.push({
+                    message: myObject[k][0]
+                })
+            }
+        }
+
 
         new ServiceApi().addKegiatan(data)
             .then(response => {
@@ -74,9 +85,13 @@ const TambahPelatihan = () => {
                     history.push('/kegiatan/daftar_kegiatan');
                 })
             }).catch(err => {
+                getValidationMessage(err.response.data.data)
+                var mess = messageError.map(mes => {
+                    return mes.message + '<br/>'
+                })
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.nama_pelatihan ? err.response.data.data.nama_pelatihan : '') + '</i>',
+                    html: '<i>' + (err.response.data.data ? mess : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -120,6 +135,11 @@ const TambahPelatihan = () => {
         }
         fetchGetSelect();
     }, []);
+
+    const setCheckDokumen = (e) => {
+        setCheckedDokumen(e)
+        setDisFile(e == 0)
+    } 
 
     return (
         <div className='main-animation'>
@@ -263,7 +283,7 @@ const TambahPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedDokumen(1)}
+                                            onClick={() => setCheckDokumen(1)}
                                         >
                                             <Form.Check
                                                 inline
@@ -271,7 +291,7 @@ const TambahPelatihan = () => {
                                                 label="Tersedia"
                                                 name="tersedia_1"
                                                 type="radio"
-                                                onChange={() => setCheckedDokumen(1)}
+                                                onChange={() => setCheckDokumen(1)}
                                                 id={`inline-tersedia_1`}
                                             />
                                         </div>
@@ -279,7 +299,7 @@ const TambahPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedDokumen(0)}
+                                            onClick={() => setCheckDokumen(0)}
                                         >
                                             <Form.Check
                                                 inline
@@ -287,7 +307,7 @@ const TambahPelatihan = () => {
                                                 checked={checkedDokumen == 0}
                                                 name="tersedia_2"
                                                 type="radio"
-                                                onChange={() => setCheckedDokumen(0)}
+                                                onChange={() => setCheckDokumen(0)}
                                                 id={`inline-tersedia_2`}
                                             />
                                         </div>
@@ -300,7 +320,7 @@ const TambahPelatihan = () => {
                                 Jenis Dokumen Pendukung
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={listJenisDokumen} name="jenis_dokumen_pendukung" placeholder="Pilih Jenis Dokumen Pendukung" />
+                                <Select required={!checkedDokumen == 0} isDisabled={checkedDokumen == 0} options={listJenisDokumen} name="jenis_dokumen_pendukung" placeholder="Pilih Jenis Dokumen Pendukung" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -308,7 +328,7 @@ const TambahPelatihan = () => {
                                 Nomor Surat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" required />
+                                <Form.Control required={!checkedDokumen == 0} disabled={checkedDokumen == 0} type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -318,8 +338,8 @@ const TambahPelatihan = () => {
                             <Col sm="9">
                                 {
                                     _.isEmpty(dataFiles) ?
-                                        <div className='drop-files-upload' {...getRootProps()}>
-                                            <input {...getInputProps()} />
+                                        <div className='drop-files-upload' {...getRootProps()} style={{ backgroundColor: condFile ? 'rgba(97,97,97,0.25)' : '' }}>
+                                            <input {...getInputProps()}/>
                                             {
                                                 isDragActive ?
                                                     <div className='d-flex flex-column justify-content-center align-items-center' style={{ paddingTop: 40, paddingBottom: 40 }}>
@@ -349,6 +369,9 @@ const TambahPelatihan = () => {
                                                 Hapus File
                                             </Button>
                                         </>
+                                }
+                                {
+                                    _.isEmpty(dataFiles) && !condFile ? '*File Diperlukan' : ''
                                 }
                             </Col>
                         </Form.Group>

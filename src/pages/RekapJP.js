@@ -15,6 +15,7 @@ import {
   Row,
   Form,
   Modal,
+  Badge,
 } from "react-bootstrap";
 import _ from "lodash";
 import * as moment from "moment";
@@ -30,11 +31,12 @@ import ReactPaginate from "react-paginate";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import ServiceApi from "../api/MyApi";
+import { longText } from "../helper/Helper"
 
 const Rekapitulasi = () => {
   const animatedComponents = makeAnimated();
   const [modalShow, setModalShow] = useState(false);
-  const [perPage, setPerPage] = useState(5);
+  const [perPage, setPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [dataCount, setDataCount] = useState(0);
@@ -71,7 +73,7 @@ const Rekapitulasi = () => {
       awalDate: moment(data.selection.startDate).format("YYYY-MM-DD"),
       akhirDate: moment(data.selection.endDate).format("YYYY-MM-DD"),
     });
-    
+
     const dataFilter = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: moment(data.selection.startDate).format("YYYY-MM-DD"), tgl_akhir: moment(data.selection.endDate).format("YYYY-MM-DD") }
     await new ServiceApi()
       .getRekapJP(dataFilter)
@@ -109,7 +111,7 @@ const Rekapitulasi = () => {
   }, []);
 
   const viewData = async () => {
-    const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+    const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, jumlah_jp: rekapJP }  }
     await new ServiceApi()
       .getRekapJP(data)
       .then((x) => {
@@ -122,7 +124,7 @@ const Rekapitulasi = () => {
 
   async function handlePerPage(e) {
     setPerPage(e.target.value);
-    const dataFilter = { 'page': currentPage, 'length': e.target.value, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+    const dataFilter = { 'page': currentPage, 'length': e.target.value, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, jumlah_jp: rekapJP }  }
     await new ServiceApi()
       .getRekapJP(dataFilter)
       .then((x) => {
@@ -134,7 +136,7 @@ const Rekapitulasi = () => {
 
   async function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage + 1);
-    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, jumlah_jp: rekapJP }  }
     await new ServiceApi()
       .getRekapJP(dataFilter)
       .then((x) => {
@@ -145,7 +147,7 @@ const Rekapitulasi = () => {
 
   const searchData = async (e) => {
     setSearch(e.target.value);
-    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': e.target.value, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': e.target.value, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, jumlah_jp: rekapJP }  }
     await new ServiceApi()
       .getRekapJP(dataFilter)
       .then((x) => {
@@ -198,14 +200,15 @@ const Rekapitulasi = () => {
 
   const filterData = async (e) => {
     setModalShow(false);
-    // const data = { 'page': currentPage, 'length': perPage, 'search': '', 'filter': { 'jenis_kelamin': jenisKelamin, 'jenis_kepegawaian': kepegawaian, 'golongan_pangkat': golongan, 'jabatan': jabatan, 'unit_kerja': unit, 'penempatan': penempatan } }
-    // await new ServiceApi().getPegawai(data).then(x => {
-    //   setModalShow(false);
-    //   setDataCount(x.data.total_data);
-    //   setListPegawai(x.data.data);
-    //   setPageCount(Math.ceil(x.data.total_data / perPage));
-    // }).catch((err) => {
-    // })
+    const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, jumlah_jp: rekapJP } }
+    await new ServiceApi()
+      .getRekapJP(data).then(x => {
+        setModalShow(false);
+        setDataCount(x.data.total_data);
+        setListRekap(x.data.data);
+        setPageCount(Math.ceil(x.data.total_data / perPage));
+      })
+      .catch((err) => { })
   }
 
   const listRekapJP = [
@@ -256,7 +259,7 @@ const Rekapitulasi = () => {
                   onChange={(e) => handlePerPage(e)}
                 >
                   <option value="5">5</option>
-                  <option value="10">10</option>
+                  <option value="10" selected>10</option>
                   <option value="50">50</option>
                   <option value="100">100</option>
                 </Form.Control>
@@ -327,10 +330,10 @@ const Rekapitulasi = () => {
                           </td>
                           <td>{x.nama}</td>
                           <td>{x.jenis_kepegawaian ?? '-'}</td>
-                          <td>{x.jabatan ?? '-'}</td>
+                          <td>{longText(x.jabatan) ?? '-'}</td>
                           <td className="text-center">{x.penempatan ?? '-'}</td>
                           <td className="text-center">{x.jumlah_jp ?? '-'}</td>
-                          <td className="text-center">{x.keterangan ?? '-'}</td>
+                          <td className="text-center">{<StatusKeterangan jlmh_jp={x.jumlah_jp} /> ?? '-'}</td>
                         </tr>
                       );
                     })
@@ -483,5 +486,18 @@ const Rekapitulasi = () => {
     </div>
   );
 };
+
+function StatusKeterangan({ jlmh_jp }) {
+  return (
+    jlmh_jp == 0 ?
+      <Badge className="danger" bg="danger">Tidak Terpenuhi</Badge>
+      : jlmh_jp > 0 && jlmh_jp <= 20 ?
+        <Badge className="warning" bg="warning">Terpenuhi Sebagian</Badge>
+        : jlmh_jp > 20 ?
+          <><Badge className="success" bg="success">Terpenuhi</Badge></>
+          :
+          <Badge className="danger" bg="danger">Tidak Terpenuhi</Badge>
+  )
+}
 
 export default Rekapitulasi;

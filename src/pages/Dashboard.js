@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faMapMarkerAlt, faCalendar, faUserAlt, faClock } from '@fortawesome/free-solid-svg-icons'
 import { Card, Col, Container, Dropdown, Row, Form, Modal, Button } from 'react-bootstrap';
-import _ from 'lodash';
+import _, { size } from 'lodash';
 import Skeleton from 'react-loading-skeleton';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import Swal from 'sweetalert2'
@@ -23,12 +23,13 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import Select from 'react-select';
 import ServiceApi from '../api/MyApi';
 import LogoUser from "../img/user.png";
 import LogoCalendar from "../img/calendar.png";
 import Logo from "../img/logo.png";
+import { IconContext } from 'react-icons';
 
 ChartJS.register(
   RadialLinearScale,
@@ -88,7 +89,11 @@ const DashboardView = () => {
   const [listJenisKepegawaian, setListJenisKepegawaian] = useState([]);
   const [listYear, setListYear] = useState([]);
   const [listPenempatan, setListPenempatan] = useState([]);
-  const [showDropTahun, setShowDropTahun] = useState(false);
+  const [filterTahun, setFilterTahun] = useState(null);
+  const [dataFilter, setDataFilter] = useState({
+    jenis_kepegawaian: 0,
+    penempatan: 0
+  });
   const [dataTahun, setDataTahun] = useState({
     tahun: (new Date()).getFullYear(),
     triwulan_awal: 1,
@@ -113,8 +118,8 @@ const DashboardView = () => {
       ],
     }
   });
-  const [dataJenisKepegawaian, setJenisKepegawaian] = useState('ASN');
-  const [dataPenempatan, setPenempatan] = useState('Pusat');
+  const [dataJenisKepegawaian, setJenisKepegawaian] = useState('Semua');
+  const [dataPenempatan, setPenempatan] = useState('Semua');
   const [modalShow, setModalShow] = useState(null);
   const [filterDate, setFilterDate] = useState({
     startDate: moment(new Date()).format('DD/MM/YYYY'),
@@ -126,18 +131,15 @@ const DashboardView = () => {
       let formData = new FormData();
       formData.append('parameter[]', 'all');
       await new ServiceApi().getSelect(formData).then(x => {
-        setListJenisKepegawaian(x.data.jenis_kepegawaian)
-      });
-    }
-    fetchGetSelect();
-  }, []);
+        var jenisPeg = [];
+        var penem = [];
+        jenisPeg = x.data.jenis_kepegawaian;
+        penem = x.data.penempatan;
+        jenisPeg.push({ id: 0, name: 'Semua' });
+        penem.push({ id: 0, name: 'Semua' });
 
-  useEffect(() => {
-    async function fetchGetSelect() {
-      let formData = new FormData();
-      formData.append('parameter[]', 'all');
-      await new ServiceApi().getSelect(formData).then(x => {
-        setListPenempatan(x.data.penempatan)
+        setListJenisKepegawaian(jenisPeg)
+        setListPenempatan(penem)
       });
     }
     fetchGetSelect();
@@ -152,7 +154,7 @@ const DashboardView = () => {
 
   useEffect(() => {
     const currentYear = (new Date()).getFullYear();
-    const rangeYear = (start, stop, step) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+    const rangeYear = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step));
     var data_year = rangeYear(currentYear, currentYear - 15, -1).map((row, i) => {
       return (
         { value: row, label: row }
@@ -163,7 +165,14 @@ const DashboardView = () => {
 
   useEffect(() => {
     async function fetchGeData() {
-      await new ServiceApi().getDashboardData(dataTahun).then(x => {
+      const data = {
+        tahun: dataTahun.tahun,
+        triwulan_awal: dataTahun.triwulan_awal,
+        triwulan_akhir: dataTahun.triwulan_akhir,
+        jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+        penempatan: dataFilter.penempatan
+      }
+      await new ServiceApi().getDashboardData(data).then(x => {
         setDataCard({
           totalKegiatan: x.data.jml_kegiatan,
           totalPegawai: x.data.jml_pegawai,
@@ -179,6 +188,10 @@ const DashboardView = () => {
                 borderColor: 'rgba(255, 143, 42, 1)',
                 fill: true,
                 backgroundColor: 'rgba(255, 221, 40, 0.5)',
+                borderWidth: 2,
+                borderRadius: 5,
+                borderSkipped: false,
+                borderColor: '#FF8F2A'
               },
             ],
           }
@@ -190,7 +203,11 @@ const DashboardView = () => {
 
   const fetchGeData = async (data) => {
     await new ServiceApi().getDashboardData(data).then(x => {
-      setDataTahun({tahun: data.tahun, triwulan_awal: data.triwulan_awal, triwulan_akhir: data.triwulan_akhir});
+      setDataTahun({ tahun: data.tahun, triwulan_awal: data.triwulan_awal, triwulan_akhir: data.triwulan_akhir });
+      setDataFilter({
+        jenis_kepegawaian: data.jenis_kepegawaian,
+        penempatan: data.penempatan
+      })
       setDataCard({
         totalKegiatan: x.data.jml_kegiatan,
         totalPegawai: x.data.jml_pegawai,
@@ -206,6 +223,10 @@ const DashboardView = () => {
               borderColor: 'rgba(255, 143, 42, 1)',
               fill: true,
               backgroundColor: 'rgba(255, 221, 40, 0.5)',
+              borderWidth: 2,
+              borderRadius: 5,
+              borderSkipped: false,
+              borderColor: '#FF8F2A'
             },
           ],
         }
@@ -227,15 +248,56 @@ const DashboardView = () => {
   }
 
   const setTahun = (e) => {
-    fetchGeData({tahun: e.value, triwulan_awal: dataTahun.triwulan_awal, triwulan_akhir: dataTahun.triwulan_akhir});
+    setFilterTahun(e.value)
+    fetchGeData({
+      tahun: e.value,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+      penempatan: dataFilter.penempatan
+    });
   }
 
   const setTriwulanAwal = (e) => {
-    fetchGeData({tahun: dataTahun.tahun, triwulan_awal: e.value, triwulan_akhir: dataTahun.triwulan_akhir});
+    fetchGeData({
+      tahun: dataTahun.tahun,
+      triwulan_awal: e.value,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      penempatan: dataFilter.penempatan,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+    });
   }
-  
+
   const setTriwulanAkhir = (e) => {
-    fetchGeData({tahun: dataTahun.tahun, triwulan_awal: dataTahun.triwulan_awal, triwulan_akhir: e.value});
+    fetchGeData({
+      tahun: dataTahun.tahun,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: e.value,
+      penempatan: dataFilter.penempatan,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+    });
+  }
+
+  const setJenisKepeg = (e) => {
+    setJenisKepegawaian(_.capitalize(e.name));
+    fetchGeData({
+      tahun: dataTahun.tahun,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      jenis_kepegawaian: e.id,
+      penempatan: dataFilter.penempatan
+    });
+  }
+
+  const setPenem = (e) => {
+    setPenempatan(_.capitalize(e.name));
+    fetchGeData({
+      tahun: dataTahun.tahun,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+      penempatan: e.id
+    });
   }
 
   return (
@@ -257,7 +319,7 @@ const DashboardView = () => {
                     {
                       listJenisKepegawaian.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setJenisKepegawaian(x.name)}>{x.name}</Dropdown.Item>
+                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setJenisKepeg(x)}>{_.upperCase(x.name)}</Dropdown.Item>
                         )
                       })
                     }
@@ -280,7 +342,7 @@ const DashboardView = () => {
                     {
                       listPenempatan.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setPenempatan(x.name)}>{x.name}</Dropdown.Item>
+                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setPenem(x)}>{_.upperCase(x.name)}</Dropdown.Item>
                         )
                       })
                     }
@@ -297,34 +359,34 @@ const DashboardView = () => {
             id="dropdown-menu-align-end"
           >
             <Dropdown.Toggle className='my-dropdown' id="dropdown-basic" >
-              <span><FontAwesomeIcon icon={faCalendar} /></span>&nbsp; Pilih Tahun/Triwulan
+              <span><FontAwesomeIcon icon={faCalendar} /></span>&nbsp; {filterTahun != null ? "Tahun " + filterTahun + " Triwulan " + dataTahun.triwulan_awal + " - " + dataTahun.triwulan_akhir : 'Pilih Tahun/Triwulan'}
             </Dropdown.Toggle>
 
             <Dropdown.Menu style={{ marginTop: 5, width: 400, maxHeight: 250, minHeight: 200 }}>
               <Row style={{ padding: 14 }}>
                 <Col lg={12}>Tahun</Col>
                 <Col lg={12}>
-                  <Select options={listYear} placeholder="Pilih Tahun" onChange={(e) => setTahun(e)}/>
+                  <Select options={listYear} placeholder="Pilih Tahun" onChange={(e) => setTahun(e)} />
                 </Col>
                 <Col style={{ marginTop: 20 }}><h6>Triwulan</h6></Col>
                 <Col lg={12} className="d-flex flex-row justify-content-between align-items-center">
                   <Select options={[
-                    {value: 1, label: '1'},
-                    {value: 2, label: '2'},
-                    {value: 3, label: '3'},
-                    {value: 4, label: '4'}
+                    { value: 1, label: '1' },
+                    { value: 2, label: '2' },
+                    { value: 3, label: '3' },
+                    { value: 4, label: '4' }
                   ]}
                     placeholder="Pilih Awal"
                     onChange={(e) => setTriwulanAwal(e)}
                   />
                   <div>-</div>
                   <Select options={[
-                    {value: 1, label: '1'},
-                    {value: 2, label: '2'},
-                    {value: 3, label: '3'},
-                    {value: 4, label: '4'}
+                    { value: 1, label: '1' },
+                    { value: 2, label: '2' },
+                    { value: 3, label: '3' },
+                    { value: 4, label: '4' }
                   ]} placeholder="Pilih Akhir"
-                  onChange={(e) => setTriwulanAkhir(e)} />
+                    onChange={(e) => setTriwulanAkhir(e)} />
                 </Col>
               </Row>
             </Dropdown.Menu>
@@ -382,7 +444,7 @@ const DashboardView = () => {
                 <Card.Body>
                   <h4 className="card-main-content-title">Jumlah Kegiatan</h4>
                   <p className="card-main-content-subtitle">Data pada tahun 2022</p>
-                  <Line options={options} data={dataCard.dataChart ?? data} style={{ maxHeight: 400 }} />
+                  <Bar options={options} data={dataCard.dataChart ?? data} style={{ maxHeight: 400 }} />
                 </Card.Body>
               </Card>
             </Col>
@@ -410,10 +472,13 @@ const DashboardView = () => {
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
                       <div className='d-flex flex-column'>
                         <div className='title-side'>
-                        {dataCard.pegawaiMemenuhiJP}%
+                          {dataCard.pegawaiMemenuhiJP}%
                         </div>
                         <div className='subtitle-side'>
                           Pegawai Memenuhi JP
+                        </div>
+                        <div className='subtitle-link'>
+                          Lihat Detail <IconContext.Provider value={ { size: '1em',style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
                         </div>
                       </div>
                     </Col>
@@ -441,10 +506,13 @@ const DashboardView = () => {
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
                       <div className='d-flex flex-column'>
                         <div className='title-side'>
-                        {dataCard.pegawaiSebagianJP}%
+                          {dataCard.pegawaiSebagianJP}%
                         </div>
                         <div className='subtitle-side'>
                           Pegawai Memenuhi Sebagian JP
+                        </div>
+                        <div className='subtitle-link'>
+                          Lihat Detail <IconContext.Provider value={ { size: '1em',style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
                         </div>
                       </div>
                     </Col>
@@ -476,6 +544,9 @@ const DashboardView = () => {
                         </div>
                         <div className='subtitle-side'>
                           Pegawai Tidak Memenuhi JP
+                        </div>
+                        <div className='subtitle-link'>
+                          Lihat Detail <IconContext.Provider value={ { size: '1em',style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
                         </div>
                       </div>
                     </Col>
@@ -511,7 +582,7 @@ function MyVerticallyCenteredModal(props) {
         <div className='text-center'>
           <h4><b>Aplikasi Pengembangan Kompetensi<br />Ombudsman Republik Indonesia</b></h4>
         </div>
-        <br/>
+        <br />
         <div className='text-center'>
           <p>
             Aplikasi ini sebagai Sistem Informasi untuk Pengelolaan Data<br />Pengembangan Kompetensi Pegawai di Lingkungan<br />Ombudsman Republik Indonesia

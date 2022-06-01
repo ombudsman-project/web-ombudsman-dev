@@ -137,6 +137,15 @@ const DetailKegiatan = () => {
         })
     }
 
+    const listJenisDokumen = [
+        { value: null, label: 'Tidak Mencantumkan Dokumen' },
+        { value: 1, label: 'Surat Tugas' },
+        { value: 2, label: 'Brosur' },
+        { value: 3, label: 'Undangan' },
+        { value: 4, label: 'Daftar Hadir' },
+        { value: 5, label: 'Daftar Hadir Peserta' }
+    ]
+
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
 
     return (
@@ -192,7 +201,7 @@ const DetailKegiatan = () => {
                                 <Col className="text-secondary" lg="6" md="6"><p>{myparam.tgl_mulai ? myparam.tgl_mulai : '-'} - {myparam.tgl_selesai ? myparam.tgl_selesai : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Jenis Dokumen Pendukung</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.jenis_dokumen ? myparam.jenis_dokumen : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{_.find(listJenisDokumen, {value: myparam.jenis_dokumen}).label ?? '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Nomor Surat</p></Col>
                                 <Col className="text-secondary" lg="6" md="6"><p>{myparam.nomor_surat ? myparam.nomor_surat : '-'}</p></Col>
@@ -229,7 +238,7 @@ const DetailKegiatan = () => {
                                                 <th className="table-title" scope="col">Jenis Kepegawaian</th>
                                                 <th className="table-title" scope="col">Jabatan</th>
                                                 <th className="table-title" scope="col">Pusat/PWK</th>
-                                                <th className="table-title" scope="col">Action</th>
+                                                <th className="table-title" scope="col">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -239,10 +248,10 @@ const DetailKegiatan = () => {
                                                         return (
                                                             <tr key={key}>
                                                                 <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                                <td>{x.nama_pegawai}</td>
-                                                                <td>{x.jenis_kepegawaian}</td>
-                                                                <td>{x.jabatan}</td>
-                                                                <td>{x.penempatan}</td>
+                                                                <td>{x.nama_pegawai ?? '-'}</td>
+                                                                <td>{x.jenis_kepegawaian ?? '-'}</td>
+                                                                <td>{x.jabatan ?? '-'}</td>
+                                                                <td>{x.penempatan ?? '-'}</td>
                                                                 <td className="action-column">
                                                                     <DropdownButton
                                                                         id={`dropdown-button-drop-start`}
