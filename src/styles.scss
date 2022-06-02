@@ -125,6 +125,38 @@ header {
   user-select: none;
 }
 
+.badge.success {
+  font-weight: 500 !important;
+  padding: 5px 10px 5px 10px !important;
+  background-color: #04990a33 !important;
+  color: #04990a !important;
+  border-radius: 11px;
+}
+
+.badge.info {
+  font-weight: 500 !important;
+  padding: 5px 10px 5px 10px !important;
+  background-color: #0098ff33 !important;
+  color: #0098ff !important;
+  border-radius: 11px;
+}
+
+.badge.warning {
+  font-weight: 500 !important;
+  padding: 5px 10px 5px 10px !important;
+  background-color: #ff8f2a33 !important;
+  color: #ff8f2a !important;
+  border-radius: 11px;
+}
+
+.badge.danger {
+  font-weight: 500 !important;
+  padding: 5px 10px 5px 10px !important;
+  background-color: #ff3c541a !important;
+  color: #ff3c54 !important;
+  border-radius: 11px;
+}
+
 .modal-filter {
   .modal-header {
     border-bottom: none !important;
@@ -150,6 +182,38 @@ header {
     padding: 20px 30px 20px 30px;
     border-radius: 20px;
     border: none;
+  }
+
+  .badge.success {
+    font-weight: 500 !important;
+    padding: 5px 10px 5px 10px !important;
+    background-color: #04990a33 !important;
+    color: #04990a !important;
+    border-radius: 11px;
+  }
+
+  .badge.info {
+    font-weight: 500 !important;
+    padding: 5px 10px 5px 10px !important;
+    background-color: #0098ff33 !important;
+    color: #0098ff !important;
+    border-radius: 11px;
+  }
+
+  .badge.warning {
+    font-weight: 500 !important;
+    padding: 5px 10px 5px 10px !important;
+    background-color: #ff8f2a33 !important;
+    color: #ff8f2a !important;
+    border-radius: 11px;
+  }
+
+  .badge.danger {
+    font-weight: 500 !important;
+    padding: 5px 10px 5px 10px !important;
+    background-color: #ff3c541a !important;
+    color: #ff3c54 !important;
+    border-radius: 11px;
   }
 
   .form-check-label {
@@ -636,8 +700,8 @@ h2 {
     .badge.info {
       font-weight: 500 !important;
       padding: 5px 10px 5px 10px !important;
-      background-color: #0098FF33 !important;
-      color: #0098FF !important;
+      background-color: #0098ff33 !important;
+      color: #0098ff !important;
       border-radius: 11px;
     }
 

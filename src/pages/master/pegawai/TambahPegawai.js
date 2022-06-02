@@ -72,6 +72,23 @@ const TambahPegawai = () => {
         })
     }
 
+    const selectedKepegawaian = async (e) => {
+        let formData = new FormData();
+
+        formData.append('parameter[]', 'jabatan')
+        formData.append('jenis_kepegawaian[]', e.value)
+
+        await new ServiceApi().getSelect(formData).then(x => {
+            var data_jabatan = x.data.jabatan.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListJabatan(data_jabatan);
+        }).catch((err) => {
+        })
+    }
+
     const submitData = async (e) => {
         e.preventDefault();
 
@@ -84,6 +101,8 @@ const TambahPegawai = () => {
             'jabatan': e.target.elements.jabatan_id.value,
             'unit_kerja': e.target.elements.unit_kerja_id.value,
             'penempatan': e.target.elements.penempatan_id.value,
+            'tgl_masuk': e.target.elements.tgl_masuk.value,
+            'tgl_keluar': e.target.elements.tgl_keluar.value,
         }
 
         new ServiceApi().addPegawai(data)
@@ -184,7 +203,7 @@ const TambahPegawai = () => {
                                 Tanggal Masuk
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" name="tanggal_masuk" autoComplete="off" required />
+                                <Form.Control type="date" name="tgl_masuk" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -192,7 +211,7 @@ const TambahPegawai = () => {
                                 Tanggal Keluar
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" name="tanggal_keluar" autoComplete="off" required />
+                                <Form.Control type="date" name="tgl_keluar" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -204,6 +223,7 @@ const TambahPegawai = () => {
                                     placeholder="Pilih Jenis Kepegawaian"
                                     name="jenis_kepegawaian_id"
                                     options={listKepegawaian}
+                                    onChange={(e) => selectedKepegawaian(e)}
                                     required
                                 />
                             </Col>
@@ -217,7 +237,6 @@ const TambahPegawai = () => {
                                     placeholder="Pilih Jenis Golongan"
                                     name="golongan_pangkat_id"
                                     options={listGolongan}
-                                    required
                                 />
                             </Col>
                         </Form.Group>
