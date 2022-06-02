@@ -31,7 +31,9 @@ import ReactPaginate from "react-paginate";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import ServiceApi from "../api/MyApi";
-import { longText } from "../helper/Helper"
+import { longText } from "../helper/Helper";
+import ExcelExport from 'export-xlsx';
+import { rekap_jp } from '../helper/Export';
 
 const Rekapitulasi = () => {
   const animatedComponents = makeAnimated();
@@ -74,7 +76,7 @@ const Rekapitulasi = () => {
       akhirDate: moment(data.selection.endDate).format("YYYY-MM-DD"),
     });
 
-    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: moment(data.selection.startDate).format("YYYY-MM-DD"), tgl_akhir: moment(data.selection.endDate).format("YYYY-MM-DD"), 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP} }
+    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: moment(data.selection.startDate).format("YYYY-MM-DD"), tgl_akhir: moment(data.selection.endDate).format("YYYY-MM-DD"), 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
     await new ServiceApi()
       .getRekapJP(dataFilter)
       .then((x) => {
@@ -111,7 +113,7 @@ const Rekapitulasi = () => {
   }, []);
 
   const viewData = async () => {
-    const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP }  }
+    const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
     await new ServiceApi()
       .getRekapJP(data)
       .then((x) => {
@@ -124,7 +126,7 @@ const Rekapitulasi = () => {
 
   async function handlePerPage(e) {
     setPerPage(e.target.value);
-    const dataFilter = { 'page': currentPage, 'length': e.target.value, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP }  }
+    const dataFilter = { 'page': currentPage, 'length': e.target.value, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
     await new ServiceApi()
       .getRekapJP(dataFilter)
       .then((x) => {
@@ -136,7 +138,7 @@ const Rekapitulasi = () => {
 
   async function handlePageClick({ selected: selectedPage }) {
     setCurrentPage(selectedPage + 1);
-    const dataFilter = { 'page': selectedPage + 1, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP }  }
+    const dataFilter = { 'page': selectedPage + 1, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
     await new ServiceApi()
       .getRekapJP(dataFilter)
       .then((x) => {
@@ -147,7 +149,7 @@ const Rekapitulasi = () => {
 
   const searchData = async (e) => {
     setSearch(e.target.value);
-    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': e.target.value, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP }  }
+    const dataFilter = { 'page': currentPage, 'length': perPage, 'search': e.target.value, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
     await new ServiceApi()
       .getRekapJP(dataFilter)
       .then((x) => {
@@ -217,6 +219,31 @@ const Rekapitulasi = () => {
     { id: '3', name: 'Tidak Memenuhi JP' },
   ]
 
+  const exportJP = async () => {
+    const data = { 'page': '', 'length': '99999', tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
+    await new ServiceApi().getRekapJP(data)
+      .then((x) => {
+        var temp_data = [];
+        for (const [key, value] of Object.entries(x.data.data)) {
+          value['number'] = Number(key) + 1;
+          value['keterangan'] = value.jumlah_jp == 0 ? 'Tidak Terpenuhi' : value.jumlah_jp > 0 && value.jumlah_jp < 20 ? 'Terpenuhi Sebagian' : value.jumlah_jp >= 20 ? 'Terpenuhi' : 'Tidak Terpenuhi';
+          temp_data.push(value)
+        }
+
+        var send_temp = {
+          tabel_rekap_jp: temp_data
+        }
+
+        const data = [
+          send_temp
+        ]
+
+        const excelExport = new ExcelExport();
+        excelExport.downloadExcel(rekap_jp, data);
+      })
+      .catch((err) => { });
+  }
+
   return (
     <div className="main-animation">
       <div className="d-flex flex-row justify-content-between align-items-center">
@@ -270,6 +297,16 @@ const Rekapitulasi = () => {
               <button
                 type="button"
                 className="btn btn-link filter-table"
+                onClick={() => exportJP()}
+              >
+                <div className="d-flex justify-content-center align-items-center">
+                  <FiIcons.FiPrinter />
+                  &nbsp;Cetak
+                </div>
+              </button>
+              <button
+                type="button"
+                className="btn btn-link filter-table"
                 onClick={() => setModalShow(true)}
               >
                 <div className="d-flex justify-content-center align-items-center">
@@ -308,9 +345,9 @@ const Rekapitulasi = () => {
                       Jabatan
                     </th>
                     <th className="table-title text-center" scope="col">
-                      Pusat/PWK
+                      Penempatan
                     </th>
-                    <th className="table-title" scope="col">
+                    <th className="table-title text-center" scope="col">
                       JP
                     </th>
                     <th className="table-title" scope="col">

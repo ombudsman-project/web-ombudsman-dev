@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown, faClock, faEllipsisH, faSearchLocation, faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faClock, faEllipsisH, faSearchLocation, faCalendar, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { Button, Card, Col, Container, Form, Pagination, Row, Dropdown, ButtonGroup, DropdownButton, Badge, Modal } from 'react-bootstrap';
 import { addDays } from 'date-fns';
 import { id as localeID } from 'date-fns/esm/locale';
@@ -17,6 +17,8 @@ import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import ReactPaginate from 'react-paginate';
 import { longText } from '../../helper/Helper';
+import { rekap_kegiatan } from '../../helper/Export';
+import ExcelExport from 'export-xlsx';
 
 const DaftarKegiatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
@@ -38,6 +40,7 @@ const DaftarKegiatan = () => {
     })
 
     const [modalShow, setModalShow] = useState(false);
+    const [modalInfo, setModalInfo] = useState(false);
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
@@ -77,26 +80,26 @@ const DaftarKegiatan = () => {
             awalDate: moment(data.selection.startDate).format("YYYY-MM-DD"),
             akhirDate: moment(data.selection.endDate).format("YYYY-MM-DD"),
         })
-        
+
         let formData = new FormData();
         formData.append('page', currentPage)
         formData.append('length', perPage)
         formData.append('search', search)
         formData.append('tgl_awal', moment(data.selection.startDate).format("YYYY-MM-DD"))
         formData.append('tgl_akhir', moment(data.selection.endDate).format("YYYY-MM-DD"))
-        if(!_.isEmpty(penyelenggara)){
-          penyelenggara.map(x => {
-              formData.append('penyelenggara[]', x)
-          })
+        if (!_.isEmpty(penyelenggara)) {
+            penyelenggara.map(x => {
+                formData.append('penyelenggara[]', x)
+            })
         }
         await new ServiceApi()
-          .getKegiatan(formData).then(x => {
-            setModalShow(false);
-            setDataCount(x.data.total_data);
-            setListKegiatan(x.data.data);
-            setPageCount(Math.ceil(x.data.total_data / perPage));
-          })
-          .catch((err) => { })
+            .getKegiatan(formData).then(x => {
+                setModalShow(false);
+                setDataCount(x.data.total_data);
+                setListKegiatan(x.data.data);
+                setPageCount(Math.ceil(x.data.total_data / perPage));
+            })
+            .catch((err) => { })
     }
 
 
@@ -213,11 +216,39 @@ const DaftarKegiatan = () => {
             .catch((err) => { })
     }
 
+    const exportKegiatan = async () => {
+        const data = { 'page': '', 'length': '99999', tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+        await new ServiceApi().getKegiatan(data)
+            .then((x) => {
+                var temp_data = [];
+                for (const [key, value] of Object.entries(x.data.data)) {
+                    value['number'] = Number(key) + 1;
+                    value['status_kegiatan_fix'] = (value.status_kegiatan == 0 && value.status_administrasi == 0 ? 'Belum Terlaksana' : value.status_kegiatan == 0 && value.status_administrasi == 1 ? 'Belum Terlaksana' : value.status_kegiatan == 1 && value.status_administrasi == 0 ? 'Terlaksana' : value.status_kegiatan == 1 && value.status_administrasi == 1 ? 'Terlaksana' : 'Tidak Terlaksana');
+                    value['status_administrasi_fix'] = (value.status_kegiatan == 0 && value.status_administrasi == 0 ? '' : value.status_kegiatan == 0 && value.status_administrasi == 1 ? '' : value.status_kegiatan == 1 && value.status_administrasi == 0 ? 'Belum Lengkap' : value.status_kegiatan == 1 && value.status_administrasi == 1 ? 'Lengkap' : '');
+                    value['jenis_dokumen_fix'] = (value.jenis_dokumen == null ? '' : value.jenis_dokumen == 1 ? 'Surat Tugas' : value.jenis_dokumen == 2 ? 'Brosur' : value.jenis_dokumen == 3 ? 'Undangan' : value.jenis_dokumen == 4 ? 'Daftar Hadir' : value.jenis_dokumen == 5 ? 'Daftar Hadir Peserta' : '');
+                    value['file_original_fix'] = value.file_original ?? '-';
+                    temp_data.push(value);
+                }
+
+                var send_temp = {
+                    tabel_rekap_kegiatan: temp_data
+                }
+
+                const data = [
+                    send_temp
+                ]
+
+                const excelExport = new ExcelExport();
+                excelExport.downloadExcel(rekap_kegiatan, data);
+            })
+            .catch((err) => { });
+    }
+
     return (
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Daftar Kegiatan</h3>
+                    <h3 className="content-title">Daftar Kegiatan <Link style={{ color: '#000' }} onClick={() => setModalInfo(true)}><FontAwesomeIcon icon={faInfoCircle} /></Link></h3>
                 </div>
                 <div className='content-dropdown d-flex flex-row '>
                     <Dropdown
@@ -261,6 +292,16 @@ const DaftarKegiatan = () => {
                             <div>&nbsp; data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
+                            <button
+                                type="button"
+                                className="btn btn-link filter-table"
+                                onClick={() => exportKegiatan()}
+                            >
+                                <div className="d-flex justify-content-center align-items-center">
+                                    <FiIcons.FiPrinter />
+                                    &nbsp;Cetak
+                                </div>
+                            </button>
                             <button type="button" className="btn btn-link filter-table"
                                 onClick={() => setModalShow(true)}>
                                 <div className="d-flex justify-content-center align-items-center">
@@ -365,6 +406,84 @@ const DaftarKegiatan = () => {
                     </div>
                 </Card.Body>
             </Card>
+
+            <Modal
+                show={modalInfo}
+                onHide={() => setModalInfo(false)}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                className="modal-filter"
+            >
+                <Form>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Kategori Kegiatan
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Row>
+                            <div className="d-flex flex-row justify-content-between align-items-center">
+                                <Col lg="6">
+                                    <div>
+                                        <Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className="success" bg="success">Lengkap</Badge>
+                                    </div>
+                                </Col>
+                                <Col lg="6">
+                                    <div>
+                                        Kegiatan yang sudah dilaksanakan, dan sudah ditambahkan kehadiran peserta
+                                    </div>
+                                </Col>
+                            </div>
+                        </Row>
+
+                        <Row>
+                            <div className="d-flex flex-row justify-content-between align-items-center mt-4">
+                                <Col lg="6">
+                                    <div>
+                                        <Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge>
+                                    </div>
+                                </Col>
+                                <Col lg="6">
+                                    <div>
+                                        Kegiatan yang sudah terlaksana, tetapi belum ditambahkan kehadiran peserta
+                                    </div>
+                                </Col>
+                            </div>
+                        </Row>
+
+                        <Row>
+                            <div className="d-flex flex-row justify-content-between align-items-center mt-4">
+                                <Col lg="6">
+                                    <div>
+                                        <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
+                                    </div>
+                                </Col>
+                                <Col lg="6">
+                                    <div>
+                                        Kegiatan belum terlaksana
+                                    </div>
+                                </Col>
+                            </div>
+                        </Row>
+
+                        <Row>
+                            <div className="d-flex flex-row justify-content-between align-items-center mt-4">
+                                <Col lg="6">
+                                    <div>
+                                        <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
+                                    </div>
+                                </Col>
+                                <Col lg="6">
+                                    <div>
+                                        Kegiatan tidak terlaksana karena hal tertentu
+                                    </div>
+                                </Col>
+                            </div>
+                        </Row>
+                    </Modal.Body>
+                </Form>
+            </Modal>
 
             <Modal
                 show={modalShow}

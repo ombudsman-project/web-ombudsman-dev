@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ const DetailPegawai = () => {
     const location = useLocation();
     const myparam = location.state;
 
-    if(!myparam) return <Redirect to="/master/pegawai" />
+    if (!myparam) return <Redirect to="/master/pegawai" />
 
     return (
         <div className='main-animation'>
@@ -56,6 +56,9 @@ const DetailPegawai = () => {
 
                             <Col lg="3" md="3"><p>Kategori jabatan</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.kategori_jabatan ?? '-'}</p></Col>
+
+                            <Col lg="3" md="3"><p>Status</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><Badge className="info" bg="info">Aktif</Badge></Col>
 
                             <Col lg="3" md="3"><p>Pangkat</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.pangkat ?? '-'}</p></Col>

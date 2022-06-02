@@ -34,6 +34,8 @@ const EditPegawai = () => {
     const [listPenempatan, setListPenempatan] = useState([]);
     const [penempatanID, setPenempatanID] = useState('');
     const [jenisKelamin, setJenisKelamin] = useState(null);
+    const [tglMasuk, setTglMasuk] = useState(null);
+    const [tglKeluar, setTglKeluar] = useState(null);
 
     useEffect(() => {
         listData();
@@ -41,11 +43,14 @@ const EditPegawai = () => {
         setNip(myparam.x.nip);
         setNamaPegawai(myparam.x.nama_pegawai);
         setJenisKelamin(myparam.x.jenis_kelamin)
+        setTglMasuk(myparam.x.tgl_masuk)
+        setTglKeluar(myparam.x.tgl_keluar)
     }, [])
 
     const listData = async () => {
         let formData = new FormData();
         formData.append('parameter[]', 'all')
+        formData.append('jenis_kepegawaian[]', kepegawaianID)
         await new ServiceApi().getSelect(formData).then(x => {
             const jenis_kepegawaian_id = x.data.jenis_kepegawaian.map((row, i) => {
                 return (
@@ -54,7 +59,7 @@ const EditPegawai = () => {
             })
             const golongan_id = x.data.golongan_pangkat.map((row, i) => {
                 return (
-                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan +' (' + row.pangkat + ')' }
+                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan + ' (' + row.pangkat + ')' }
                 )
             })
             const jabatan_id = x.data.jabatan.map((row, i) => {
@@ -92,8 +97,23 @@ const EditPegawai = () => {
         })
     }
 
-    const selectedKepegawaian = (e) => {
+    const selectedKepegawaian = async (e) => {
         setKepegawaianID(e.value)
+
+        let formData = new FormData();
+
+        formData.append('parameter[]', 'jabatan')
+        formData.append('jenis_kepegawaian[]', e.value)
+
+        await new ServiceApi().getSelect(formData).then(x => {
+            var data_jabatan = x.data.jabatan.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListJabatan(data_jabatan);
+        }).catch((err) => {
+        })
     }
 
     const selectedGolongan = (e) => {
@@ -120,6 +140,8 @@ const EditPegawai = () => {
             'nip': e.target.elements.nip.value,
             'nama_pegawai': e.target.elements.nama_pegawai.value,
             'jenis_kelamin': jenisKelamin,
+            'tgl_masuk': e.target.elements.tgl_masuk.value,
+            'tgl_keluar': e.target.elements.tgl_keluar.value,
             'jenis_kepegawaian': kepegawaianID,
             'golongan_pangkat': golonganID,
             'jabatan': jabatanID,
@@ -150,7 +172,7 @@ const EditPegawai = () => {
             });
     }
 
-    if(!myparam) return <Redirect to="/master/pegawai" />
+    if (!myparam) return <Redirect to="/master/pegawai" />
 
     return (
         <div className='main-animation'>
@@ -220,6 +242,22 @@ const EditPegawai = () => {
                                         </div>
                                     </Col>
                                 </Row>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Tanggal Masuk
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="date" value={tglMasuk} name="tgl_masuk" onChange={(e) => setTglMasuk(e.target.value)} autoComplete="off" required />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Tanggal Keluar
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="date" value={tglKeluar} name="tgl_keluar" onChange={(e) => setTglKeluar(e.target.value)} autoComplete="off" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
