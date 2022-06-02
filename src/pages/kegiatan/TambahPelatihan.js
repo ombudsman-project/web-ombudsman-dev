@@ -47,19 +47,22 @@ const TambahPelatihan = () => {
 
     const submitData = async (e) => {
         e.preventDefault();
-
-        const data = {
-            'nama_pelatihan': e.target.elements.nama_pelatihan.value,
-            'metode_pelatihan': checkedMetode == 1 ? "1" : "2",
-            'jalur_pelatihan': e.target.elements.jalur_pelatihan.value == "" ? 0 : e.target.elements.jalur_pelatihan.value,
-            'penyelenggara': e.target.elements.institusi_penyelenggara.value,
-            'tgl_mulai': moment(e.target.elements.tanggal_mulai.value).format('yyyy-MM-DD'),
-            'tgl_selesai': moment(e.target.elements.tanggal_selesai.value).format('yyyy-MM-DD'),
-            'jml_jp': e.target.elements.jam_pelajaran.value,
-            'kompetensi': e.target.elements.jenis_kompetensi.value == "" ? 0 : e.target.elements.jenis_kompetensi.value,
-            'sub_kompetensi': e.target.elements.jenis_sub_kompetensi.value == "" ? 0 : e.target.elements.jenis_sub_kompetensi.value,
-            'ketersediaan_dokumen': checkedDokumen,
-            'jenis_dokumen': e.target.elements.jenis_dokumen_pendukung ? e.target.elements.jenis_dokumen_pendukung.value : 0
+        
+        let formData = new FormData();
+        formData.append('nama_pelatihan', e.target.nama_pelatihan.value);
+        formData.append('metode_pelatihan', checkedMetode == 1 ? "1" : "2",);
+        formData.append('jalur_pelatihan', e.target.elements.jalur_pelatihan.value == "" ? 0 : e.target.elements.jalur_pelatihan.value);
+        formData.append('penyelenggara', e.target.institusi_penyelenggara.value);
+        formData.append('tgl_mulai', moment(e.target.elements.tanggal_mulai.value).format('yyyy-MM-DD'));
+        formData.append('tgl_selesai', moment(e.target.elements.tanggal_selesai.value).format('yyyy-MM-DD'));
+        formData.append('jml_jp', e.target.jam_pelajaran.value);
+        formData.append('kompetensi', e.target.elements.jenis_kompetensi.value == "" ? 0 : e.target.elements.jenis_kompetensi.value);
+        formData.append('sub_kompetensi', e.target.elements.jenis_sub_kompetensi.value == "" ? 0 : e.target.elements.jenis_sub_kompetensi.value);
+        formData.append('ketersediaan_dokumen', checkedDokumen);
+        formData.append('jenis_dokumen', e.target.elements.jenis_dokumen_pendukung ? e.target.elements.jenis_dokumen_pendukung.value : 0);
+        //formData.append('file', dataFiles);
+        if(dataFiles != null){
+            dataFiles.forEach((file) => formData.append('file', file));
         }
         var messageError = [];
         const getValidationMessage = (myObject) => {
@@ -71,7 +74,7 @@ const TambahPelatihan = () => {
         }
 
 
-        new ServiceApi().addKegiatan(data)
+        new ServiceApi().addKegiatan(formData)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
