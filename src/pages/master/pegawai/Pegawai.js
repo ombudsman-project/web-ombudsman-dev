@@ -38,6 +38,7 @@ const Pegawai = () => {
     const [jenisKelamin, setJenisKelamin] = useState([]);
     const [listKepegawaian, setListKepegawaian] = useState([]);
     const [kepegawaian, setKepegawaian] = useState([]);
+    const [selectKepegawaian, setSelectKepegawaian] = useState('');
     const [listGolongan, setListGolongan] = useState([]);
     const [golongan, setGolongan] = useState([]);
     const [selectGolongan, setSelectGolongan] = useState([]);
@@ -99,7 +100,12 @@ const Pegawai = () => {
         let formData = new FormData();
         formData.append('parameter[]', 'all')
         await new ServiceApi().getSelect(formData).then(x => {
-            setListKepegawaian(x.data.jenis_kepegawaian);
+            var data_kepegawaian = x.data.jenis_kepegawaian.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListKepegawaian(data_kepegawaian);
             var data_golongan = x.data.golongan_pangkat.map((row, i) => {
                 return (
                     { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan + ' (' + row.pangkat + ')' }
@@ -143,30 +149,24 @@ const Pegawai = () => {
         );
     };
 
-    const changeKepegawaian = async (event) => {
-        const { checked, value } = event.currentTarget;
-
-        console.log(event.target.value)
-
-        setKepegawaian(prev => checked
-            ? [...prev, value]
-            : prev.filter(val => val !== value)
-        );
-
-        // let data = [{
-        //     'jenis_kepegawaian': prev => checked
-        //         ? [...prev, value]
-        //         : prev.filter(val => val !== value)
-        // }]
-        // if (checked) selectedKepegawaian(value);
-    };
-
-    const selectedKepegawaian = async () => {
-        let formData = new FormData();
-        formData.append('parameter[]', 'jabatan')
-        kepegawaian.map(x => {
-            formData.append('jenis_kepegawaian[]', x)
+    const selectedKepegawaian = async (e) => {
+        var data_map = e.map((row, id) => {
+            return (
+                row.value
+            )
         })
+        setKepegawaian(data_map)
+        setSelectKepegawaian(e)
+
+        let formData = new FormData();
+
+        formData.append('parameter[]', 'jabatan')
+
+        if (!_.isEmpty(data_map)) {
+            data_map.map(x => {
+                formData.append('jenis_kepegawaian[]', x)
+            })
+        }
         await new ServiceApi().getSelect(formData).then(x => {
             var data_jabatan = x.data.jabatan.map((row, i) => {
                 return (
@@ -454,24 +454,14 @@ const Pegawai = () => {
                             <Form.Label column sm="12">
                                 <p className="mb-2">Jenis Kepegawaian</p>
                             </Form.Label>
-                            {listKepegawaian.map(item => {
-                                return (
-                                    <Col sm="3">
-                                        <div className='input-checkbox-custom'>
-                                            <Form.Check
-                                                inline
-                                                id={item.name}
-                                                name={item.id}
-                                                value={item.id}
-                                                type="checkbox"
-                                                label={item.name}
-                                                checked={kepegawaian.some(val => val == item.id)}
-                                                onChange={changeKepegawaian}
-                                            />
-                                        </div>
-                                    </Col>
-                                )
-                            })}
+                            <Select
+                                defaultValue={selectKepegawaian}
+                                placeholder="Pilih Jenis Kepegawaian"
+                                options={listKepegawaian}
+                                onChange={(e) => selectedKepegawaian(e)}
+                                isMulti
+                                components={animatedComponents}
+                            />
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="12">
