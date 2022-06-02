@@ -45,7 +45,7 @@ const TambahPegawai = () => {
             })
             const golongan_id = x.data.golongan_pangkat.map((row, i) => {
                 return (
-                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan +' (' + row.pangkat + ')' }
+                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan + ' (' + row.pangkat + ')' }
                 )
             })
             const jabatan_id = x.data.jabatan.map((row, i) => {
@@ -177,6 +177,22 @@ const TambahPegawai = () => {
                                         </div>
                                     </Col>
                                 </Row>
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Tanggal Masuk
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="date" name="tanggal_masuk" autoComplete="off" required />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="3">
+                                Tanggal Keluar
+                            </Form.Label>
+                            <Col sm="9">
+                                <Form.Control type="date" name="tanggal_keluar" autoComplete="off" required />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">

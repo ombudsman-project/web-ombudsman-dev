@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faClock, faPlus, faSearchLocation } from '@fortawesome/free-solid-svg-icons'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import { Button, Card, Col, Container, Form, Modal, Pagination, Row } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Container, Form, Modal, Pagination, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Skeleton from 'react-loading-skeleton'
 import { useTranslation } from 'react-i18next';
@@ -38,6 +38,7 @@ const Pegawai = () => {
     const [jenisKelamin, setJenisKelamin] = useState([]);
     const [listKepegawaian, setListKepegawaian] = useState([]);
     const [kepegawaian, setKepegawaian] = useState([]);
+    const [selectKepegawaian, setSelectKepegawaian] = useState('');
     const [listGolongan, setListGolongan] = useState([]);
     const [golongan, setGolongan] = useState([]);
     const [selectGolongan, setSelectGolongan] = useState([]);
@@ -99,10 +100,15 @@ const Pegawai = () => {
         let formData = new FormData();
         formData.append('parameter[]', 'all')
         await new ServiceApi().getSelect(formData).then(x => {
-            setListKepegawaian(x.data.jenis_kepegawaian);
+            var data_kepegawaian = x.data.jenis_kepegawaian.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListKepegawaian(data_kepegawaian);
             var data_golongan = x.data.golongan_pangkat.map((row, i) => {
                 return (
-                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan +' (' + row.pangkat + ')'  }
+                    { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan + ' (' + row.pangkat + ')' }
                 )
             })
             setListGolongan(data_golongan);
@@ -143,15 +149,34 @@ const Pegawai = () => {
         );
     };
 
-    const changeKepegawaian = event => {
-        const { checked, value } = event.currentTarget;
+    const selectedKepegawaian = async (e) => {
+        var data_map = e.map((row, id) => {
+            return (
+                row.value
+            )
+        })
+        setKepegawaian(data_map)
+        setSelectKepegawaian(e)
 
-        setKepegawaian(
-            prev => checked
-                ? [...prev, value]
-                : prev.filter(val => val !== value)
-        );
-    };
+        let formData = new FormData();
+
+        formData.append('parameter[]', 'jabatan')
+
+        if (!_.isEmpty(data_map)) {
+            data_map.map(x => {
+                formData.append('jenis_kepegawaian[]', x)
+            })
+        }
+        await new ServiceApi().getSelect(formData).then(x => {
+            var data_jabatan = x.data.jabatan.map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            })
+            setListJabatan(data_jabatan);
+        }).catch((err) => {
+        })
+    }
 
     const selectedGolongan = (e) => {
         var data_map = e.map((row, id) => {
@@ -296,6 +321,7 @@ const Pegawai = () => {
                                         <th className="table-title text-center" scope="col">Kategori</th>
                                         <th className="table-title text-center" scope="col">Unit Kerja</th>
                                         <th className="table-title text-center" scope="col">Penempatan</th>
+                                        <th className="table-title text-center" scope="col">Status</th>
                                         <th className="table-title text-center" scope="col">Aksi</th>
                                     </tr>
                                 </thead>
@@ -317,6 +343,7 @@ const Pegawai = () => {
                                                         <td className="text-center">{x.kategori_jabatan ?? '-'}</td>
                                                         <td className="text-center">{x.unit_kerja ?? '-'}</td>
                                                         <td className="text-center">{x.penempatan ?? '-'}</td>
+                                                        <td className="text-center"><Badge className="info" bg="info">Aktif</Badge></td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/pegawai/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">
@@ -427,24 +454,14 @@ const Pegawai = () => {
                             <Form.Label column sm="12">
                                 <p className="mb-2">Jenis Kepegawaian</p>
                             </Form.Label>
-                            {listKepegawaian.map(item => {
-                                return (
-                                    <Col sm="3">
-                                        <div className='input-checkbox-custom'>
-                                            <Form.Check
-                                                inline
-                                                id={item.name}
-                                                name={item.id}
-                                                value={item.id}
-                                                type="checkbox"
-                                                label={item.name}
-                                                checked={kepegawaian.some(val => val == item.id)}
-                                                onChange={changeKepegawaian}
-                                            />
-                                        </div>
-                                    </Col>
-                                )
-                            })}
+                            <Select
+                                defaultValue={selectKepegawaian}
+                                placeholder="Pilih Jenis Kepegawaian"
+                                options={listKepegawaian}
+                                onChange={(e) => selectedKepegawaian(e)}
+                                isMulti
+                                components={animatedComponents}
+                            />
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
                             <Form.Label column sm="12">
