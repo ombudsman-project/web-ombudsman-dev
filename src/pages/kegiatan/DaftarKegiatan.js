@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faClock, faEllipsisH, faSearchLocation, faCalendar } from '@fortawesome/free-solid-svg-icons'
-import { Button, Card, Col, Container, Form, Pagination, Row, Dropdown, ButtonGroup, DropdownButton, Badge } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Pagination, Row, Dropdown, ButtonGroup, DropdownButton, Badge, Modal } from 'react-bootstrap';
 import { addDays } from 'date-fns';
 import { id as localeID } from 'date-fns/esm/locale';
 import _ from 'lodash';
-import Skeleton from 'react-loading-skeleton'
+import makeAnimated from 'react-select/animated';
 import * as moment from 'moment';
 import { DateRangePicker } from 'react-date-range';
 import Swal from 'sweetalert2'
 import * as AiIcons from 'react-icons/ai';
 import * as FaIcons from 'react-icons/fa';
 import * as FiIcons from 'react-icons/fi';
-import * as IoIcons from 'react-icons/io';
+import Select from 'react-select';
 import { Link, useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import ReactPaginate from 'react-paginate';
@@ -21,6 +21,7 @@ import { longText } from '../../helper/Helper';
 const DaftarKegiatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16, strokeWidth: 50 };
     const history = useHistory();
+    const animatedComponents = makeAnimated();
     const [state, setState] = useState([
         {
             startDate: new Date(),
@@ -32,30 +33,76 @@ const DaftarKegiatan = () => {
     const [filterDate, setFilterDate] = useState({
         startDate: moment(new Date()).format('DD/MM/YYYY'),
         endDate: moment(addDays(new Date(), 30)).format('DD/MM/YYYY'),
+        awalDate: moment(new Date()).format("YYYY-MM-DD"),
+        akhirDate: moment(addDays(new Date(), 30)).format("YYYY-MM-DD"),
     })
 
+    const [modalShow, setModalShow] = useState(false);
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
     const [dataCount, setDataCount] = useState(0);
     const [listKegiatan, setListKegiatan] = useState([]);
+    const [listPenyelenggara, setListPenyelenggara] = useState([]);
+    const [search, setSearch] = useState("");
+    const [penyelenggara, setPenyelenggara] = useState([]);
+    const [selectPenyelenggara, setSelectPenyelenggara] = useState('');
 
     useEffect(() => {
         viewData();
-    }, [])
+    }, []);
 
-    const setDateRange = (data) => {
+    useEffect(() => {
+        async function listData() {
+            let formData = new FormData();
+            formData.append('parameter[]', 'penyelenggara')
+            await new ServiceApi().getSelect(formData).then(x => {
+                var data_penye = x.data.penyelenggara.map((row, i) => {
+                    return (
+                        { value: row.id, label: row.name }
+                    )
+                })
+                setListPenyelenggara(data_penye)
+            }).catch((err) => {
+            })
+        }
+        listData();
+    }, []);
+
+    const setDateRange = async (data) => {
         setState([data.selection]);
         setFilterDate({
             startDate: moment(data.selection.startDate).format('DD/MM/YYYY'),
             endDate: moment(data.selection.endDate).format('DD/MM/YYYY'),
+            awalDate: moment(data.selection.startDate).format("YYYY-MM-DD"),
+            akhirDate: moment(data.selection.endDate).format("YYYY-MM-DD"),
         })
+        
+        let formData = new FormData();
+        formData.append('page', currentPage)
+        formData.append('length', perPage)
+        formData.append('search', search)
+        formData.append('tgl_awal', moment(data.selection.startDate).format("YYYY-MM-DD"))
+        formData.append('tgl_akhir', moment(data.selection.endDate).format("YYYY-MM-DD"))
+        if(!_.isEmpty(penyelenggara)){
+          penyelenggara.map(x => {
+              formData.append('penyelenggara[]', x)
+          })
+        }
+        await new ServiceApi()
+          .getKegiatan(formData).then(x => {
+            setModalShow(false);
+            setDataCount(x.data.total_data);
+            setListKegiatan(x.data.data);
+            setPageCount(Math.ceil(x.data.total_data / perPage));
+          })
+          .catch((err) => { })
     }
 
 
     const viewData = async () => {
-        const param = `page=${currentPage}&length=${perPage}&search=`;
-        await new ServiceApi().getKegiatan(param).then(x => {
+        const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+        await new ServiceApi().getKegiatan(data).then(x => {
             setDataCount(x.data.total_data);
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -65,8 +112,8 @@ const DaftarKegiatan = () => {
 
     function handlePerPage(e) {
         setPerPage(e.target.value)
-        const param = `page=${currentPage}&length=${e.target.value}&search=`;
-        new ServiceApi().getKegiatan(param).then(x => {
+        const data = { 'page': currentPage, 'length': e.target.value, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+        new ServiceApi().getKegiatan(data).then(x => {
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
@@ -75,16 +122,17 @@ const DaftarKegiatan = () => {
 
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        const param = `page=${selectedPage + 1}&length=${perPage}&search=`;
-        await new ServiceApi().getKegiatan(param).then(x => {
+        const data = { 'page': selectedPage + 1, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+        await new ServiceApi().getKegiatan(data).then(x => {
             setListKegiatan(x.data.data);
         }).catch((err) => {
         })
     }
 
     const searchData = async (e) => {
-        const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}`;
-        await new ServiceApi().getKegiatan(param).then(x => {
+        setSearch(e.target.value)
+        const data = { 'page': currentPage, 'length': perPage, 'search': e.target.value, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate }
+        await new ServiceApi().getKegiatan(data).then(x => {
             setDataCount(x.data.total_data);
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -129,6 +177,40 @@ const DaftarKegiatan = () => {
 
     const actionButton = (route, e) => {
         history.push(route, e);
+    }
+
+
+    const selectedPenyelenggara = (e) => {
+        var data_map = e.map((row, id) => {
+            return (
+                row.value
+            )
+        })
+        setPenyelenggara(data_map)
+        setSelectPenyelenggara(e);
+    }
+
+    const filterData = async () => {
+        setModalShow(false);
+        let formData = new FormData();
+        formData.append('page', currentPage)
+        formData.append('length', perPage)
+        formData.append('search', search)
+        formData.append('tgl_awal', filterDate.awalDate)
+        formData.append('tgl_akhir', filterDate.akhirDate)
+        if (!_.isEmpty(penyelenggara)) {
+            penyelenggara.map(x => {
+                formData.append('penyelenggara[]', x)
+            })
+        }
+        await new ServiceApi()
+            .getKegiatan(formData).then(x => {
+                setModalShow(false);
+                setDataCount(x.data.total_data);
+                setListKegiatan(x.data.data);
+                setPageCount(Math.ceil(x.data.total_data / perPage));
+            })
+            .catch((err) => { })
     }
 
     return (
@@ -179,7 +261,8 @@ const DaftarKegiatan = () => {
                             <div>&nbsp; data</div>
                         </div>
                         <div className="d-flex flex-row align-items-center">
-                            <button type="button" className="btn btn-link filter-table">
+                            <button type="button" className="btn btn-link filter-table"
+                                onClick={() => setModalShow(true)}>
                                 <div className="d-flex justify-content-center align-items-center">
                                     <FiIcons.FiFilter />&nbsp;Filter
                                 </div>
@@ -219,7 +302,7 @@ const DaftarKegiatan = () => {
                                                         <td>{longText(x.nama_pelatihan) ?? '-'}</td>
                                                         <td className="">{longText(x.nama_penyelenggara) ?? '-'}</td>
                                                         <td className="text-center">{x.tgl_mulai ?? '-'}</td>
-                                                        <td className="text-center"><StatusPelaksanaan status={x.status_kegiatan} status_administrasi={x.status_administrasi}/></td>
+                                                        <td className="text-center"><StatusPelaksanaan status={x.status_kegiatan} status_administrasi={x.status_administrasi} /></td>
                                                         <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
                                                         <td className="action-column">
                                                             <DropdownButton
@@ -230,7 +313,7 @@ const DaftarKegiatan = () => {
                                                             >
                                                                 <Dropdown.Item eventKey="1" onClick={() => actionButton('/kegiatan/daftar_kegiatan/detail', x)}>Lihat Detail</Dropdown.Item>
                                                                 <Dropdown.Item eventKey="2" onClick={() => actionButton('/kegiatan/daftar_kegiatan/edit', x)}>Edit Kegiatan</Dropdown.Item>
-                                                                <Dropdown.Divider/>
+                                                                <Dropdown.Divider />
                                                                 <Dropdown.Item eventKey="3" onClick={() => deleteData(x)}>Hapus Kegiatan</Dropdown.Item>
                                                             </DropdownButton>
                                                         </td>
@@ -282,24 +365,61 @@ const DaftarKegiatan = () => {
                     </div>
                 </Card.Body>
             </Card>
+
+            <Modal
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+                className="modal-filter"
+            >
+                <Form>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="contained-modal-title-vcenter">
+                            Pilih Data yang Ingin Ditampilkan
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm="12">
+                                <p className="mb-2">Penyelenggara</p>
+                            </Form.Label>
+                            <Col sm="12">
+                                <Select
+                                    defaultValue={selectPenyelenggara}
+                                    placeholder="Pilih Penyelenggara"
+                                    options={listPenyelenggara}
+                                    onChange={(e) => selectedPenyelenggara(e)}
+                                    isMulti
+                                    components={animatedComponents}
+                                />
+                            </Col>
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button className="button-submit" onClick={() => filterData()} type="button">Simpan</Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
         </div>
     );
 };
 
 
 
-function StatusPelaksanaan ({ status, status_administrasi }) {
+function StatusPelaksanaan({ status, status_administrasi }) {
     return (
         status == 0 && status_administrasi == 0 ?
             <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
-        :status == 0 && status_administrasi == 1 ?
-            <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
-        : status == 1 && status_administrasi == 0 ?
-            <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
-        : status == 1 && status_administrasi == 1 ?
-            <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className="success" bg="success">Lengkap</Badge></>
-        :
-            <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
+            : status == 0 && status_administrasi == 1 ?
+                <Badge className="danger" bg="danger">Belum Terlaksana</Badge>
+                : status == 1 && status_administrasi == 0 ?
+                    <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className='warning' bg='warning'>Belum Lengkap</Badge></>
+                    : status == 1 && status_administrasi == 1 ?
+                        <><Badge className="success" bg="success">Terlaksana</Badge>&nbsp;<Badge className="success" bg="success">Lengkap</Badge></>
+                        :
+                        <Badge className="danger" bg="danger">Tidak Terlaksana</Badge>
     )
 }
 

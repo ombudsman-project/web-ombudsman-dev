@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faClock, faPlus, faInbox } from '@fortawesome/free-solid-svg-icons'
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { faInbox } from '@fortawesome/free-solid-svg-icons'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import _ from 'lodash';
-import Skeleton from 'react-loading-skeleton'
 import * as moment from 'moment';
 import Swal from 'sweetalert2'
-import * as AiIcons from 'react-icons/ai';
-import * as BsIcons from 'react-icons/bs';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
@@ -50,19 +47,22 @@ const TambahPelatihan = () => {
 
     const submitData = async (e) => {
         e.preventDefault();
-
-        const data = {
-            'nama_pelatihan': e.target.elements.nama_pelatihan.value,
-            'metode_pelatihan': checkedMetode == 1 ? "1" : "2",
-            'jalur_pelatihan': e.target.elements.jalur_pelatihan.value == "" ? 0 : e.target.elements.jalur_pelatihan.value,
-            'penyelenggara': e.target.elements.institusi_penyelenggara.value,
-            'tgl_mulai': moment(e.target.elements.tanggal_mulai.value).format('yyyy-MM-DD'),
-            'tgl_selesai': moment(e.target.elements.tanggal_selesai.value).format('yyyy-MM-DD'),
-            'jml_jp': e.target.elements.jam_pelajaran.value,
-            'kompetensi': e.target.elements.jenis_kompetensi.value == "" ? 0 : e.target.elements.jenis_kompetensi.value,
-            'sub_kompetensi': e.target.elements.jenis_sub_kompetensi.value == "" ? 0 : e.target.elements.jenis_sub_kompetensi.value,
-            'ketersediaan_dokumen': checkedDokumen,
-            'jenis_dokumen': e.target.elements.jenis_dokumen_pendukung ? e.target.elements.jenis_dokumen_pendukung.value : 0
+        
+        let formData = new FormData();
+        formData.append('nama_pelatihan', e.target.nama_pelatihan.value);
+        formData.append('metode_pelatihan', checkedMetode == 1 ? "1" : "2",);
+        formData.append('jalur_pelatihan', e.target.elements.jalur_pelatihan.value == "" ? 0 : e.target.elements.jalur_pelatihan.value);
+        formData.append('penyelenggara', e.target.institusi_penyelenggara.value);
+        formData.append('tgl_mulai', moment(e.target.elements.tanggal_mulai.value).format('yyyy-MM-DD'));
+        formData.append('tgl_selesai', moment(e.target.elements.tanggal_selesai.value).format('yyyy-MM-DD'));
+        formData.append('jml_jp', e.target.jam_pelajaran.value);
+        formData.append('kompetensi', e.target.elements.jenis_kompetensi.value == "" ? 0 : e.target.elements.jenis_kompetensi.value);
+        formData.append('sub_kompetensi', e.target.elements.jenis_sub_kompetensi.value == "" ? 0 : e.target.elements.jenis_sub_kompetensi.value);
+        formData.append('ketersediaan_dokumen', checkedDokumen);
+        formData.append('jenis_dokumen', e.target.elements.jenis_dokumen_pendukung ? e.target.elements.jenis_dokumen_pendukung.value : 0);
+        //formData.append('file', dataFiles);
+        if(dataFiles != null){
+            dataFiles.forEach((file) => formData.append('file', file));
         }
         var messageError = [];
         const getValidationMessage = (myObject) => {
@@ -74,7 +74,7 @@ const TambahPelatihan = () => {
         }
 
 
-        new ServiceApi().addKegiatan(data)
+        new ServiceApi().addKegiatan(formData)
             .then(response => {
                 Swal.fire({
                     title: 'Sukses!',
@@ -136,6 +136,43 @@ const TambahPelatihan = () => {
         fetchGetSelect();
     }, []);
 
+    const getSelectFilter = async (e, key) => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'bentuk_jalur_kompetensi');
+        formData.append('metode_pelatihan', e);
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map_jalur_pel = x.data[key].map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            });
+            setListJalurPelatihan(data_map_jalur_pel)
+        });
+    }
+
+    const getSelectFilterKom = async (e, key) => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'sub_kompetensi');
+        formData.append('kompetensi', e);
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map_jalur_pel = x.data[key].map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            });
+            setListSubKompetensi(data_map_jalur_pel)
+        });
+    }
+
+    const setCheckMetode = (e) => {
+        setCheckedMetode(e)
+        getSelectFilter(e, ['bentuk_jalur_kompetensi'])
+    }
+
+    const setSelectedKom = (e) => {
+        getSelectFilterKom(e.value, 'sub_kompetensi')
+    }
+
     const setCheckDokumen = (e) => {
         setCheckedDokumen(e)
         setDisFile(e == 0)
@@ -171,7 +208,7 @@ const TambahPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedMetode(1)}
+                                            onClick={() => setCheckMetode(1)}
                                         >
                                             <Form.Check
                                                 inline
@@ -179,7 +216,7 @@ const TambahPelatihan = () => {
                                                 label="Klasikal"
                                                 name="klasikal_1"
                                                 type="radio"
-                                                onChange={() => setCheckedMetode(1)}
+                                                onChange={() => setCheckMetode(1)}
                                                 id={`inline-klasikal_1`}
                                             />
                                         </div>
@@ -187,15 +224,15 @@ const TambahPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedMetode(0)}
+                                            onClick={() => setCheckMetode(2)}
                                         >
                                             <Form.Check
                                                 inline
                                                 label="Non Klasikal"
-                                                checked={checkedMetode == 0}
+                                                checked={checkedMetode == 2}
                                                 name="klasikal_2"
                                                 type="radio"
-                                                onChange={() => setCheckedMetode(0)}
+                                                onChange={() => setCheckMetode(2)}
                                                 id={`inline-klasikal_2`}
                                             />
                                         </div>
@@ -256,7 +293,7 @@ const TambahPelatihan = () => {
                                 Jenis Kompetensi
                             </Form.Label>
                             <Col sm="9">
-                                <Select options={listKompetensi} name="jenis_kompetensi" placeholder="Pilih Jenis Kompetensi" />
+                                <Select options={listKompetensi} name="jenis_kompetensi" placeholder="Pilih Jenis Kompetensi" onChange={(e) => setSelectedKom(e)} />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">

@@ -32,6 +32,7 @@ const EditPelatihan = () => {
     const [subKompetensiID, setSubKompetensiID] = useState('');
     const [jenisDokumen, setJenisDokumen] = useState('');
     const [dataFiles, setFiles] = useState([]);
+    const [condFile, setDisFile] = useState(false);
 
     const onDrop = useCallback(acceptedFiles => {
         setFiles(acceptedFiles)
@@ -40,6 +41,7 @@ const EditPelatihan = () => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         maxFiles: 1,
+        disabled: condFile,
         accept: {
             'application/pdf': ['.pdf'],
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
@@ -63,7 +65,7 @@ const EditPelatihan = () => {
         formData.append('jml_jp', e.target.jml_jp.value);
         formData.append('kompetensi', e.target.kompetensi.value);
         formData.append('sub_kompetensi', e.target.sub_kompetensi.value);
-        formData.append('ketersediaan_dokumen', checkedDokumen ? 1 : 0);
+        formData.append('ketersediaan_dokumen', checkedDokumen);
         formData.append('status_kegiatan', e.target.status_kegiatan.value);
         formData.append('status_administrasi', e.target.status_administrasi.value);
         formData.append('file', dataFiles);
@@ -111,6 +113,8 @@ const EditPelatihan = () => {
                 setStatusAdministrasiID(x.data.data.status_administrasi)
                 setJenisDokumen(x.data.data.jenis_dokumen)
                 setDetailPelatihan(x.data.data);
+
+                getSelectFilter(x.data.data.jalur_kompetensi_id, ['bentuk_jalur_kompetensi'])
             }).catch((err) => {
             })
         }
@@ -143,13 +147,40 @@ const EditPelatihan = () => {
                     )
                 });
                 setListKompetensi(data_map)
-                setListSubKompetensi(data_map_sub)
-                setListJalurPelatihan(data_map_jalur)
                 setListPenyelenggara(data_map_penyelenggara)
             });
         }
         fetchGetSelect();
     }, []);
+    
+    
+    const getSelectFilter = async (e, key) => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'bentuk_jalur_kompetensi');
+        formData.append('metode_pelatihan', e);
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map_jalur_pel = x.data[key].map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            });
+            setListJalurPelatihan(data_map_jalur_pel)
+        });
+    }
+
+    const getSelectFilterKom = async (e, key) => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'sub_kompetensi');
+        formData.append('kompetensi', e);
+        await new ServiceApi().getSelect(formData).then(x => {
+            const data_map_jalur_pel = x.data[key].map((row, i) => {
+                return (
+                    { value: row.id, label: row.name }
+                )
+            });
+            setListSubKompetensi(data_map_jalur_pel)
+        });
+    }
     
     const selectedJalur = (e) => {
         setJalurPelatihanID(e.value)
@@ -169,6 +200,7 @@ const EditPelatihan = () => {
 
     const selectedKompetensi = (e) => {
         setKompetensiID(e.value)
+        getSelectFilterKom(e.value, 'sub_kompetensi')
     }
 
     const selectedSubKompetensi = (e) => {
@@ -177,6 +209,16 @@ const EditPelatihan = () => {
 
     const selectedJenisFile = (e) => {
         setJenisDokumen(e.value)
+    }
+
+    const setCheckDokumen = (e) => {
+        setCheckedDokumen(e)
+        setDisFile(e == 0)
+    } 
+
+    const setCheckMetode = (e) => {
+        setCheckedMetode(e)
+        getSelectFilter(e, ['bentuk_jalur_kompetensi'])
     }
 
     const listStatusKegiatan = [
@@ -229,7 +271,7 @@ const EditPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedMetode(1)}
+                                            onClick={() => setCheckMetode(1)}
                                         >
                                             <Form.Check
                                                 inline
@@ -237,7 +279,7 @@ const EditPelatihan = () => {
                                                 label="Klasikal"
                                                 name="metode_pelatihan"
                                                 type="radio"
-                                                onChange={() => setCheckedMetode(1)}
+                                                onChange={() => setCheckMetode(1)}
                                                 id={`inline-klasikal_1`}
                                             />
                                         </div>
@@ -245,7 +287,7 @@ const EditPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedMetode(2)}
+                                            onClick={() => setCheckMetode(2)}
                                         >
                                             <Form.Check
                                                 inline
@@ -253,7 +295,7 @@ const EditPelatihan = () => {
                                                 checked={checkedMetode ? checkedMetode == 2 : detailPelatihan.metode_pelatihan == 2}
                                                 name="metode_pelatihan"
                                                 type="radio"
-                                                onChange={() => setCheckedMetode(2)}
+                                                onChange={() => setCheckMetode(2)}
                                                 id={`inline-klasikal_2`}
                                             />
                                         </div>
@@ -393,7 +435,7 @@ const EditPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedDokumen(true)}
+                                            onClick={() => setCheckDokumen(true)}
                                         >
                                             <Form.Check
                                                 inline
@@ -401,7 +443,7 @@ const EditPelatihan = () => {
                                                 label="Tersedia"
                                                 name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckedDokumen(true)}
+                                                onChange={() => setCheckDokumen(true)}
                                                 id={`inline-tersedia_1`}
                                             />
                                         </div>
@@ -409,7 +451,7 @@ const EditPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckedDokumen(false)}
+                                            onClick={() => setCheckDokumen(false)}
                                         >
                                             <Form.Check
                                                 inline
@@ -417,7 +459,7 @@ const EditPelatihan = () => {
                                                 checked={!checkedDokumen}
                                                 name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckedDokumen(false)}
+                                                onChange={() => setCheckDokumen(false)}
                                                 id={`inline-tersedia_2`}
                                             />
                                         </div>
@@ -431,6 +473,7 @@ const EditPelatihan = () => {
                             </Form.Label>
                             <Col sm="9">
                                 <Select
+                                    required={!checkedDokumen == 0} isDisabled={checkedDokumen == 0}
                                     options={listJenisDokumen}
                                     name="jenis_dokumen"
                                     value={listJenisDokumen.filter((option) => option.value == jenisDokumen)}
@@ -444,7 +487,7 @@ const EditPelatihan = () => {
                                 Nomor Surat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" defaultValue={detailPelatihan.nomor_surat} name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
+                                <Form.Control required={!checkedDokumen == 0} disabled={checkedDokumen == 0} type="text" defaultValue={detailPelatihan.nomor_surat} name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -454,7 +497,7 @@ const EditPelatihan = () => {
                             <Col sm="9">
                                 {
                                     _.isEmpty(dataFiles) ?
-                                        <div className='drop-files-upload' {...getRootProps()}>
+                                        <div className='drop-files-upload' {...getRootProps()} style={{ backgroundColor: condFile ? 'rgba(97,97,97,0.25)' : '' }}>
                                             <input {...getInputProps()} />
                                             {
                                                 isDragActive ?
