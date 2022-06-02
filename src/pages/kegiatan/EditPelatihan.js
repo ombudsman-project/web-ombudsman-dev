@@ -89,13 +89,13 @@ const EditPelatihan = () => {
                     history.push('/kegiatan/daftar_kegiatan');
                 })
             }).catch(err => {
-                getValidationMessage(err.response.data.data)
+                const getMessage = err.response.data.data ? getValidationMessage(err.response.data.data) : '';
                 var mess = messageError.map(mes => {
                     return mes.message + '<br/>'
                 })
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data ? mess : '') + '</i>',
+                    html: '<i>' + (err.response.data.data ? mess : err.response.data.message) + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
