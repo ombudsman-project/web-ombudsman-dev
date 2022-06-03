@@ -6,6 +6,7 @@ import { Badge, Button, Card, Col, Container, Dropdown, DropdownButton, Form, Mo
 import _ from 'lodash';
 import * as FiIcons from 'react-icons/fi';
 import * as BsIcons from 'react-icons/bs';
+import * as moment from 'moment';
 import Swal from 'sweetalert2'
 import Select, { createFilter } from 'react-select';
 import { useDropzone } from 'react-dropzone';
@@ -24,7 +25,7 @@ const Pencatatan = () => {
     const [dataCount, setDataCount] = useState(0);
     const [checkedDokumen, setCheckedDokumen] = useState(0);
     const [listPegawai, setListPegawai] = useState([]);
-    const [condFile, setDisFile] = useState(false);
+    const [condFile, setDisFile] = useState(true);
     const [selectedKegiatan, setSelectedKegiatan] = useState(null);
     const [listKehadiranPegawai, setListKehadiranPegawai] = useState([]);
     const [modalShow, setModalShow] = useState(false);
@@ -259,7 +260,7 @@ const Pencatatan = () => {
                                             <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.jml_jp ?? '-'}</p></Col>
 
                                             <Col lg="6" md="6"><p>Tanggal</p></Col>
-                                            <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.tgl_mulai ?? '-'}</p></Col>
+                                            <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.tgl_mulai != null ? moment(selectedKegiatan.tgl_mulai).format('DD MMMM YYYY') : '-'}</p></Col>
 
                                             <Col lg="6" md="6"><p>Jenis Dokumen Pendukung</p></Col>
                                             <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.jalur_pelatihan ?? '-'}</p></Col>
@@ -495,7 +496,7 @@ const Pencatatan = () => {
                                 Nomor Surat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control required={!checkedDokumen == 0} disabled={checkedDokumen == 0} type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
+                                <Form.Control required={checkedDokumen == 0} disabled={checkedDokumen == 0} type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">

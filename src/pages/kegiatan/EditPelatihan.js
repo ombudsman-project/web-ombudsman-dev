@@ -23,7 +23,7 @@ const EditPelatihan = () => {
     const [listKompetensi, setListKompetensi] = useState([]);
     const [listSubKompetensi, setListSubKompetensi] = useState([]);
     const [checkedMetode, setCheckedMetode] = useState(null);
-    const [checkedDokumen, setCheckedDokumen] = useState(null);
+    const [checkedDokumen, setCheckedDokumen] = useState(1);
     const [jalurID, setJalurPelatihanID] = useState('');
     const [penyelenggaraID, setPenyelenggaraID] = useState('');
     const [statusKegiatanID, setStatusKegiatanID] = useState('');
@@ -435,7 +435,7 @@ const EditPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckDokumen(true)}
+                                            onClick={() => setCheckDokumen(1)}
                                         >
                                             <Form.Check
                                                 inline
@@ -443,7 +443,7 @@ const EditPelatihan = () => {
                                                 label="Tersedia"
                                                 name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckDokumen(true)}
+                                                onChange={() => setCheckDokumen(1)}
                                                 id={`inline-tersedia_1`}
                                             />
                                         </div>
@@ -451,7 +451,7 @@ const EditPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckDokumen(false)}
+                                            onClick={() => setCheckDokumen(0)}
                                         >
                                             <Form.Check
                                                 inline
@@ -459,7 +459,7 @@ const EditPelatihan = () => {
                                                 checked={!checkedDokumen}
                                                 name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckDokumen(false)}
+                                                onChange={() => setCheckDokumen(0)}
                                                 id={`inline-tersedia_2`}
                                             />
                                         </div>

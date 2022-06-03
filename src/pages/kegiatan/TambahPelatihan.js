@@ -130,11 +130,14 @@ const TambahPelatihan = () => {
                 setListKompetensi(data_map)
                 setListSubKompetensi(data_map_sub)
                 setListPenyelenggara(data_map_penyelenggara)
-                setListJalurPelatihan(data_map_jalur_pel)
             });
         }
         fetchGetSelect();
     }, []);
+
+    useEffect(() => {
+        getSelectFilter(checkedMetode, ['bentuk_jalur_kompetensi']);
+    }, [])
 
     const getSelectFilter = async (e, key) => {
         let formData = new FormData();

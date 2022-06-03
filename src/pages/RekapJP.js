@@ -231,7 +231,10 @@ const Rekapitulasi = () => {
         }
 
         var send_temp = {
-          tabel_rekap_jp: temp_data
+          tabel_rekap_jp: temp_data,
+          table_info: [
+            { tanggal_pengambilan: filterDate.startDate + '-' + filterDate.endDate }
+          ]
         }
 
         const data = [
