@@ -38,8 +38,8 @@ const EditPegawai = () => {
     const [tglKeluar, setTglKeluar] = useState(null);
 
     useEffect(() => {
-        listData();
         viewData();
+        listData();
         setNip(myparam.x.nip);
         setNamaPegawai(myparam.x.nama_pegawai);
         setJenisKelamin(myparam.x.jenis_kelamin)
@@ -47,16 +47,37 @@ const EditPegawai = () => {
         setTglKeluar(myparam.x.tgl_keluar)
     }, [])
 
-    const listData = async () => {
+    const viewData = () => {
+        new ServiceApi().getDetailPegawai(myparam.x.id).then(x => {
+            setKepegawaianID(x.data.data.jenis_kepegawaian_id);
+            setGolonganID(x.data.data.golongan_pangkat_id);
+            setJabatanID(x.data.data.jabatan_id);
+            setUnitID(x.data.data.unit_kerja_id);
+            setPenempatanID(x.data.data.penempatan_id);
+            getKepegawaian(x.data.data.jenis_kepegawaian_id)
+        }).catch((err) => {
+        })
+    }
+
+    const getKepegawaian = (value) => {
         let formData = new FormData();
         formData.append('parameter[]', 'all')
-        formData.append('jenis_kepegawaian[]', kepegawaianID)
-        await new ServiceApi().getSelect(formData).then(x => {
+        formData.append('jenis_kepegawaian[]', value)
+        new ServiceApi().getSelect(formData).then(x => {
             const jenis_kepegawaian_id = x.data.jenis_kepegawaian.map((row, i) => {
                 return (
                     { value: row.id, label: row.name }
                 )
             })
+            setListKepegawaian(jenis_kepegawaian_id)
+        }).catch((err) => {
+        })
+    }
+
+    const listData = async () => {
+        let formData = new FormData();
+        formData.append('parameter[]', 'all')
+        await new ServiceApi().getSelect(formData).then(x => {
             const golongan_id = x.data.golongan_pangkat.map((row, i) => {
                 return (
                     { value: row.id, label: row.golongan == '-' ? row.pangkat : row.golongan + ' (' + row.pangkat + ')' }
@@ -77,22 +98,10 @@ const EditPegawai = () => {
                     { value: row.id, label: row.name }
                 )
             })
-            setListKepegawaian(jenis_kepegawaian_id)
             setListGolongan(golongan_id)
             setListJabatan(jabatan_id)
             setListUnit(unit_kerja_id)
             setListPenempatan(penempatan_id)
-        }).catch((err) => {
-        })
-    }
-
-    const viewData = async () => {
-        await new ServiceApi().getDetailPegawai(myparam.x.id).then(x => {
-            setKepegawaianID(x.data.data.jenis_kepegawaian_id);
-            setGolonganID(x.data.data.golongan_pangkat_id);
-            setJabatanID(x.data.data.jabatan_id);
-            setUnitID(x.data.data.unit_kerja_id);
-            setPenempatanID(x.data.data.penempatan_id);
         }).catch((err) => {
         })
     }

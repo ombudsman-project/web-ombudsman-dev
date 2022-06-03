@@ -51,6 +51,7 @@ const Pegawai = () => {
     const [penempatan, setPenempatan] = useState([]);
     const [listPenempatan, setListPenempatan] = useState([]);
     const [selectPenempatan, setSelectPenempatan] = useState('');
+    const [todayDate] = useState(moment(new Date).format("YYYY-MM-DD"));
 
     useEffect(() => {
         viewData();
@@ -343,7 +344,14 @@ const Pegawai = () => {
                                                         <td className="text-center">{x.kategori_jabatan ?? '-'}</td>
                                                         <td className="text-center">{x.unit_kerja ?? '-'}</td>
                                                         <td className="text-center">{x.penempatan ?? '-'}</td>
-                                                        <td className="text-center"><Badge className="info" bg="info">Aktif</Badge></td>
+                                                        <td className="text-center">
+                                                            {
+                                                                x.tgl_keluar == null || moment(todayDate).unix() < moment(x.tgl_keluar).unix() ?
+                                                                    <Badge className="info" bg="info">Aktif</Badge>
+                                                                    :
+                                                                    <Badge className="danger" bg="danger">Tidak Aktif</Badge>
+                                                            }
+                                                        </td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/pegawai/detail`, state: { x } }}>
                                                                 <button type="button" className="btn btn-warning button-view">
