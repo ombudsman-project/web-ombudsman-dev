@@ -18,6 +18,7 @@ import { Link, Redirect, useLocation } from 'react-router-dom';
 const DetailPegawai = () => {
     const location = useLocation();
     const myparam = location.state;
+    const [todayDate] = useState(moment().toDate())
 
     if (!myparam) return <Redirect to="/master/pegawai" />
 
@@ -39,17 +40,24 @@ const DetailPegawai = () => {
                             </div>
                         </div>
                         <Row>
+                            <Col lg="3" md="3"><p>Nama</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.nama_pegawai ?? '-'}</p></Col>
+
+                            <Col lg="3" md="3"><p>Status</p></Col>
+                            <Col className="text-secondary" lg="3" md="3">
+                                {
+                                    myparam.x.tgl_keluar == null || moment(todayDate).unix() < moment(myparam.x.tgl_keluar).unix() ?
+                                        <Badge className="info" bg="info">Aktif</Badge>
+                                        :
+                                        <Badge className="danger" bg="danger">Tidak Aktif</Badge>
+                                }
+                            </Col>
+
                             <Col lg="3" md="3"><p>NIP</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.nip ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Klasifikasi jabatan</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.klasifikasi_jabatan ?? '-'}</p></Col>
-
-                            <Col lg="3" md="3"><p>Nama</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.nama_pegawai ?? '-'}</p></Col>
-
-                            <Col lg="3" md="3"><p>Jenis Kepegawaian</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jenis_kepegawaian ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Jenis Kelamin</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jenis_kelamin ?? '-'}</p></Col>
@@ -57,23 +65,38 @@ const DetailPegawai = () => {
                             <Col lg="3" md="3"><p>Kategori jabatan</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.kategori_jabatan ?? '-'}</p></Col>
 
-                            <Col lg="3" md="3"><p>Status</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><Badge className="info" bg="info">Aktif</Badge></Col>
-
-                            <Col lg="3" md="3"><p>Pangkat</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.pangkat ?? '-'}</p></Col>
+                            <Col lg="3" md="3"><p>Jenis Kepegawaian</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jenis_kepegawaian ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Unit Kerja</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.unit_kerja ?? '-'}</p></Col>
 
-                            <Col lg="3" md="3"><p>Golongan</p></Col>
-                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.golongan ?? '-'}</p></Col>
+                            <Col lg="3" md="3"><p>Pangkat</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.pangkat ?? '-'}</p></Col>
 
                             <Col lg="3" md="3"><p>Penempatan</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.penempatan ?? '-'}</p></Col>
 
+                            <Col lg="3" md="3"><p>Golongan</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.golongan ?? '-'}</p></Col>
+
+                            <Col lg="3" md="3"><p></p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p></p></Col>
+
                             <Col lg="3" md="3"><p>Jabatan</p></Col>
                             <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.jabatan ?? '-'}</p></Col>
+
+                            <Col lg="3" md="3"><p></p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p></p></Col>
+
+                            <Col lg="3" md="3"><p>Tanggal Masuk</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.tgl_masuk == null ? '-' : moment(myparam.x.tgl_masuk).format('DD MMMM YYYY')}</p></Col>
+
+                            <Col lg="3" md="3"><p></p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p></p></Col>
+
+                            <Col lg="3" md="3"><p>Tanggal Keluar</p></Col>
+                            <Col className="text-secondary" lg="3" md="3"><p>{myparam.x.tgl_keluar == null ? '-' : moment(myparam.x.tgl_keluar).format('DD MMM YYYY')}</p></Col>
                         </Row>
                     </Card.Body>
                 </Card>
