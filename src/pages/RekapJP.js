@@ -20,7 +20,7 @@ import {
 import _ from "lodash";
 import * as moment from "moment";
 import { DateRangePicker } from "react-date-range";
-import { addDays } from "date-fns";
+import { addDays, parseISO } from "date-fns";
 import { id as localeID } from "date-fns/esm/locale";
 import Swal from "sweetalert2";
 import * as AiIcons from "react-icons/ai";
@@ -46,16 +46,16 @@ const Rekapitulasi = () => {
   const [search, setSearch] = useState("");
   const [state, setState] = useState([
     {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 30),
+      startDate: parseISO('20220101'),
+      endDate: new Date(),
       key: "selection",
     },
   ]);
   const [filterDate, setFilterDate] = useState({
-    startDate: moment(new Date()).format("DD/MM/YYYY"),
-    endDate: moment(addDays(new Date(), 30)).format("DD/MM/YYYY"),
-    awalDate: moment(new Date()).format("YYYY-MM-DD"),
-    akhirDate: moment(addDays(new Date(), 30)).format("YYYY-MM-DD"),
+    startDate: moment('20220101').format("DD/MM/YYYY"),
+    endDate: moment(new Date()).format("DD/MM/YYYY"),
+    awalDate: moment('20220101').format("YYYY-MM-DD"),
+    akhirDate: moment(new Date()).format("YYYY-MM-DD"),
   });
   const [listKepegawaian, setListKepegawaian] = useState([]);
   const [kepegawaian, setKepegawaian] = useState([]);

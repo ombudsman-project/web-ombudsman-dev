@@ -27,6 +27,10 @@ class ServiceApi {
         return apiClient.post(`/dashboard/default`, data);
     }
 
+    getDashboardDetailJP(data) {
+        return apiClient.post(`/dashboard/detail-jp`, data);
+    }
+
     getRekapJP(data) {
         return apiClient.post(`/dashboard/rekap-jp`, data);
     }

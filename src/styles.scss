@@ -157,6 +157,37 @@ header {
   border-radius: 11px;
 }
 
+.modal-detail {
+  .modal-content {
+    border-radius: 20px;
+    border: none;
+  }
+  
+  .modal-header {
+    border-bottom: none !important;
+  }
+  
+  .modal-title {
+    font-weight: 600;
+  }
+
+  .close {
+    width: 30px;
+    border-radius: 50%;
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #000;
+    opacity: 0.5;
+    background-color: #fff;
+  }
+}
+
+.modal-90w {
+  width: 70vw !important;
+}
+
 .modal-filter {
   .modal-header {
     border-bottom: none !important;
@@ -392,6 +423,11 @@ h2 {
   font-weight: 600;
 }
 
+.custom-content-titlev1 {
+  margin: 30px 0px 30px 0px;
+  font-weight: 600;
+}
+
 .content-dropdown {
   margin-right: 10px;
 
@@ -499,7 +535,7 @@ h2 {
   .information-dashboard {
     .title-side {
       color: rgba(44, 45, 48, 1);
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 700;
     }
 
@@ -514,6 +550,19 @@ h2 {
       font-size: 16px;
       font-weight: 500;
       cursor: pointer;
+    }
+
+    .persen-circle {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .title-count{
+      font-weight: 500 !important;
+      font-size: 15px !important;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 7px;
     }
   }
 
