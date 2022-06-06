@@ -166,7 +166,7 @@ header {
   .modal-header {
     border-bottom: none !important;
   }
-  
+
   .modal-title {
     font-weight: 600;
   }
@@ -184,11 +184,18 @@ header {
   }
 }
 
-.modal-90w {
+.modal-70w {
   width: 70vw !important;
 }
 
+@media (min-width: 576px){
+  .modal-dialog {
+      max-width: 70vw !important;
+      margin: 1.75rem auto !important;
+  }
+}
 .modal-filter {
+
   .modal-header {
     border-bottom: none !important;
   }

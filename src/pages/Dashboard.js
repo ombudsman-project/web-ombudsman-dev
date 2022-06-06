@@ -212,7 +212,7 @@ const DashboardView = () => {
       });
     }
     fetchGeData();
-  }, []);
+  }, [dataFilter.jenis_kepegawaian, dataFilter.penempatan, dataTahun.tahun, dataTahun.triwulan_akhir, dataTahun.triwulan_awal]);
 
   const fetchGeData = async (data) => {
     await new ServiceApi().getDashboardData(data).then(x => {
@@ -655,7 +655,7 @@ const DashboardView = () => {
         show={modalDetail}
         onHide={() => setModalDetail(false)}
         centered
-        dialogClassName="modal-90w"
+        dialogClassName="modal-70w"
         className='modal-detail'
       >
         <Modal.Body>
