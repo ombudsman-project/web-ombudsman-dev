@@ -154,49 +154,107 @@ const Pencatatan = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        let formData = new FormData();
-        formData.append('pegawai', pegawaiDaftar.value);
-        formData.append('kegiatan', selectedKegiatan.id);
-        formData.append('ketersediaan_dokumen', checkedDokumen);
-        formData.append('file', dataFiles);
-        formData.append('nomor_surat', e.target.nomor_surat.value);
-
-        Swal.fire({
-            title: 'Perhatian!',
-            html: '<i>Anda yakin ingin menambah Peserta<br/><b>' + pegawaiDaftar.label + '</b> ?</i>',
-            showCancelButton: true,
-            confirmButtonText: 'Tambahkan',
-            cancelButtonText: 'Batalkan',
-            confirmButtonColor: '#0058a8',
-            cancelButtonColor: '#FD3D00',
-        }).then(function (response) {
-            if (response.isConfirmed) {
-                new ServiceApi().addPesertaKegiatan(formData)
-                    .then(response => {
-                        Swal.fire({
-                            title: 'Sukses!',
-                            html: '<i>Berhasil menambah data</i>',
-                            icon: 'success'
-                        })
-                        viewData(selectedKegiatan.id);
-                        setModalShow(false);
-                        refreshListPegawai();
-                    }).catch(err => {
-                        Swal.fire({
-                            title: 'Gagal!',
-                            html: '<i>' + err.response.data.message + '</i>',
-                            icon: 'error',
-                            confirmButtonColor: '#0058a8',
-                        })
-                    })
+        if(pegawaiDaftar.value == null){
+            Swal.fire({
+                title: 'Gagal!',
+                html: '<i>Pegawai Diperlukan!</i>',
+                icon: 'warning',
+                confirmButtonColor: '#0058a8',
+            })
+        }else{
+            if(checkedDokumen == 1 && dataFiles.length > 0){
+                let formData = new FormData();
+                formData.append('pegawai', pegawaiDaftar.value);
+                formData.append('kegiatan', selectedKegiatan.id);
+                formData.append('ketersediaan_dokumen', checkedDokumen);
+                formData.append('file', dataFiles);
+                formData.append('nomor_surat', e.target.nomor_surat.value == "" ? null : e.target.nomor_surat.value);
+            
+                Swal.fire({
+                    title: 'Perhatian!',
+                    html: '<i>Anda yakin ingin menambah Peserta<br/><b>' + pegawaiDaftar.label + '</b> ?</i>',
+                    showCancelButton: true,
+                    confirmButtonText: 'Tambahkan',
+                    cancelButtonText: 'Batalkan',
+                    confirmButtonColor: '#0058a8',
+                    cancelButtonColor: '#FD3D00',
+                }).then(function (response) {
+                    if (response.isConfirmed) {
+                        new ServiceApi().addPesertaKegiatan(formData)
+                            .then(response => {
+                                Swal.fire({
+                                    title: 'Sukses!',
+                                    html: '<i>Berhasil menambah data</i>',
+                                    icon: 'success'
+                                })
+                                viewData(selectedKegiatan.id);
+                                setModalShow(false);
+                                refreshListPegawai();
+                            }).catch(err => {
+                                Swal.fire({
+                                    title: 'Gagal!',
+                                    html: '<i>' + err.response.data.message + '</i>',
+                                    icon: 'error',
+                                    confirmButtonColor: '#0058a8',
+                                })
+                            })
+                    }
+                })
+            }else if(checkedDokumen == 1 && dataFiles.length == 0){
+                Swal.fire({
+                    title: 'Gagal!',
+                    html: '<i>File Diperlukan!</i>',
+                    icon: 'warning',
+                    confirmButtonColor: '#0058a8',
+                })
+            }else if(checkedDokumen == 0){
+                let formData = new FormData();
+                formData.append('pegawai', pegawaiDaftar.value);
+                formData.append('kegiatan', selectedKegiatan.id);
+                formData.append('ketersediaan_dokumen', checkedDokumen);
+                formData.append('file', dataFiles);
+                formData.append('nomor_surat', e.target.nomor_surat.value == "" ? null : e.target.nomor_surat.value);
+            
+                Swal.fire({
+                    title: 'Perhatian!',
+                    html: '<i>Anda yakin ingin menambah Peserta<br/><b>' + pegawaiDaftar.label + '</b> ?</i>',
+                    showCancelButton: true,
+                    confirmButtonText: 'Tambahkan',
+                    cancelButtonText: 'Batalkan',
+                    confirmButtonColor: '#0058a8',
+                    cancelButtonColor: '#FD3D00',
+                }).then(function (response) {
+                    if (response.isConfirmed) {
+                        new ServiceApi().addPesertaKegiatan(formData)
+                            .then(response => {
+                                Swal.fire({
+                                    title: 'Sukses!',
+                                    html: '<i>Berhasil menambah data</i>',
+                                    icon: 'success'
+                                })
+                                viewData(selectedKegiatan.id);
+                                setModalShow(false);
+                                refreshListPegawai();
+                            }).catch(err => {
+                                Swal.fire({
+                                    title: 'Gagal!',
+                                    html: '<i>' + err.response.data.message + '</i>',
+                                    icon: 'error',
+                                    confirmButtonColor: '#0058a8',
+                                })
+                            })
+                    }
+                })
             }
-        })
+        }
     }
 
     const setCheckDokumen = (e) => {
         setCheckedDokumen(e)
         setDisFile(e == 0)
+        if(e == 0){
+            setFiles([]);
+        }
     }
 
     const listJenisDokumen = [
@@ -207,6 +265,12 @@ const Pencatatan = () => {
         { value: 4, label: 'Daftar Hadir Peserta' },
         { value: 5, label: 'Daftar Hadir Peserta' }
     ]
+
+    const openModal = (e) => {
+        setPegawaiDaftarBaru({value: null, label: ''})
+        setCheckedDokumen(0);
+        setModalShow(e);
+    }
 
     return (
         <div className="main-animation">
@@ -294,7 +358,7 @@ const Pencatatan = () => {
                                                 <p className="card-main-content-subtitle">Tambahkan kehadiran peserta dengan memilih dan mengunggah file pendukung.</p>
                                             </div>
                                             <div>
-                                                <Button className="content-button d-flex flex-row align-items-center" onClick={() => setModalShow(true)}><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
+                                                <Button className="content-button d-flex flex-row align-items-center" onClick={() => openModal(true)}><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
                                             </div>
                                         </div>
                                         <div className='d-flex flex-column justify-content-center align-items-center' style={{ minHeight: 400 }}>
@@ -319,7 +383,7 @@ const Pencatatan = () => {
                                                 <p className="card-main-content-subtitle">Tambahkan kehadiran peserta dengan memilih dan mengunggah file pendukung.</p>
                                             </div>
                                             <div>
-                                                <Button className="content-button d-flex flex-row align-items-center" onClick={() => setModalShow(true)}><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
+                                                <Button className="content-button d-flex flex-row align-items-center" onClick={() => openModal(true)}><FiIcons.FiUserPlus style={style} />&nbsp; Tambah Peserta</Button>
                                             </div>
                                         </div>
                                         <div id="content-table" className="content-table">
@@ -505,7 +569,7 @@ const Pencatatan = () => {
                                 Nomor Surat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control required={checkedDokumen == 0} disabled={checkedDokumen == 0} type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
+                                <Form.Control disabled={checkedDokumen == 0} type="text" name="nomor_surat" placeholder="Masukkan Nomor Surat" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
