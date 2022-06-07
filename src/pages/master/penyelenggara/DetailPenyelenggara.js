@@ -31,8 +31,12 @@ const DetailPenyelenggara = () => {
     }, [])
 
     const viewData = async () => {
-        const param = `page=${currentPage}&length=${perPage}&search=&penyelenggara=${myparam.x.id}`;
-        await new ServiceApi().getKegiatan(param).then(x => {
+        let formData = new FormData();
+        formData.append('page', currentPage)
+        formData.append('length', perPage)
+        formData.append('search', '')
+        formData.append('penyelenggara[]', myparam.x.uniq)
+        await new ServiceApi().getKegiatan(formData).then(x => {
             setDataCount(x.data.total_data);
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / perPage));
@@ -42,8 +46,13 @@ const DetailPenyelenggara = () => {
 
     function handlePerPage(e) {
         setPerPage(e.target.value)
-        const param = `page=${currentPage}&length=${e.target.value}&search=&penyelenggara=${myparam.x.id}`;
-        new ServiceApi().getKegiatan(param).then(x => {
+        
+        let formData = new FormData();
+        formData.append('page', currentPage)
+        formData.append('length', e.target.value)
+        formData.append('search', '')
+        formData.append('penyelenggara[]', myparam.x.uniq)
+        new ServiceApi().getKegiatan(formData).then(x => {
             setListKegiatan(x.data.data);
             setPageCount(Math.ceil(x.data.total_data / e.target.value));
         }).catch((err) => {
@@ -52,8 +61,13 @@ const DetailPenyelenggara = () => {
 
     async function handlePageClick({ selected: selectedPage }) {
         setCurrentPage(selectedPage + 1);
-        const param = `page=${selectedPage + 1}&length=${perPage}&search=&penyelenggara=${myparam.x.id}`;
-        await new ServiceApi().getKegiatan(param).then(x => {
+
+        let formData = new FormData();
+        formData.append('page', selectedPage + 1)
+        formData.append('length', perPage)
+        formData.append('search', '')
+        formData.append('penyelenggara[]', myparam.x.uniq)
+        await new ServiceApi().getKegiatan(formData).then(x => {
             setListKegiatan(x.data.data);
         }).catch((err) => {
         })
@@ -61,6 +75,12 @@ const DetailPenyelenggara = () => {
 
     const searchData = async (e) => {
         const param = `page=${currentPage}&length=${perPage}&search=${e.target.value}&penyelenggara=${myparam.x.id}`;
+
+        let formData = new FormData();
+        formData.append('page', currentPage)
+        formData.append('length', perPage)
+        formData.append('search', e.target.value)
+        formData.append('penyelenggara[]', myparam.x.uniq)
         await new ServiceApi().getKegiatan(param).then(x => {
             setDataCount(x.data.total_data);
             setListKegiatan(x.data.data);

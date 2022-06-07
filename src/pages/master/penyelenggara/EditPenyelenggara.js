@@ -42,12 +42,10 @@ const EditPenyelenggara = () => {
         const data = {
             'key': myparam.x.id,
             'nama_penyelenggara': e.target.elements.nama_penyelenggara.value,
-            'alamat': e.target.elements.alamat.value,
-            'email': e.target.elements.email.value,
-            'telp': e.target.elements.telp.value,
+            'alamat': e.target.elements.alamat.value === '' ? null : e.target.elements.alamat.value,
+            'email': e.target.elements.email.value === '' ? null : e.target.elements.email.value,
+            'telp': e.target.elements.telp.value === '' ? null : e.target.elements.telp.value,
         }
-
-        console.log(data)
 
         new ServiceApi().editPenyelenggara(data)
             .then(response => {
@@ -95,19 +93,19 @@ const EditPenyelenggara = () => {
                                 Alamat
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={alamat} name="alamat" placeholder="Masukkan alamat penyelenggara" onChange={(e) => setAlamat(e.target.value)} autoComplete="off" required />
+                                <Form.Control type="text" value={alamat} name="alamat" placeholder="Masukkan alamat penyelenggara" onChange={(e) => setAlamat(e.target.value)} autoComplete="off" />
                             </Col>
                             <Form.Label column sm="2" className="mb-3">
                                 Email
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="email" value={email} name="email" placeholder="Masukkan email penyelenggara" onChange={(e) => setEmail(e.target.value)} autoComplete="off" required />
+                                <Form.Control type="email" value={email} name="email" placeholder="Masukkan email penyelenggara" onChange={(e) => setEmail(e.target.value)} autoComplete="off" />
                             </Col>
                             <Form.Label column sm="2" className="mb-3">
                                 No. Telp
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control type="text" value={telp} name="telp" placeholder="Masukkan no. telp penyelenggara" onChange={(e) => setTelp(e.target.value)} autoComplete="off" required />
+                                <Form.Control type="text" value={telp} name="telp" placeholder="Masukkan no. telp penyelenggara" onChange={(e) => setTelp(e.target.value)} autoComplete="off" />
                             </Col>
                         </Form.Group>
                     </Card.Body>

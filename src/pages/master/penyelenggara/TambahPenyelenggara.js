@@ -25,9 +25,9 @@ const TambahPenyelenggara = () => {
 
         const data = {
             'nama_penyelenggara': e.target.elements.nama_penyelenggara.value,
-            'alamat': e.target.elements.alamat.value,
-            'email': e.target.elements.email.value,
-            'telp': e.target.elements.telp.value,
+            'alamat': e.target.elements.alamat.value === '' ? null : e.target.elements.alamat.value,
+            'email': e.target.elements.email.value === '' ? null : e.target.elements.email.value,
+            'telp': e.target.elements.telp.value === '' ? null : e.target.elements.telp.value,
         }
 
         new ServiceApi().addPenyelenggara(data)
@@ -43,7 +43,7 @@ const TambahPenyelenggara = () => {
             }).catch(err => {
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.nama_penyelenggara ? err.response.data.data.nama_penyelenggara + '<br/>' : '') + (err.response.data.data.alamat ? err.response.data.data.alamat + '<br/>' : '') + (err.response.data.data.email ? err.response.data.data.email + '<br/>' : '') + (err.response.data.data.telp ? err.response.data.data.telp + '<br/>' : '') + '</i>',
+                    html: '<i>' + (err.response.data.data.nama_penyelenggara ? err.response.data.data.nama_penyelenggara + '<br/>' : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -74,19 +74,19 @@ const TambahPenyelenggara = () => {
                                 Alamat
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="alamat" placeholder="Masukkan alamat penyelenggara" autoComplete="off" required />
+                                <Form.Control type="text" name="alamat" placeholder="Masukkan alamat penyelenggara" autoComplete="off" />
                             </Col>
                             <Form.Label column sm="3" className="mb-3">
                                 Email
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="email" name="email" placeholder="Masukkan email penyelenggara" autoComplete="off" required />
+                                <Form.Control type="email" name="email" placeholder="Masukkan email penyelenggara" autoComplete="off" />
                             </Col>
                             <Form.Label column sm="3" className="mb-3">
                                 No. Telp
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="text" name="telp" placeholder="Masukkan no. telp penyelenggara" autoComplete="off" required />
+                                <Form.Control type="text" name="telp" placeholder="Masukkan no. telp penyelenggara" autoComplete="off" />
                             </Col>
                         </Form.Group>
                     </Card.Body>

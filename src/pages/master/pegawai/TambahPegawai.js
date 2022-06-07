@@ -29,6 +29,7 @@ const TambahPegawai = () => {
     const [listUnitKerja, setListUnitKerja] = useState([]);
     const [listPenempatan, setListPenempatan] = useState([]);
     const [jenisKelamin, setJenisKelamin] = useState([]);
+    const [kepegawaian, setKepegawaian] = useState(null);
 
     useEffect(() => {
         listData();
@@ -73,6 +74,7 @@ const TambahPegawai = () => {
     }
 
     const selectedKepegawaian = async (e) => {
+        setKepegawaian(e.value);
         let formData = new FormData();
 
         formData.append('parameter[]', 'jabatan')
@@ -97,12 +99,12 @@ const TambahPegawai = () => {
             'nama_pegawai': e.target.elements.nama_pegawai.value,
             'jenis_kelamin': jenisKelamin,
             'jenis_kepegawaian': e.target.elements.jenis_kepegawaian_id.value,
-            'golongan_pangkat': e.target.elements.golongan_pangkat_id.value,
+            'golongan_pangkat': kepegawaian === 1 ? e.target.elements.golongan_pangkat_id.value : null,
             'jabatan': e.target.elements.jabatan_id.value,
             'unit_kerja': e.target.elements.unit_kerja_id.value,
             'penempatan': e.target.elements.penempatan_id.value,
             'tgl_masuk': e.target.elements.tgl_masuk.value,
-            'tgl_keluar': e.target.elements.tgl_keluar.value,
+            'tgl_keluar': e.target.elements.tgl_keluar.value === '' ? null : e.target.elements.tgl_keluar.value,
         }
 
         new ServiceApi().addPegawai(data)
@@ -121,7 +123,7 @@ const TambahPegawai = () => {
 
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.nama_pegawai ? err.response.data.data.nama_pegawai + '<br/>' : '') + (err.response.data.data.jenis_kelamin ? err.response.data.data.jenis_kelamin + '<br/>' : '') + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian + '<br/>' : '') + (err.response.data.data.golongan_pangkat ? err.response.data.data.golongan_pangkat + '<br/>' : '') + (err.response.data.data.jabatan ? err.response.data.data.jabatan + '<br/>' : '') + (err.response.data.data.unit_kerja ? err.response.data.data.unit_kerja + '<br/>' : '') + (err.response.data.data.penempatan ? err.response.data.data.penempatan + '<br/>' : '') + '</i>',
+                    html: '<i>' + (err.response.data.data.nama_pegawai ? err.response.data.data.nama_pegawai + '<br/>' : '') + (err.response.data.data.jenis_kelamin ? err.response.data.data.jenis_kelamin + '<br/>' : '') +  (err.response.data.data.tgl_masuk ? err.response.data.data.tgl_masuk + '<br/>' : '') + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian + '<br/>' : '') + (err.response.data.data.jabatan ? err.response.data.data.jabatan + '<br/>' : '') + (err.response.data.data.unit_kerja ? err.response.data.data.unit_kerja + '<br/>' : '') + (err.response.data.data.penempatan ? err.response.data.data.penempatan + '<br/>' : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -211,7 +213,7 @@ const TambahPegawai = () => {
                                 Tanggal Keluar
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" name="tgl_keluar" autoComplete="off" required />
+                                <Form.Control type="date" name="tgl_keluar" autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -237,6 +239,7 @@ const TambahPegawai = () => {
                                     placeholder="Pilih Jenis Golongan"
                                     name="golongan_pangkat_id"
                                     options={listGolongan}
+                                    isDisabled={kepegawaian == 1 ? false : true}
                                 />
                             </Col>
                         </Form.Group>

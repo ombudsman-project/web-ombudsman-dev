@@ -150,9 +150,9 @@ const EditPegawai = () => {
             'nama_pegawai': e.target.elements.nama_pegawai.value,
             'jenis_kelamin': jenisKelamin,
             'tgl_masuk': e.target.elements.tgl_masuk.value,
-            'tgl_keluar': e.target.elements.tgl_keluar.value,
+            'tgl_keluar': e.target.elements.tgl_keluar.value === '' ? null : e.target.elements.tgl_keluar.value,
             'jenis_kepegawaian': kepegawaianID,
-            'golongan_pangkat': golonganID,
+            'golongan_pangkat': kepegawaianID === 1 ? golonganID : null,
             'jabatan': jabatanID,
             'unit_kerja': unitID,
             'penempatan': penempatanID,
@@ -174,7 +174,7 @@ const EditPegawai = () => {
 
                 Swal.fire({
                     title: 'Gagal!',
-                    html: '<i>' + (err.response.data.data.nip ? err.response.data.data.nip + '<br/>' : '') + (err.response.data.data.nama_pegawai ? err.response.data.data.nama_pegawai + '<br/>' : '') + (err.response.data.data.jenis_kelamin ? err.response.data.data.jenis_kelamin : '') + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + (err.response.data.data.golongan_pangkat ? err.response.data.data.golongan_pangkat : '') + (err.response.data.data.jabatan ? err.response.data.data.jabatan : '') + (err.response.data.data.unit_kerja ? err.response.data.data.unit_kerja : '') + (err.response.data.data.penempatan ? err.response.data.data.penempatan : '') + '</i>',
+                    html: '<i>' + (err.response.data.data.nip ? err.response.data.data.nip + '<br/>' : '') + (err.response.data.data.nama_pegawai ? err.response.data.data.nama_pegawai + '<br/>' : '') + (err.response.data.data.jenis_kelamin ? err.response.data.data.jenis_kelamin : '') + (err.response.data.data.tgl_masuk ? err.response.data.data.tgl_masuk : '') + (err.response.data.data.jenis_kepegawaian ? err.response.data.data.jenis_kepegawaian : '') + (err.response.data.data.jabatan ? err.response.data.data.jabatan : '') + (err.response.data.data.unit_kerja ? err.response.data.data.unit_kerja : '') + (err.response.data.data.penempatan ? err.response.data.data.penempatan : '') + '</i>',
                     icon: 'error',
                     confirmButtonColor: '#0058a8',
                 })
@@ -266,7 +266,7 @@ const EditPegawai = () => {
                                 Tanggal Keluar
                             </Form.Label>
                             <Col sm="9">
-                                <Form.Control type="date" value={tglKeluar} name="tgl_keluar" onChange={(e) => setTglKeluar(e.target.value)} autoComplete="off" required />
+                                <Form.Control type="date" value={tglKeluar} name="tgl_keluar" onChange={(e) => setTglKeluar(e.target.value)} autoComplete="off" />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">
@@ -295,7 +295,7 @@ const EditPegawai = () => {
                                     name="golongan_pangkat"
                                     options={listGolongan}
                                     onChange={(e) => selectedGolongan(e)}
-                                    required
+                                    isDisabled={kepegawaianID != '' && kepegawaianID == 1 ? false : true}
                                 />
                             </Col>
                         </Form.Group>

@@ -483,6 +483,7 @@ const Pegawai = () => {
                                 onChange={(e) => selectedGolongan(e)}
                                 isMulti
                                 components={animatedComponents}
+                                isDisabled={kepegawaian.filter(val => val == 1) == true ? false : true}
                             />
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">

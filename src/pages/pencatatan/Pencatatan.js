@@ -331,9 +331,9 @@ const Pencatatan = () => {
 
                                             <Col lg="6" md="6"><p>Durasi (Jam)</p></Col>
                                             <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.jml_jp ?? '-'}</p></Col>
-
+                                            
                                             <Col lg="6" md="6"><p>Tanggal</p></Col>
-                                            <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.tgl_mulai != null ? moment(selectedKegiatan.tgl_mulai).format('DD MMMM YYYY') : '-'}</p></Col>
+                                            <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.tgl_mulai != null ? moment(selectedKegiatan.tgl_mulai).format('DD MMMM YYYY') : '-'} - {selectedKegiatan.tgl_selesai != null ? moment(selectedKegiatan.tgl_selesai).format('DD MMMM YYYY') : '-'}</p></Col>
 
                                             <Col lg="6" md="6"><p>Jenis Dokumen Pendukung</p></Col>
                                             <Col className="text-secondary" lg="6" md="6"><p>{_.find(listJenisDokumen, {value: selectedKegiatan.jenis_dokumen}).label ?? '-'}</p></Col>
