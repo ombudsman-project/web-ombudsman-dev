@@ -143,8 +143,8 @@ const DashboardView = () => {
         var penem = [];
         jenisPeg = x.data.jenis_kepegawaian;
         penem = x.data.penempatan;
-        jenisPeg.push({ id: 0, name: 'Semua' });
-        penem.push({ id: 0, name: 'Semua' });
+        jenisPeg.unshift({ id: 0, name: 'Semua' });
+        penem.unshift({ id: 0, name: 'Semua' });
 
         setListJenisKepegawaian(jenisPeg)
         setListPenempatan(penem)
