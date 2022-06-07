@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faClock, faEllipsisH, faSearchLocation, faCalendar, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import { Button, Card, Col, Container, Form, Pagination, Row, Dropdown, ButtonGroup, DropdownButton, Badge, Modal } from 'react-bootstrap';
-import { addDays } from 'date-fns';
+import { addDays, parseISO } from 'date-fns';
 import { id as localeID } from 'date-fns/esm/locale';
 import _ from 'lodash';
 import makeAnimated from 'react-select/animated';
@@ -26,17 +26,17 @@ const DaftarKegiatan = () => {
     const animatedComponents = makeAnimated();
     const [state, setState] = useState([
         {
-            startDate: new Date(),
-            endDate: addDays(new Date(), 30),
+            startDate: parseISO('20220101'),
+            endDate: new Date(),
             key: 'selection'
         }
     ]);
 
     const [filterDate, setFilterDate] = useState({
-        startDate: moment(new Date()).format('DD/MM/YYYY'),
-        endDate: moment(addDays(new Date(), 30)).format('DD/MM/YYYY'),
-        awalDate: moment(new Date()).format("YYYY-MM-DD"),
-        akhirDate: moment(addDays(new Date(), 30)).format("YYYY-MM-DD"),
+        startDate: moment('20220101').format('DD/MM/YYYY'),
+        endDate: moment(new Date()).format('DD/MM/YYYY'),
+        awalDate: moment('20220101').format("YYYY-MM-DD"),
+        akhirDate: moment(new Date()).format("YYYY-MM-DD"),
     })
 
     const [modalShow, setModalShow] = useState(false);
@@ -344,7 +344,7 @@ const DaftarKegiatan = () => {
                                                         <td className="">{longText(x.nama_penyelenggara) ?? '-'}</td>
                                                         <td className="text-center">{x.tgl_mulai ?? '-'}</td>
                                                         <td className="text-center"><StatusPelaksanaan status={x.status_kegiatan} status_administrasi={x.status_administrasi} /></td>
-                                                        <td className="text-center">{x.peserta ? x.peserta + ' Peserta' : '0 Peserta'}</td>
+                                                        <td className="text-center">{x.jumlah_peserta ? x.jumlah_peserta + ' Peserta' : '0 Peserta'}</td>
                                                         <td className="action-column">
                                                             <DropdownButton
                                                                 id={`dropdown-button-drop-start`}
