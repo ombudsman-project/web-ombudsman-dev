@@ -66,6 +66,7 @@ const Rekapitulasi = () => {
   const [listPenempatan, setListPenempatan] = useState([]);
   const [selectPenempatan, setSelectPenempatan] = useState('');
   const [rekapJP, setRekapJP] = useState([]);
+  const [selectKepegawaian, setSelectKepegawaian] = useState('');
 
   const setDateRange = async (data) => {
     setState([data.selection]);
@@ -92,7 +93,12 @@ const Rekapitulasi = () => {
       let formData = new FormData();
       formData.append('parameter[]', 'all')
       await new ServiceApi().getSelect(formData).then(x => {
-        setListKepegawaian(x.data.jenis_kepegawaian);
+        var data_kepegawaian = x.data.jenis_kepegawaian.map((row, i) => {
+          return (
+            { value: row.id, label: row.name }
+          )
+        })
+        setListKepegawaian(data_kepegawaian);
         var data_jabatan = x.data.jabatan.map((row, i) => {
           return (
             { value: row.id, label: row.name }
@@ -111,21 +117,6 @@ const Rekapitulasi = () => {
     listData();
     viewData();
   }, []);
-
-  const getFilterJabatan = async (val) => {
-    let formData = new FormData();
-    formData.append('parameter[]', 'all')
-    formData.append('jenis_kepegawaian[]', kepegawaian.length === 0 ? val : kepegawaian)
-    await new ServiceApi().getSelect(formData).then(x => {
-      var data_jabatan = x.data.jabatan.map((row, i) => {
-        return (
-          { value: row.id, label: row.name }
-        )
-      })
-      setListJabatan(data_jabatan);
-    }).catch((err) => {
-    })
-  }
 
   const viewData = async () => {
     const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
@@ -183,10 +174,6 @@ const Rekapitulasi = () => {
         ? [...prev, value]
         : prev.filter(val => val !== value)
     );
-    getFilterJabatan(
-      prev => checked
-        ? [...prev, value]
-        : prev.filter(val => val !== value));
   };
 
   const selectedJabatan = (e) => {
@@ -264,6 +251,35 @@ const Rekapitulasi = () => {
         excelExport.downloadExcel(rekap_jp, data);
       })
       .catch((err) => { });
+  }
+
+  const selectedKepegawaian = async (e) => {
+    var data_map = e.map((row, id) => {
+      return (
+        row.value
+      )
+    })
+    setKepegawaian(data_map)
+    setSelectKepegawaian(e)
+
+    let formData = new FormData();
+
+    formData.append('parameter[]', 'jabatan')
+
+    if (!_.isEmpty(data_map)) {
+      data_map.map(x => {
+        formData.append('jenis_kepegawaian[]', x)
+      })
+    }
+    await new ServiceApi().getSelect(formData).then(x => {
+      var data_jabatan = x.data.jabatan.map((row, i) => {
+        return (
+          { value: row.id, label: row.name }
+        )
+      })
+      setListJabatan(data_jabatan);
+    }).catch((err) => {
+    })
   }
 
   return (
@@ -468,24 +484,14 @@ const Rekapitulasi = () => {
               <Form.Label column sm="12">
                 <p className="mb-2">Jenis Kepegawaian</p>
               </Form.Label>
-              {listKepegawaian.map((item, key) => {
-                return (
-                  <Col sm="4" key={key}>
-                    <div className='input-checkbox-custom'>
-                      <Form.Check
-                        inline
-                        id={item.name}
-                        name={item.id}
-                        value={item.id}
-                        type="checkbox"
-                        label={item.name}
-                        checked={kepegawaian.some(val => val == item.id)}
-                        onChange={changeKepegawaian}
-                      />
-                    </div>
-                  </Col>
-                )
-              })}
+              <Select
+                defaultValue={selectKepegawaian}
+                placeholder="Pilih Jenis Kepegawaian"
+                options={listKepegawaian}
+                onChange={(e) => selectedKepegawaian(e)}
+                isMulti
+                components={animatedComponents}
+              />
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm="12">

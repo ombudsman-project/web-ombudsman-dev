@@ -199,6 +199,15 @@ const Pencatatan = () => {
         setDisFile(e == 0)
     }
 
+    const listJenisDokumen = [
+        { value: null, label: 'Tidak Mencantumkan Dokumen' },
+        { value: 1, label: 'Surat Tugas' },
+        { value: 2, label: 'Brosur' },
+        { value: 3, label: 'Undangan' },
+        { value: 4, label: 'Daftar Hadir Peserta' },
+        { value: 5, label: 'Daftar Hadir Peserta' }
+    ]
+
     return (
         <div className="main-animation">
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -263,7 +272,7 @@ const Pencatatan = () => {
                                             <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.tgl_mulai != null ? moment(selectedKegiatan.tgl_mulai).format('DD MMMM YYYY') : '-'}</p></Col>
 
                                             <Col lg="6" md="6"><p>Jenis Dokumen Pendukung</p></Col>
-                                            <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.jalur_pelatihan ?? '-'}</p></Col>
+                                            <Col className="text-secondary" lg="6" md="6"><p>{_.find(listJenisDokumen, {value: selectedKegiatan.jenis_dokumen}).label ?? '-'}</p></Col>
 
                                             <Col lg="6" md="6"><p>Nomor Surat</p></Col>
                                             <Col className="text-secondary" lg="6" md="6"><p>{selectedKegiatan.nomor_surat ?? '-'}</p></Col>

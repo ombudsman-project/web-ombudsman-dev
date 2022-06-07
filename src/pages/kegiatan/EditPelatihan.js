@@ -235,8 +235,7 @@ const EditPelatihan = () => {
         { value: 1, label: 'Surat Tugas' },
         { value: 2, label: 'Brosur' },
         { value: 3, label: 'Undangan' },
-        { value: 4, label: 'Daftar Hadir' },
-        { value: 5, label: 'Daftar Hadir Peserta' }
+        { value: 4, label: 'Daftar Hadir Peserta' }
     ]
 
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
@@ -245,7 +244,7 @@ const EditPelatihan = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Update Pelatihan</h3>
+                    <Link className="content-link" to={{ pathname: `/kegiatan/daftar_kegiatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Update Pelatihan</h3></Link>
                 </div>
             </div>
 

@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
-import { capitalize, listJenisDokumen } from '../../helper/Helper';
+//import { capitalize, listJenisDokumen } from '../../helper/Helper';
 
 const TambahPelatihan = () => {
     const history = useHistory();
@@ -172,7 +172,16 @@ const TambahPelatihan = () => {
     const setCheckDokumen = (e) => {
         setCheckedDokumen(e)
         setDisFile(e == 0)
-    } 
+    }
+
+    const listJenisDokumen = [
+        { value: null, label: 'Tidak Mencantumkan Dokumen' },
+        { value: 1, label: 'Surat Tugas' },
+        { value: 2, label: 'Brosur' },
+        { value: 3, label: 'Undangan' },
+        //{ value: 4, label: 'Daftar Hadir' },
+        { value: 5, label: 'Daftar Hadir Peserta' }
+    ]
 
     return (
         <div className='main-animation'>
