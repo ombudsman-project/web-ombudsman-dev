@@ -10,7 +10,7 @@ export const SidebarData = [
     },
     {
         title: "Rekap JP",
-        path: "/rekapitulasi",
+        path: "/rekap-jp",
         icon: <img src={require('../../icons/icon-clock.svg').default} alt='mySvgImage' />,
     },
     {

@@ -328,7 +328,11 @@ const DashboardView = () => {
   const viewDataDetail = async (v) => {
     setModalDetail(true);
     setJenisJP(v);
-    setTitleDetail(v === 1 ? 'Pegawai Memenuhi JP' : v === 2 ? 'Pegawai Memenuhi Sebagian JP' : 'Pegawai Tidak  Sebagian JP')
+    setDataCount(0);
+    setPageCount(0);
+    setSearch("");
+    setCurrentPage(1);
+    setTitleDetail(v === 1 ? 'Pegawai Memenuhi JP' : v === 2 ? 'Pegawai Memenuhi Sebagian JP' : 'Pegawai Tidak Memenuhi JP')
     const data = { jenis_jp: v, 'page': currentPage, 'length': perPage, 'search': search,
       tahun: dataTahun.tahun,
       triwulan_awal: dataTahun.triwulan_awal,
