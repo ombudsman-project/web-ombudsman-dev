@@ -320,7 +320,7 @@ const DashboardView = () => {
   const setPenem = (e) => {
     setPenempatan(_.capitalize(e.name));
     setDataFilter({
-      jenis_kepegawaian: dataFilter.penempatan,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
       penempatan: e.id
     })
     fetchGeData({
