@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faMapMarkerAlt, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons'
-import { Card, Col, Dropdown, Row, Modal, Button } from 'react-bootstrap';
+import { Card, Col, Dropdown, Row, Modal, Button, Form, Spinner } from 'react-bootstrap';
 import _ from 'lodash';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import * as AiIcons from 'react-icons/ai';
@@ -16,11 +16,14 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import Select from 'react-select';
+import * as FaIcons from "react-icons/fa";
+import ReactPaginate from "react-paginate";
 import ServiceApi from '../api/MyApi';
 import LogoUser from "../img/user.png";
 import LogoCalendar from "../img/calendar.png";
 import Logo from "../img/logo.png";
 import { IconContext } from 'react-icons';
+import { longText } from '../helper/Helper';
 
 ChartJS.register(
   RadialLinearScale,
@@ -74,6 +77,15 @@ const DashboardView = () => {
   const [listYear, setListYear] = useState([]);
   const [listPenempatan, setListPenempatan] = useState([]);
   const [filterTahun, setFilterTahun] = useState(null);
+  const [listPegawai, setListPegawai] = useState([]);
+  const [modalDetail, setModalDetail] = useState(false);
+  const [search, setSearch] = useState("");
+  const [titleDetail, setTitleDetail] = useState("");
+  const [perPage, setPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [jenisJP, setJenisJP] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [dataCount, setDataCount] = useState(0);
   const [dataFilter, setDataFilter] = useState({
     jenis_kepegawaian: 0,
     penempatan: 0
@@ -86,6 +98,9 @@ const DashboardView = () => {
   const [dataCard, setDataCard] = useState({
     totalPegawai: 0,
     totalKegiatan: 0,
+    pegawaiMemenuhiJPJumlah: 0,
+    pegawaiSebagianJPJumlah: 0,
+    pegawaiTidakJPJumlah: 0,
     pegawaiMemenuhiJP: 0,
     pegawaiSebagianJP: 0,
     pegawaiTidakJP: 0,
@@ -105,6 +120,18 @@ const DashboardView = () => {
   const [dataJenisKepegawaian, setJenisKepegawaian] = useState('Semua');
   const [dataPenempatan, setPenempatan] = useState('Semua');
   const [modalShow, setModalShow] = useState(null);
+  const [listTriwulanAwal, setListTriwulanAwal] = useState([
+    { value: 1, label: '1' },
+    { value: 2, label: '2' },
+    { value: 3, label: '3' },
+    { value: 4, label: '4' }
+  ]);
+  const [listTriwulanAkhir, setListTriwulanAkhir] = useState([
+    { value: 1, label: '1' },
+    { value: 2, label: '2' },
+    { value: 3, label: '3' },
+    { value: 4, label: '4' }
+  ]);
 
   useEffect(() => {
     let abortController = new AbortController();
@@ -116,8 +143,8 @@ const DashboardView = () => {
         var penem = [];
         jenisPeg = x.data.jenis_kepegawaian;
         penem = x.data.penempatan;
-        jenisPeg.push({ id: 0, name: 'Semua' });
-        penem.push({ id: 0, name: 'Semua' });
+        jenisPeg.unshift({ id: 0, name: 'Semua' });
+        penem.unshift({ id: 0, name: 'Semua' });
 
         setListJenisKepegawaian(jenisPeg)
         setListPenempatan(penem)
@@ -160,9 +187,12 @@ const DashboardView = () => {
         setDataCard({
           totalKegiatan: x.data.jml_kegiatan,
           totalPegawai: x.data.jml_pegawai,
-          pegawaiMemenuhiJP: Math.ceil(x.data.jp_terpenuhi),
-          pegawaiSebagianJP: Math.ceil(x.data.jp_sebagian),
-          pegawaiTidakJP: Math.ceil(x.data.jp_tidak_terpenuhi),
+          pegawaiMemenuhiJP: Math.ceil(x.data.jp_terpenuhi_persen),
+          pegawaiSebagianJP: Math.ceil(x.data.jp_sebagian_persen),
+          pegawaiTidakJP: Math.ceil(x.data.jp_tidak_terpenuhi_persen),
+          pegawaiMemenuhiJPJumlah: x.data.jp_terpenuhi_jumlah,
+          pegawaiSebagianJPJumlah: x.data.jp_sebagian_jumlah,
+          pegawaiTidakJPJumlah: x.data.jp_tidak_terpenuhi_jumlah,
           dataChart: {
             labels: x.data.jml_kegiatan_perbulan.map((x) => x.bulan),
             datasets: [
@@ -186,17 +216,15 @@ const DashboardView = () => {
 
   const fetchGeData = async (data) => {
     await new ServiceApi().getDashboardData(data).then(x => {
-      setDataTahun({ tahun: data.tahun, triwulan_awal: data.triwulan_awal, triwulan_akhir: data.triwulan_akhir });
-      setDataFilter({
-        jenis_kepegawaian: data.jenis_kepegawaian,
-        penempatan: data.penempatan
-      })
       setDataCard({
         totalKegiatan: x.data.jml_kegiatan,
         totalPegawai: x.data.jml_pegawai,
-        pegawaiMemenuhiJP: Math.ceil(x.data.jp_terpenuhi),
-        pegawaiSebagianJP: Math.ceil(x.data.jp_sebagian),
-        pegawaiTidakJP: Math.ceil(x.data.jp_tidak_terpenuhi),
+        pegawaiMemenuhiJP: Math.ceil(x.data.jp_terpenuhi_persen),
+        pegawaiSebagianJP: Math.ceil(x.data.jp_sebagian_persen),
+        pegawaiTidakJP: Math.ceil(x.data.jp_tidak_terpenuhi_persen),
+        pegawaiMemenuhiJPJumlah: x.data.jp_terpenuhi_jumlah,
+        pegawaiSebagianJPJumlah: x.data.jp_sebagian_jumlah,
+        pegawaiTidakJPJumlah: x.data.jp_tidak_terpenuhi_jumlah,
         dataChart: {
           labels: x.data.jml_kegiatan_perbulan.map((x) => x.bulan),
           datasets: [
@@ -223,6 +251,7 @@ const DashboardView = () => {
 
   const setTahun = (e) => {
     setFilterTahun(e.value)
+    setDataTahun({ tahun: e.value, triwulan_awal: dataTahun.triwulan_awal, triwulan_akhir: dataTahun.triwulan_akhir });
     fetchGeData({
       tahun: e.value,
       triwulan_awal: dataTahun.triwulan_awal,
@@ -233,6 +262,27 @@ const DashboardView = () => {
   }
 
   const setTriwulanAwal = (e) => {
+    //setTriwulanAkhir(listTriwulanAkhir.map(x => x.value > e.value))
+    setListTriwulanAkhir([
+      { value: 1, label: '1' },
+      { value: 2, label: '2' },
+      { value: 3, label: '3' },
+      { value: 4, label: '4' }
+    ].map((x, index, { length }) => {
+      if (length - 1 === index) {
+        if (x.value === e.value) {
+          return { ...x }
+        } else {
+          return { ...x }
+        }
+      } else {
+        if (x.value >= e.value) {
+          return { ...x }
+        } else {
+          return { ...x, disabled: true }
+        }
+      }
+    }))
     fetchGeData({
       tahun: dataTahun.tahun,
       triwulan_awal: e.value,
@@ -254,6 +304,10 @@ const DashboardView = () => {
 
   const setJenisKepeg = (e) => {
     setJenisKepegawaian(_.capitalize(e.name));
+    setDataFilter({
+      jenis_kepegawaian: e.id,
+      penempatan: dataFilter.penempatan
+    })
     fetchGeData({
       tahun: dataTahun.tahun,
       triwulan_awal: dataTahun.triwulan_awal,
@@ -265,6 +319,10 @@ const DashboardView = () => {
 
   const setPenem = (e) => {
     setPenempatan(_.capitalize(e.name));
+    setDataFilter({
+      jenis_kepegawaian: dataFilter.penempatan,
+      penempatan: e.id
+    })
     fetchGeData({
       tahun: dataTahun.tahun,
       triwulan_awal: dataTahun.triwulan_awal,
@@ -273,6 +331,85 @@ const DashboardView = () => {
       penempatan: e.id
     });
   }
+
+  const viewDataDetail = async (v) => {
+    setModalDetail(true);
+    setJenisJP(v);
+    setDataCount(0);
+    setPageCount(0);
+    setSearch("");
+    setCurrentPage(1);
+    setTitleDetail(v === 1 ? 'Pegawai Memenuhi JP' : v === 2 ? 'Pegawai Memenuhi Sebagian JP' : 'Pegawai Tidak Memenuhi JP')
+    const data = { jenis_jp: v, 'page': currentPage, 'length': perPage, 'search': search,
+      tahun: dataTahun.tahun,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+      penempatan: dataFilter.penempatan
+    }
+    await new ServiceApi()
+      .getDashboardDetailJP(data)
+      .then((x) => {
+        setDataCount(x.data.total_data);
+        setListPegawai(x.data.data);
+        setPageCount(Math.ceil(x.data.total_data / perPage));
+      })
+      .catch((err) => { });
+  };
+
+  async function handlePerPage(e) {
+    setPerPage(e.target.value);
+    const data = { jenis_jp: jenisJP, 'page': currentPage, 'length': e.target.value, 'search': search,
+      tahun: dataTahun.tahun,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+      penempatan: dataFilter.penempatan
+    }
+    await new ServiceApi()
+      .getDashboardDetailJP(data)
+      .then((x) => {
+        setListPegawai(x.data.data);
+        setPageCount(Math.ceil(x.data.total_data / e.target.value));
+      })
+      .catch((err) => { });
+  }
+
+  async function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage + 1);
+    const data = { jenis_jp: jenisJP, 'page': selectedPage + 1, 'length': perPage, 'search': search,
+      tahun: dataTahun.tahun,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+      penempatan: dataFilter.penempatan
+    }
+    await new ServiceApi()
+      .getDashboardDetailJP(data)
+      .then((x) => {
+        setListPegawai(x.data.data);
+      })
+      .catch((err) => { console.log(err) });
+  }
+
+  const searchData = async (e) => {
+    setSearch(e.target.value);
+    const data = { jenis_jp: jenisJP, 'page': currentPage, 'length': perPage, 'search': e.target.value,
+      tahun: dataTahun.tahun,
+      triwulan_awal: dataTahun.triwulan_awal,
+      triwulan_akhir: dataTahun.triwulan_akhir,
+      jenis_kepegawaian: dataFilter.jenis_kepegawaian,
+      penempatan: dataFilter.penempatan
+    }
+    await new ServiceApi()
+      .getDashboardDetailJP(data)
+      .then((x) => {
+        setDataCount(x.data.total_data);
+        setListPegawai(x.data.data);
+        setPageCount(Math.ceil(x.data.total_data / perPage));
+      })
+      .catch((err) => { });
+  };
 
   return (
     <div className='main-animation'>
@@ -293,7 +430,7 @@ const DashboardView = () => {
                     {
                       listJenisKepegawaian.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setJenisKepeg(x)}>{_.upperCase(x.name)}</Dropdown.Item>
+                          <Dropdown.Item key={key} onClick={() => setJenisKepeg(x)}>{_.upperCase(x.name)}</Dropdown.Item>
                         )
                       })
                     }
@@ -316,7 +453,7 @@ const DashboardView = () => {
                     {
                       listPenempatan.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setPenem(x)}>{_.upperCase(x.name)}</Dropdown.Item>
+                          <Dropdown.Item key={key} onClick={() => setPenem(x)}>{_.upperCase(x.name)}</Dropdown.Item>
                         )
                       })
                     }
@@ -344,23 +481,18 @@ const DashboardView = () => {
                 </Col>
                 <Col style={{ marginTop: 20 }}><h6>Triwulan</h6></Col>
                 <Col lg={12} className="d-flex flex-row justify-content-between align-items-center">
-                  <Select options={[
-                    { value: 1, label: '1' },
-                    { value: 2, label: '2' },
-                    { value: 3, label: '3' },
-                    { value: 4, label: '4' }
-                  ]}
+                  <Select options={listTriwulanAwal}
                     placeholder="Pilih Awal"
                     onChange={(e) => setTriwulanAwal(e)}
+                    isOptionDisabled={(option) => option.disabled}
                   />
                   <div>-</div>
-                  <Select options={[
-                    { value: 1, label: '1' },
-                    { value: 2, label: '2' },
-                    { value: 3, label: '3' },
-                    { value: 4, label: '4' }
-                  ]} placeholder="Pilih Akhir"
-                    onChange={(e) => setTriwulanAkhir(e)} />
+                  <Select
+                    options={listTriwulanAkhir}
+                    placeholder="Pilih Akhir"
+                    onChange={(e) => setTriwulanAkhir(e)}
+                    isOptionDisabled={(option) => option.disabled}
+                  />
                 </Col>
               </Row>
             </Dropdown.Menu>
@@ -369,7 +501,7 @@ const DashboardView = () => {
       </div>
 
       <Row>
-        <Col lg={9}>
+        <Col md={12} lg={8}>
           <Row>
             <Col>
               <Card className="card-main-content">
@@ -377,7 +509,7 @@ const DashboardView = () => {
                   <Row>
                     <Col lg={2} className="blue-background-icon">
                       <div className='background-icon d-flex justify-content-center'>
-                        <img src={LogoUser} alt="logoUser"/>
+                        <img src={LogoUser} alt="logoUser" />
                       </div>
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
@@ -398,7 +530,7 @@ const DashboardView = () => {
                   <Row>
                     <Col lg={2} className="orange-background-icon">
                       <div className='background-icon d-flex justify-content-center'>
-                        <img src={LogoCalendar} alt="logoCalendar"/>
+                        <img src={LogoCalendar} alt="logoCalendar" />
                       </div>
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
@@ -424,7 +556,7 @@ const DashboardView = () => {
             </Col>
           </Row>
         </Col>
-        <Col lg={3}>
+        <Col md={12} lg={4}>
           <Row>
             <Col lg={12}>
               <Card className="card-main-content">
@@ -433,27 +565,24 @@ const DashboardView = () => {
                     <Col sm={12} md={12} lg={4} className='d-flex flex-column align-items-start justify-content-center'>
                       <div>
                         <CircularProgressbarWithChildren value={dataCard.pegawaiMemenuhiJP} styles={buildStyles({
-                          textSize: '16px',
-                          pathTransitionDuration: 0.5,
+                          pathTransitionDuration: 1,
                           pathColor: `rgba(4, 153, 10, 1)`,
                           trailColor: 'rgba(228, 255, 230, 1)'
                         })}
                         >
-                          <FontAwesomeIcon icon={faClock} size='2x' style={{ color: 'rgba(4, 153, 10, 1)' }} />
+                          <div className='persen-circle' style={{ color: 'rgba(4, 153, 10, 1)' }}>{dataCard.pegawaiMemenuhiJP}%</div>
                         </CircularProgressbarWithChildren>
                       </div>
                     </Col>
-                    <Col className='d-flex flex-column align-items-start justify-content-center'>
-                      <div className='d-flex flex-column'>
-                        <div className='title-side'>
-                          {dataCard.pegawaiMemenuhiJP}%
-                        </div>
-                        <div className='subtitle-side'>
-                          Pegawai Memenuhi JP
-                        </div>
-                        <div className='subtitle-link'>
-                          Lihat Detail <IconContext.Provider value={ { size: '1em',style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
-                        </div>
+                    <Col sm={12} md={12} lg={8} className='d-flex flex-column align-items-start justify-content-center'>
+                      <div className='subtitle-side'>
+                        Pegawai Memenuhi JP
+                      </div>
+                      <div className='title-side d-flex flex-row'>
+                        {dataCard.pegawaiMemenuhiJPJumlah}<div className='title-count'>/{dataCard.totalPegawai}</div>
+                      </div>
+                      <div className='subtitle-link' onClick={() => viewDataDetail(1)}>
+                        Lihat Detail <IconContext.Provider value={{ size: '1em', style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
                       </div>
                     </Col>
                   </Row>
@@ -473,21 +602,19 @@ const DashboardView = () => {
                           trailColor: 'rgba(255, 244, 222, 1)'
                         })}
                         >
-                          <FontAwesomeIcon icon={faClock} size='2x' style={{ color: 'rgba(255, 168, 0, 1)' }} />
+                          <div className='persen-circle' style={{ color: 'rgba(255, 168, 0, 1)' }}>{dataCard.pegawaiSebagianJP}%</div>
                         </CircularProgressbarWithChildren>
                       </div>
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
-                      <div className='d-flex flex-column'>
-                        <div className='title-side'>
-                          {dataCard.pegawaiSebagianJP}%
-                        </div>
-                        <div className='subtitle-side'>
-                          Pegawai Memenuhi Sebagian JP
-                        </div>
-                        <div className='subtitle-link'>
-                          Lihat Detail <IconContext.Provider value={ { size: '1em',style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
-                        </div>
+                      <div className='subtitle-side'>
+                        Pegawai Memenuhi Sebagian JP
+                      </div>
+                      <div className='title-side d-flex flex-row'>
+                        {dataCard.pegawaiSebagianJPJumlah}<div className='title-count'>/{dataCard.totalPegawai}</div>
+                      </div>
+                      <div className='subtitle-link' onClick={() => viewDataDetail(2)}>
+                        Lihat Detail <IconContext.Provider value={{ size: '1em', style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
                       </div>
                     </Col>
                   </Row>
@@ -507,21 +634,19 @@ const DashboardView = () => {
                           trailColor: 'rgba(255, 244, 222, 1)'
                         })}
                         >
-                          <FontAwesomeIcon icon={faClock} size='2x' style={{ color: 'rgba(166, 25, 45, 1)' }} />
+                          <div className='persen-circle' style={{ color: 'rgba(166, 25, 45, 1)' }}>{dataCard.pegawaiTidakJP}%</div>
                         </CircularProgressbarWithChildren>
                       </div>
                     </Col>
                     <Col className='d-flex flex-column align-items-start justify-content-center'>
-                      <div className='d-flex flex-column'>
-                        <div className='title-side'>
-                          {dataCard.pegawaiTidakJP}%
-                        </div>
-                        <div className='subtitle-side'>
-                          Pegawai Tidak Memenuhi JP
-                        </div>
-                        <div className='subtitle-link'>
-                          Lihat Detail <IconContext.Provider value={ { size: '1em',style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
-                        </div>
+                      <div className='subtitle-side'>
+                        Pegawai Tidak Memenuhi JP
+                      </div>
+                      <div className='title-side d-flex flex-row'>
+                        {dataCard.pegawaiTidakJPJumlah}<div className='title-count'>/{dataCard.totalPegawai}</div>
+                      </div>
+                      <div className='subtitle-link' onClick={() => viewDataDetail(3)}>
+                        Lihat Detail <IconContext.Provider value={{ size: '1em', style: { verticalAlign: 'middle' } }}><AiIcons.AiOutlineArrowRight /></IconContext.Provider>
                       </div>
                     </Col>
                   </Row>
@@ -532,11 +657,160 @@ const DashboardView = () => {
         </Col>
       </Row>
 
-
       <MyVerticallyCenteredModal
         show={modalShow == "1"}
         onHide={() => handleModal("0")}
       />
+
+      <Modal
+        show={modalDetail}
+        onHide={() => setModalDetail(false)}
+        centered
+        dialogClassName="modal-70w"
+        className='modal-detail'
+      >
+        <Modal.Body>
+          <Card className="card-main-content">
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title-vcenter">
+              {titleDetail}
+              </Modal.Title>
+            </Modal.Header>
+            <Card.Body>
+            {/* <h3 className="custom-content-titlev1">{titleDetail}</h3> */}
+              <div className="head-table">
+                <div id="size-table" className="size-table">
+                  <div>Lihat &nbsp;</div>
+                  <div>
+                    <Form.Control
+                      className="select-row-table"
+                      name="per_page"
+                      as="select"
+                      onChange={(e) => handlePerPage(e)}
+                    >
+                      <option value="5" selected>5</option>
+                      <option value="10">10</option>
+                      <option value="50">50</option>
+                      <option value="100">100</option>
+                    </Form.Control>
+                  </div>
+                  <div>&nbsp; data</div>
+                </div>
+                <div className="d-flex flex-row align-items-center">
+                  <div id="search-table" className="search-table">
+                    <FaIcons.FaSearch
+                      style={{ marginLeft: "1rem", position: "absolute" }}
+                      color="#2c2d3040"
+                    />
+                    <Form.Control
+                      type="text"
+                      placeholder="Cari"
+                      onChange={(e) => searchData(e)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div id="content-table" className="content-table">
+                {/* <div className='d-flex justify-content-center align-items-center' style={{ minHeight: 300 }}>
+                  <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div> */}
+                <div className="scroll-me">
+                  <table className="table table-hover">
+                    <thead>
+                      <tr>
+                        <th className="table-title" scope="col" style={{ width: 46 }}>
+                          #
+                        </th>
+                        <th className="table-title" scope="col">
+                          Nama
+                        </th>
+                        <th className="table-title" scope="col">
+                          Jenis Kepegawaian
+                        </th>
+                        <th className="table-title" scope="col">
+                          Jabatan
+                        </th>
+                        <th className="table-title text-center" scope="col">
+                          Penempatan
+                        </th>
+                        <th className="table-title text-center" scope="col">
+                          JP
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {!_.isEmpty(listPegawai) ? (
+                        listPegawai.map((x, key) => {
+                          return (
+                            <tr key={x.id}>
+                              <td>
+                                {currentPage > 1
+                                  ? (currentPage - 1) * perPage + key + 1
+                                  : key + 1}
+                              </td>
+                              <td>{x.nama}</td>
+                              <td>{x.jenis_kepegawaian ?? '-'}</td>
+                              <td>{longText(x.jabatan) ?? '-'}</td>
+                              <td className="text-center">{x.penempatan ?? '-'}</td>
+                              <td className="text-center">{x.jumlah_jp ?? '-'}</td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={7} className="text-center">
+                            -
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="footer-table d-flex justify-content-between align-items-center">
+                  <div>
+                    {!_.isEmpty(listPegawai) ? (
+                      <>
+                        Menampilkan data {currentPage * perPage - perPage + 1} -{" "}
+                        {listPegawai.length == perPage
+                          ? currentPage * perPage
+                          : currentPage * perPage -
+                          (perPage - listPegawai.length)}{" "}
+                        dari {dataCount} data
+                      </>
+                    ) : (
+                      <>Menampilkan data 0 - 0 dari 0 data</>
+                    )}
+                  </div>
+                  <div>
+                    <ReactPaginate
+                      pageCount={pageCount}
+                      onPageChange={handlePageClick}
+                      previousLabel="Sebelumnya"
+                      nextLabel="Selanjutnya"
+                      pageClassName="page-item"
+                      pageLinkClassName="page-link"
+                      previousClassName="page-item"
+                      previousLinkClassName="page-link"
+                      nextClassName="page-item"
+                      nextLinkClassName="page-link"
+                      breakLabel="..."
+                      breakClassName="page-item"
+                      breakLinkClassName="page-link"
+                      containerClassName="pagination"
+                      activeClassName="active"
+                      pageRangeDisplayed={2}
+                      marginPagesDisplayed={1}
+                      renderOnZeroPageCount={null}
+                    />
+                  </div>
+                </div>
+              </div>
+            </Card.Body>
+          </Card>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

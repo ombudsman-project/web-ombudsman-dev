@@ -10,12 +10,22 @@ export const rekap_jp = {
             startingRowNumber: 1,
             // gapBetweenTwoTables: 1,
             tableSettings: {
+                table_info: {
+                    tableTitle: "Info",
+                    headerDefinition: [
+                        {
+                            name: 'Tanggal Pengambilan Rekap',
+                            key: 'tanggal_pengambilan',
+                        },
+                    ]
+                },
                 tabel_rekap_jp: {
                     tableTitle: "Rekap Jam Pelajaran",
                     headerDefinition: [
                         {
                             name: '#',
                             key: 'number',
+                            alignment: alignment.middleLeft
                         },
                         {
                             name: 'Nama',
