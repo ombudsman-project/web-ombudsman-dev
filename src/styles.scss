@@ -182,18 +182,20 @@ header {
     opacity: 0.5;
     background-color: #fff;
   }
+  
+  @media (min-width: 576px){
+    .modal-dialog {
+        max-width: 70vw !important;
+        margin: 1.75rem auto !important;
+    }
+  }
 }
 
 .modal-70w {
   width: 70vw !important;
 }
 
-@media (min-width: 576px){
-  .modal-dialog {
-      max-width: 70vw !important;
-      margin: 1.75rem auto !important;
-  }
-}
+
 .modal-filter {
 
   .modal-header {

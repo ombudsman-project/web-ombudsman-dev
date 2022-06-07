@@ -9,14 +9,7 @@ import { useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
-
-const listJenisDokumen = [
-    { value: 1, label: 'Surat Tugas' },
-    { value: 2, label: 'Brosur' },
-    { value: 3, label: 'Undangan' },
-    { value: 4, label: 'Daftar Hadir' },
-    { value: 5, label: 'Daftar Hadir Peserta' }
-]
+import { capitalize, listJenisDokumen } from '../../helper/Helper';
 
 const TambahPelatihan = () => {
     const history = useHistory();

@@ -112,6 +112,21 @@ const Rekapitulasi = () => {
     viewData();
   }, []);
 
+  const getFilterJabatan = async (val) => {
+    let formData = new FormData();
+    formData.append('parameter[]', 'all')
+    formData.append('jenis_kepegawaian[]', kepegawaian.length === 0 ? val : kepegawaian)
+    await new ServiceApi().getSelect(formData).then(x => {
+      var data_jabatan = x.data.jabatan.map((row, i) => {
+        return (
+          { value: row.id, label: row.name }
+        )
+      })
+      setListJabatan(data_jabatan);
+    }).catch((err) => {
+    })
+  }
+
   const viewData = async () => {
     const data = { 'page': currentPage, 'length': perPage, 'search': search, tgl_awal: filterDate.awalDate, tgl_akhir: filterDate.akhirDate, 'filter': { 'jenis_kepegawaian': kepegawaian, 'jabatan': jabatan, 'penempatan': penempatan, rekap_jp: rekapJP } }
     await new ServiceApi()
@@ -168,6 +183,10 @@ const Rekapitulasi = () => {
         ? [...prev, value]
         : prev.filter(val => val !== value)
     );
+    getFilterJabatan(
+      prev => checked
+        ? [...prev, value]
+        : prev.filter(val => val !== value));
   };
 
   const selectedJabatan = (e) => {

@@ -12,6 +12,7 @@ import { Link, useLocation, Redirect } from 'react-router-dom';
 import tambahPesertaLogo from '../../img/tambah_peserta.png';
 import ReactPaginate from 'react-paginate';
 import ServiceApi from '../../api/MyApi';
+import { capitalize, listJenisDokumen } from '../../helper/Helper';
 
 const DetailKegiatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16 };
@@ -136,15 +137,6 @@ const DetailKegiatan = () => {
             }
         })
     }
-
-    const listJenisDokumen = [
-        { value: null, label: 'Tidak Mencantumkan Dokumen' },
-        { value: 1, label: 'Surat Tugas' },
-        { value: 2, label: 'Brosur' },
-        { value: 3, label: 'Undangan' },
-        { value: 4, label: 'Daftar Hadir' },
-        { value: 5, label: 'Daftar Hadir Peserta' }
-    ]
 
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
 

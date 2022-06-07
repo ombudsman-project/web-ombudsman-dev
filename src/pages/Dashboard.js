@@ -277,7 +277,7 @@ const DashboardView = () => {
           return { ...x }
         }
       } else {
-        if (x.value > e.value) {
+        if (x.value >= e.value) {
           return { ...x }
         } else {
           return { ...x, disabled: true }
