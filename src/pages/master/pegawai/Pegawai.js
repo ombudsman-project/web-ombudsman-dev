@@ -20,6 +20,7 @@ import ServiceApi from '../../../api/MyApi';
 import ReactPaginate from 'react-paginate';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { longText } from '../../../helper/Helper';
 
 const iconPerson = new L.Icon({
 
@@ -339,10 +340,10 @@ const Pegawai = () => {
                                                         <td className="text-center">{x.jenis_kepegawaian ?? '-'}</td>
                                                         <td className="text-center">{x.golongan ?? '-'}</td>
                                                         <td className="text-center">{x.pangkat ?? '-'}</td>
-                                                        <td className="text-center">{x.jabatan ?? '-'}</td>
+                                                        <td className="text-center">{longText(x.jabatan) ?? '-'}</td>
                                                         <td className="text-center">{x.klasifikasi_jabatan ?? '-'}</td>
                                                         <td className="text-center">{x.kategori_jabatan ?? '-'}</td>
-                                                        <td className="text-center">{x.unit_kerja ?? '-'}</td>
+                                                        <td className="text-center">{longText(x.unit_kerja) ?? '-'}</td>
                                                         <td className="text-center">{x.penempatan ?? '-'}</td>
                                                         <td className="text-center">
                                                             {
@@ -482,6 +483,7 @@ const Pegawai = () => {
                                 onChange={(e) => selectedGolongan(e)}
                                 isMulti
                                 components={animatedComponents}
+                                isDisabled={kepegawaian.filter(val => val == 1) == true ? false : true}
                             />
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3">

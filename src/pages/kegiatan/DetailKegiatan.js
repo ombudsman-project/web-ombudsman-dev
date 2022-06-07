@@ -4,7 +4,7 @@ import { faArrowLeft, faEllipsisH, faPlus, faSearchLocation } from '@fortawesome
 import { Badge, Button, Card, Col, Container, Dropdown, DropdownButton, Form, Modal, Row } from 'react-bootstrap';
 import _ from 'lodash';
 import Select, { createFilter } from 'react-select';
-import moment from 'moment';
+import * as moment from 'moment';
 import Swal from 'sweetalert2'
 import * as FiIcons from 'react-icons/fi';
 import * as BsIcons from 'react-icons/bs';
@@ -12,6 +12,7 @@ import { Link, useLocation, Redirect } from 'react-router-dom';
 import tambahPesertaLogo from '../../img/tambah_peserta.png';
 import ReactPaginate from 'react-paginate';
 import ServiceApi from '../../api/MyApi';
+//import { capitalize, listJenisDokumen } from '../../helper/Helper';
 
 const DetailKegiatan = () => {
     const style = { color: 'white', fontWeight: 600, fontSize: 16 };
@@ -142,7 +143,7 @@ const DetailKegiatan = () => {
         { value: 1, label: 'Surat Tugas' },
         { value: 2, label: 'Brosur' },
         { value: 3, label: 'Undangan' },
-        { value: 4, label: 'Daftar Hadir' },
+        { value: 4, label: 'Daftar Hadir Peserta' },
         { value: 5, label: 'Daftar Hadir Peserta' }
     ]
 
@@ -198,7 +199,7 @@ const DetailKegiatan = () => {
                                 <Col className="text-secondary" lg="6" md="6"><p>{myparam.jml_jp ? myparam.jml_jp : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Tanggal</p></Col>
-                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.tgl_mulai ? myparam.tgl_mulai : '-'} - {myparam.tgl_selesai ? myparam.tgl_selesai : '-'}</p></Col>
+                                <Col className="text-secondary" lg="6" md="6"><p>{myparam.tgl_mulai ? moment(myparam.tgl_mulai).format('DD MMMM YYYY') : '-'} - {myparam.tgl_selesai ? moment(myparam.tgl_selesai).format('DD MMMM YYYY') : '-'}</p></Col>
 
                                 <Col lg="6" md="6"><p>Jenis Dokumen Pendukung</p></Col>
                                 <Col className="text-secondary" lg="6" md="6"><p>{_.find(listJenisDokumen, {value: myparam.jenis_dokumen}).label ?? '-'}</p></Col>

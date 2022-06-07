@@ -9,14 +9,7 @@ import { useHistory } from 'react-router-dom';
 import ServiceApi from '../../api/MyApi';
 import Select from 'react-select';
 import { useDropzone } from 'react-dropzone';
-
-const listJenisDokumen = [
-    { value: 1, label: 'Surat Tugas' },
-    { value: 2, label: 'Brosur' },
-    { value: 3, label: 'Undangan' },
-    { value: 4, label: 'Daftar Hadir' },
-    { value: 5, label: 'Daftar Hadir Peserta' }
-]
+//import { capitalize, listJenisDokumen } from '../../helper/Helper';
 
 const TambahPelatihan = () => {
     const history = useHistory();
@@ -130,11 +123,14 @@ const TambahPelatihan = () => {
                 setListKompetensi(data_map)
                 setListSubKompetensi(data_map_sub)
                 setListPenyelenggara(data_map_penyelenggara)
-                setListJalurPelatihan(data_map_jalur_pel)
             });
         }
         fetchGetSelect();
     }, []);
+
+    useEffect(() => {
+        getSelectFilter(checkedMetode, ['bentuk_jalur_kompetensi']);
+    }, [])
 
     const getSelectFilter = async (e, key) => {
         let formData = new FormData();
@@ -176,7 +172,16 @@ const TambahPelatihan = () => {
     const setCheckDokumen = (e) => {
         setCheckedDokumen(e)
         setDisFile(e == 0)
-    } 
+    }
+
+    const listJenisDokumen = [
+        { value: null, label: 'Tidak Mencantumkan Dokumen' },
+        { value: 1, label: 'Surat Tugas' },
+        { value: 2, label: 'Brosur' },
+        { value: 3, label: 'Undangan' },
+        //{ value: 4, label: 'Daftar Hadir' },
+        { value: 5, label: 'Daftar Hadir Peserta' }
+    ]
 
     return (
         <div className='main-animation'>

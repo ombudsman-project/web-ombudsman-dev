@@ -18,6 +18,7 @@ import * as IoIcons from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import ServiceApi from '../../../api/MyApi';
 import ReactPaginate from 'react-paginate';
+import { longText } from '../../../helper/Helper';
 
 const iconPerson = new L.Icon({
 
@@ -168,7 +169,7 @@ const UnitKerja = () => {
                                                 return (
                                                     <tr key={x.id}>
                                                         <td>{currentPage > 1 ? ((currentPage - 1) * perPage) + key + 1 : key + 1}</td>
-                                                        <td>{x.name ?? '-'}</td>
+                                                        <td>{longText(x.name) ?? '-'}</td>
                                                         <td className="text-center">{x.jumlah_pegawai ?? '0'}</td>
                                                         <td className="action-column">
                                                             <Link to={{ pathname: `/master/unit_kerja/detail`, state: { id: x.id, unit_kerja: x.name, jumlah_pegawai: x.jumlah_pegawai } }}>

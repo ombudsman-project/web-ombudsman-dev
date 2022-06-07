@@ -23,7 +23,7 @@ const EditPelatihan = () => {
     const [listKompetensi, setListKompetensi] = useState([]);
     const [listSubKompetensi, setListSubKompetensi] = useState([]);
     const [checkedMetode, setCheckedMetode] = useState(null);
-    const [checkedDokumen, setCheckedDokumen] = useState(null);
+    const [checkedDokumen, setCheckedDokumen] = useState(1);
     const [jalurID, setJalurPelatihanID] = useState('');
     const [penyelenggaraID, setPenyelenggaraID] = useState('');
     const [statusKegiatanID, setStatusKegiatanID] = useState('');
@@ -235,8 +235,7 @@ const EditPelatihan = () => {
         { value: 1, label: 'Surat Tugas' },
         { value: 2, label: 'Brosur' },
         { value: 3, label: 'Undangan' },
-        { value: 4, label: 'Daftar Hadir' },
-        { value: 5, label: 'Daftar Hadir Peserta' }
+        { value: 4, label: 'Daftar Hadir Peserta' }
     ]
 
     if (!myparam) return <Redirect to="/kegiatan/daftar_kegiatan" />
@@ -245,7 +244,7 @@ const EditPelatihan = () => {
         <div className='main-animation'>
             <div className="d-flex flex-row justify-content-between align-items-center">
                 <div>
-                    <h3 className="content-title">Update Pelatihan</h3>
+                    <Link className="content-link" to={{ pathname: `/kegiatan/daftar_kegiatan` }}><h3 className="content-title"><FontAwesomeIcon icon={faArrowLeft} size="sm" />&nbsp; Update Pelatihan</h3></Link>
                 </div>
             </div>
 
@@ -435,7 +434,7 @@ const EditPelatihan = () => {
                                     <Col md="auto" lg="auto" sm="auto">
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckDokumen(true)}
+                                            onClick={() => setCheckDokumen(1)}
                                         >
                                             <Form.Check
                                                 inline
@@ -443,7 +442,7 @@ const EditPelatihan = () => {
                                                 label="Tersedia"
                                                 name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckDokumen(true)}
+                                                onChange={() => setCheckDokumen(1)}
                                                 id={`inline-tersedia_1`}
                                             />
                                         </div>
@@ -451,7 +450,7 @@ const EditPelatihan = () => {
                                     <Col>
                                         <div
                                             className='input-radio-custom'
-                                            onClick={() => setCheckDokumen(false)}
+                                            onClick={() => setCheckDokumen(0)}
                                         >
                                             <Form.Check
                                                 inline
@@ -459,7 +458,7 @@ const EditPelatihan = () => {
                                                 checked={!checkedDokumen}
                                                 name="ketersediaan_dokumen"
                                                 type="radio"
-                                                onChange={() => setCheckDokumen(false)}
+                                                onChange={() => setCheckDokumen(0)}
                                                 id={`inline-tersedia_2`}
                                             />
                                         </div>

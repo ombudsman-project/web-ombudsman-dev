@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faMapMarkerAlt, faCalendar, faClock } from '@fortawesome/free-solid-svg-icons'
-import { Card, Col, Dropdown, Row, Modal, Button, Form } from 'react-bootstrap';
+import { Card, Col, Dropdown, Row, Modal, Button, Form, Spinner } from 'react-bootstrap';
 import _ from 'lodash';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import * as AiIcons from 'react-icons/ai';
@@ -143,8 +143,8 @@ const DashboardView = () => {
         var penem = [];
         jenisPeg = x.data.jenis_kepegawaian;
         penem = x.data.penempatan;
-        jenisPeg.push({ id: 0, name: 'Semua' });
-        penem.push({ id: 0, name: 'Semua' });
+        jenisPeg.unshift({ id: 0, name: 'Semua' });
+        penem.unshift({ id: 0, name: 'Semua' });
 
         setListJenisKepegawaian(jenisPeg)
         setListPenempatan(penem)
@@ -212,21 +212,19 @@ const DashboardView = () => {
       });
     }
     fetchGeData();
-  }, [dataFilter.jenis_kepegawaian, dataFilter.penempatan, dataTahun.tahun, dataTahun.triwulan_akhir, dataTahun.triwulan_awal]);
+  }, []);
 
   const fetchGeData = async (data) => {
     await new ServiceApi().getDashboardData(data).then(x => {
-      setDataTahun({ tahun: data.tahun, triwulan_awal: data.triwulan_awal, triwulan_akhir: data.triwulan_akhir });
-      setDataFilter({
-        jenis_kepegawaian: data.jenis_kepegawaian,
-        penempatan: data.penempatan
-      })
       setDataCard({
         totalKegiatan: x.data.jml_kegiatan,
         totalPegawai: x.data.jml_pegawai,
         pegawaiMemenuhiJP: Math.ceil(x.data.jp_terpenuhi_persen),
         pegawaiSebagianJP: Math.ceil(x.data.jp_sebagian_persen),
         pegawaiTidakJP: Math.ceil(x.data.jp_tidak_terpenuhi_persen),
+        pegawaiMemenuhiJPJumlah: x.data.jp_terpenuhi_jumlah,
+        pegawaiSebagianJPJumlah: x.data.jp_sebagian_jumlah,
+        pegawaiTidakJPJumlah: x.data.jp_tidak_terpenuhi_jumlah,
         dataChart: {
           labels: x.data.jml_kegiatan_perbulan.map((x) => x.bulan),
           datasets: [
@@ -253,6 +251,7 @@ const DashboardView = () => {
 
   const setTahun = (e) => {
     setFilterTahun(e.value)
+    setDataTahun({ tahun: e.value, triwulan_awal: dataTahun.triwulan_awal, triwulan_akhir: dataTahun.triwulan_akhir });
     fetchGeData({
       tahun: e.value,
       triwulan_awal: dataTahun.triwulan_awal,
@@ -277,7 +276,7 @@ const DashboardView = () => {
           return { ...x }
         }
       } else {
-        if (x.value > e.value) {
+        if (x.value >= e.value) {
           return { ...x }
         } else {
           return { ...x, disabled: true }
@@ -305,6 +304,10 @@ const DashboardView = () => {
 
   const setJenisKepeg = (e) => {
     setJenisKepegawaian(_.capitalize(e.name));
+    setDataFilter({
+      jenis_kepegawaian: e.id,
+      penempatan: dataFilter.penempatan
+    })
     fetchGeData({
       tahun: dataTahun.tahun,
       triwulan_awal: dataTahun.triwulan_awal,
@@ -316,6 +319,10 @@ const DashboardView = () => {
 
   const setPenem = (e) => {
     setPenempatan(_.capitalize(e.name));
+    setDataFilter({
+      jenis_kepegawaian: dataFilter.penempatan,
+      penempatan: e.id
+    })
     fetchGeData({
       tahun: dataTahun.tahun,
       triwulan_awal: dataTahun.triwulan_awal,
@@ -328,7 +335,11 @@ const DashboardView = () => {
   const viewDataDetail = async (v) => {
     setModalDetail(true);
     setJenisJP(v);
-    setTitleDetail(v === 1 ? 'Pegawai Memenuhi JP' : v === 2 ? 'Pegawai Memenuhi Sebagian JP' : 'Pegawai Tidak  Sebagian JP')
+    setDataCount(0);
+    setPageCount(0);
+    setSearch("");
+    setCurrentPage(1);
+    setTitleDetail(v === 1 ? 'Pegawai Memenuhi JP' : v === 2 ? 'Pegawai Memenuhi Sebagian JP' : 'Pegawai Tidak Memenuhi JP')
     const data = { jenis_jp: v, 'page': currentPage, 'length': perPage, 'search': search,
       tahun: dataTahun.tahun,
       triwulan_awal: dataTahun.triwulan_awal,
@@ -419,7 +430,7 @@ const DashboardView = () => {
                     {
                       listJenisKepegawaian.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setJenisKepeg(x)}>{_.upperCase(x.name)}</Dropdown.Item>
+                          <Dropdown.Item key={key} onClick={() => setJenisKepeg(x)}>{_.upperCase(x.name)}</Dropdown.Item>
                         )
                       })
                     }
@@ -442,7 +453,7 @@ const DashboardView = () => {
                     {
                       listPenempatan.map((x, key) => {
                         return (
-                          <Dropdown.Item href="#/action-1" key={key} onClick={() => setPenem(x)}>{_.upperCase(x.name)}</Dropdown.Item>
+                          <Dropdown.Item key={key} onClick={() => setPenem(x)}>{_.upperCase(x.name)}</Dropdown.Item>
                         )
                       })
                     }
@@ -700,6 +711,11 @@ const DashboardView = () => {
                 </div>
               </div>
               <div id="content-table" className="content-table">
+                {/* <div className='d-flex justify-content-center align-items-center' style={{ minHeight: 300 }}>
+                  <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </Spinner>
+                </div> */}
                 <div className="scroll-me">
                   <table className="table table-hover">
                     <thead>

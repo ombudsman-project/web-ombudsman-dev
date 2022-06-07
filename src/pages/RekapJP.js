@@ -66,6 +66,7 @@ const Rekapitulasi = () => {
   const [listPenempatan, setListPenempatan] = useState([]);
   const [selectPenempatan, setSelectPenempatan] = useState('');
   const [rekapJP, setRekapJP] = useState([]);
+  const [selectKepegawaian, setSelectKepegawaian] = useState('');
 
   const setDateRange = async (data) => {
     setState([data.selection]);
@@ -92,7 +93,12 @@ const Rekapitulasi = () => {
       let formData = new FormData();
       formData.append('parameter[]', 'all')
       await new ServiceApi().getSelect(formData).then(x => {
-        setListKepegawaian(x.data.jenis_kepegawaian);
+        var data_kepegawaian = x.data.jenis_kepegawaian.map((row, i) => {
+          return (
+            { value: row.id, label: row.name }
+          )
+        })
+        setListKepegawaian(data_kepegawaian);
         var data_jabatan = x.data.jabatan.map((row, i) => {
           return (
             { value: row.id, label: row.name }
@@ -231,7 +237,10 @@ const Rekapitulasi = () => {
         }
 
         var send_temp = {
-          tabel_rekap_jp: temp_data
+          tabel_rekap_jp: temp_data,
+          table_info: [
+            { tanggal_pengambilan: filterDate.startDate + '-' + filterDate.endDate }
+          ]
         }
 
         const data = [
@@ -242,6 +251,35 @@ const Rekapitulasi = () => {
         excelExport.downloadExcel(rekap_jp, data);
       })
       .catch((err) => { });
+  }
+
+  const selectedKepegawaian = async (e) => {
+    var data_map = e.map((row, id) => {
+      return (
+        row.value
+      )
+    })
+    setKepegawaian(data_map)
+    setSelectKepegawaian(e)
+
+    let formData = new FormData();
+
+    formData.append('parameter[]', 'jabatan')
+
+    if (!_.isEmpty(data_map)) {
+      data_map.map(x => {
+        formData.append('jenis_kepegawaian[]', x)
+      })
+    }
+    await new ServiceApi().getSelect(formData).then(x => {
+      var data_jabatan = x.data.jabatan.map((row, i) => {
+        return (
+          { value: row.id, label: row.name }
+        )
+      })
+      setListJabatan(data_jabatan);
+    }).catch((err) => {
+    })
   }
 
   return (
@@ -446,24 +484,14 @@ const Rekapitulasi = () => {
               <Form.Label column sm="12">
                 <p className="mb-2">Jenis Kepegawaian</p>
               </Form.Label>
-              {listKepegawaian.map((item, key) => {
-                return (
-                  <Col sm="4" key={key}>
-                    <div className='input-checkbox-custom'>
-                      <Form.Check
-                        inline
-                        id={item.name}
-                        name={item.id}
-                        value={item.id}
-                        type="checkbox"
-                        label={item.name}
-                        checked={kepegawaian.some(val => val == item.id)}
-                        onChange={changeKepegawaian}
-                      />
-                    </div>
-                  </Col>
-                )
-              })}
+              <Select
+                defaultValue={selectKepegawaian}
+                placeholder="Pilih Jenis Kepegawaian"
+                options={listKepegawaian}
+                onChange={(e) => selectedKepegawaian(e)}
+                isMulti
+                components={animatedComponents}
+              />
             </Form.Group>
             <Form.Group as={Row} className="mb-3">
               <Form.Label column sm="12">

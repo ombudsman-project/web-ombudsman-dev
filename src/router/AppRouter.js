@@ -170,7 +170,7 @@ const AppRouter = () => {
                     exact
                   /> */}
                   <Route component={DashboardView} path="/dashboard" />
-                  <Route component={RekapJPView} path="/rekapitulasi" exact />
+                  <Route component={RekapJPView} path="/rekap-jp" exact />
                   <Route component={RiwayatAktivitasView} path="/riwayat_aktivitas" exact />
 
                   {/* ANALISA KOMPETENSI */}
